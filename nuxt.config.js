@@ -1,13 +1,15 @@
 module.exports = {
+  ssr: false,
+  mode: 'spa',
   /*
   ** Headers of the page
   */
   head: {
-    title: 'fairplay-web',
+    title: 'Arena Fair Play',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Arena Fair Play' }
+      { hid: 'description', name: 'description', content: 'Você joga limpo?' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -17,6 +19,40 @@ module.exports = {
   ** Customize the progress bar color
   */
   loading: { color: '#3B8070' },
+
+  loadingIndicator: {
+    name: 'cube-grid',
+    color: 'red',
+    background: 'white'
+  },
+
+  router: {
+    linkActiveClass: 'is-active'
+  },
+
+  plugins: [
+    '~plugins/buefy'
+  ],
+
+  modules: [
+    '@nuxtjs/font-awesome',
+    '@nuxtjs/auth',
+    '@nuxtjs/axios'
+  ],
+
+
+  axios: {
+    proxyHeaders: false,
+    credentials: false,
+    baseURL: (process.env.NODE_ENV !== 'production') ? 'http://fairplay-api.dev/api/' : 'http://IP:88/api/',
+    requestInterceptor: (config, { store }) => {
+      if (store.state['auth']['token']) {
+        config.headers.common['Authorization'] = 'Bearer ' + store.state['auth']['token']
+      }
+      return config
+    }
+  },
+
   /*
   ** Build configuration
   */
@@ -32,6 +68,13 @@ module.exports = {
           loader: 'eslint-loader',
           exclude: /(node_modules)/
         })
+      }
+    },
+    postcss: {
+      plugins: {
+        'postcss-custom-properties': {
+          warnings: false
+        }
       }
     }
   }
