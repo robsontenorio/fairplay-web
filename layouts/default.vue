@@ -32,6 +32,9 @@
     </section>
     <section class="content">
       <div class="container is-fuild">
+        <div v-if="loggedIn">
+          <strong>{{ user.identificador }}</strong>
+        </div>
         <nuxt/>
       </div>
     </section>
@@ -56,6 +59,9 @@ export default {
     }
   },
   computed: {
+    user () {
+      return this.$store.state.auth.user
+    },
     loggedIn () {
       return this.$store.getters['auth/loggedIn']
       // return true

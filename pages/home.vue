@@ -1,6 +1,6 @@
 <template>
   <div class="has-text-centered">
-    oi {{ temporadas }}
+    HOME
   </div>
 </template>
 
@@ -18,8 +18,7 @@ export default {
     // TODO nao funciona em SPA?
   },
   async mounted () {
-    let { data } = await this.$axios.get(`/temporadas`)
-    this.temporadas = data
+
   }
 }
 </script>
