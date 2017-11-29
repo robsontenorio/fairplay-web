@@ -18,11 +18,14 @@ module.exports = {
   /*
   ** Customize the progress bar color
   */
-  loading: { color: '#3B8070' },
+  loading: {
+    color: 'green',
+    height: '4px'
+  },
 
   loadingIndicator: {
-    name: 'cube-grid',
-    color: 'red',
+    name: 'pulse',
+    color: 'blue',
     background: 'white'
   },
 

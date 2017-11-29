@@ -22,20 +22,26 @@ footer{
 }
 
 
-.b-table .table {
-    font-size: 10pt;
+.navbar-item-destacar
+{
+    color : #ff8f8f !important;
+    font-weight: bold;
 }
 
-.b-table .table th.is-sortable, .b-table .table th.is-sortable .th-wrap{
-      white-space: nowrap;
-      font-size: 11pt;
-}
+// .b-table .table {
+//     font-size: 10pt;
+// }
 
-.balances .b-table th{
-    background: hsl(0, 0%, 48%);    
-    color: white;
-}
+// .b-table .table th.is-sortable, .b-table .table th.is-sortable .th-wrap{
+//       white-space: nowrap;
+//       font-size: 11pt;
+// }
 
-.b-table .table .detail td {
-    border: 1px solid #c0c0c0;
-}
+// .balances .b-table th{
+//     background: hsl(0, 0%, 48%);    
+//     color: white;
+// }
+
+// .b-table .table .detail td {
+//     border: 1px solid #c0c0c0;
+// }
