@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img class="avatar" src="/user.png" />
+    <img :width="size" class="avatar" src="/user.png" />
     <br>
     <div class="identificador">{{ user.identificador }}</div>
   </div>
@@ -8,7 +8,7 @@
 <script>
 export default {
   name: 'user',
-  props: ['user']
+  props: ['user', 'size']
 }
 </script>
 <style scoped>
@@ -21,5 +21,6 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 200px;
 }
 </style>

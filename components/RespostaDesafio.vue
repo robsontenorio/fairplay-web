@@ -1,10 +1,12 @@
 <template>
   <div>
     <div v-show="resposta">
-      <span class="tag" :class="`decisao-${resposta}`"> {{ decisao }} </span>
+      <span class="tag" :class="`decisao-${resposta}`">
+        <i :class="`fa fa-${decisao}`"></i>
+      </span>
     </div>
     <div v-show="!resposta">
-      Aguardando ...
+      <img width="58px" src="/spinner2.gif" /> <br>
     </div>
   </div>
 </template>
@@ -16,9 +18,9 @@ export default {
   {
     decisao () {
       if (this.resposta === 1) {
-        return 'pronto'
+        return 'check'
       } else if (this.resposta === 0) {
-        return 'recusou'
+        return 'times'
       }
     }
   }
@@ -31,5 +33,9 @@ export default {
 
 .decisao-2 {
   color: red;
+}
+
+.tag {
+  font-size: 21pt;
 }
 </style>

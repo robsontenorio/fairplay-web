@@ -34,7 +34,8 @@ module.exports = {
   },
 
   plugins: [
-    '~plugins/buefy'
+    '~plugins/buefy',
+    '~plugins/socket.io'
   ],
 
   modules: [

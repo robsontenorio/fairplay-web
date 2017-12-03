@@ -5,7 +5,7 @@
   "author": "Robson Tenório <robsontenorio@me.com>",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nuxt",
+    "dev": "cross-env NODE_ENV=development HOST=0.0.0.0 nuxt",
     "build": "cross-env NODE_ENV=production nuxt build --spa",
     "start": "nuxt start",
     "generate": "nuxt generate",
@@ -25,7 +25,10 @@
     "moment": "^2.19.2",
     "node-sass": "^4.7.2",
     "nuxt": "^1.0.0-rc11",
-    "sass-loader": "^6.0.6"
+    "sass-loader": "^6.0.6",
+    "socket.io-client": "^2.0.4",
+    "vue-echo": "^1.0.1",
+    "vue-socket.io": "^2.1.1-a"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
