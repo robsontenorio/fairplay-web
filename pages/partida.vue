@@ -1,23 +1,41 @@
 <template>
   <div v-show="carregado">
-    <div v-if="resultado.adversario">
-      <div class="resultado-adversario has-text-centered">
-        O adversário diz que ele
-        <strong>{{ resultado.adversario }}</strong>
-      </div>
-    </div>
-    <div v-if="resultado.eu">
-      <div class="resultado-adversario has-text-centered">
-        Você diz que
-        <strong>{{ resultado.eu }}</strong>
-      </div>
+    <div v-if="finalizaEm > 0" class="resultado-timer has-text-centered">
+      <countdown :time="finalizaEm">
+        <template slot-scope="props">Finaliza em
+          <strong>{{ props.minutes }}</strong> minutos e {{ props.seconds }}s</template>
+      </countdown>
     </div>
     <div class="columns is-gapless is-mobile has-text-centered" v-if="partida.user1">
       <div class="column">
         <user :user="partida.user1" size="58"></user>
+        <div v-if="user.id === partida.user1.id">
+          <div v-if="resultado.eu" class="resultado-adversario has-text-centered">
+            marcou
+            <strong>{{ resultado.eu }}</strong>
+          </div>
+        </div>
+        <div v-if="user.id === partida.user2.id">
+          <div class="resultado-adversario has-text-centered">
+            marcou
+            <strong>{{ resultado.eu }}</strong>
+          </div>
+        </div>
       </div>
       <div class="column">
         <user :user="partida.user2" size="58"></user>
+        <div v-if="user.id === partida.user2.id">
+          <div v-if="resultado.eu" class="resultado-adversario has-text-centered">
+            marcou
+            <strong>{{ resultado.eu }}</strong>
+          </div>
+        </div>
+        <div v-if="user.id === partida.user2.id">
+          <div class="resultado-adversario has-text-centered">
+            marcou
+            <strong>{{ resultado.eu }}</strong>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -51,13 +69,13 @@
         <b-tab-item label="Resultado" icon="pencil">
           <div class="columns is-mobile" ref="abaResultado">
             <div class="column has-text-right">
-              <button class="button is-success is-fullwidth" :class="{'is-outlined' : resultado.eu !== 'ganhou'}" @click.stop="informarResultado('vitoria')">ganhei</button>
+              <button class="button is-success is-fullwidth" :class="{'is-outlined' : resultado.eu !== 'ganhei'}" @click.stop="informarResultado('vitoria')">ganhei</button>
             </div>
             <div class="column has-text-centered">
-              <button class="button is-dark is-fullwidth" :class="{'is-outlined' : resultado.eu !== 'empatou'}" @click.stop="informarResultado('empate')">empate</button>
+              <button class="button is-dark is-fullwidth" :class="{'is-outlined' : resultado.eu !== 'empate'}" @click.stop="informarResultado('empate')">empate</button>
             </div>
             <div class="column has-text-left">
-              <button class="button is-danger is-fullwidth" :class="{'is-outlined' : resultado.eu !== 'perdeu'}" @click.stop="informarResultado('derrota')">perdi</button>
+              <button class="button is-danger is-fullwidth" :class="{'is-outlined' : resultado.eu !== 'perdi'}" @click.stop="informarResultado('derrota')">perdi</button>
             </div>
           </div>
 
@@ -66,12 +84,19 @@
           <br><br>
 
           <div class="resultado-info is-default has-text-justified">
-            Perdendo ou vencendo sua reputação será mantida.
-            <strong>Caso informe um resultado falso você será banido.</strong>
+            <strong>Caso informe um resultado falso você será banido.</strong> Lembre-se que perdendo ou vencendo sua reputação será mantida.
           </div>
           <div class="resultado-info is-default has-text-justified">
-            Caso ambos jogadores concordem, por quaisquer motivos, a partida será cancelada. A reputação e as pontuações serão mantidas. Use o
-            <strong>chat</strong> para entrar em um acordo.
+            Se houver
+            <strong>divergência</strong> entre os resultados ambos jogadores vão a julgamento pela comunidade, podendo ser banido.
+          </div>
+          <div class="resultado-info is-default has-text-justified">
+            No momento em que um dos jogadores informa o resultado, o adversário tem
+            <strong>30 minutos</strong> para também informar o resultado. Após este prazo o resultado será confirmado automaticamente pelo sistema.
+          </div>
+          <div class="resultado-info is-default has-text-justified">
+            A partida somente será cancelada se o seu adversário também solicitar o cancelamento. Caso o adversário tenha informado qualquer outro resultado, ele prevalecerá ao invés do cancelamento. Use o
+            <strong>chat</strong> chegar a um acordo.
           </div>
         </b-tab-item>
       </b-tabs>
@@ -81,15 +106,16 @@
 
 <script>
 import User from '~/components/User'
+import Countdown from '@xkeshi/vue-countdown'
+import moment from 'moment'
 
 export default {
   middleware: 'auth',
-  components: { User },
+  components: { User, Countdown },
 
   data () {
     return {
       carregado: false,
-      timer: null,
       partida: {}
     }
   },
@@ -106,7 +132,7 @@ export default {
       this.partida = data
       this.carregado = true
 
-      this.$echo.channel('partida-' + this.partida.id).listen('.PartidaModificadaEvent', (payload) => {
+      this.$echo.channel('partida-' + this.partida.id).listen('.PartidaAtualizadaEvent', (payload) => {
         this.partida = payload.partida
         this.tratar()
       })
@@ -115,6 +141,19 @@ export default {
   computed: {
     user () {
       return this.$store.state.auth.user
+    },
+    finalizaEm () {
+      let trinta = 1000 * 60 * 30
+      let agora = moment()
+      let resultadoEm = moment(this.partida.resultado_em)
+      let diff = trinta - agora.diff(resultadoEm)
+
+      return diff
+    },
+    resultadoLancado () {
+      if (this.resultado.eu || this.resultado.adversario) {
+        return true
+      }
     },
     resultado () {
       let euId = this.user.id
@@ -129,6 +168,8 @@ export default {
         resultado.adversario = this.parseResultado(this.partida.detalhes[adversarioId], adversarioId)
       }
 
+      // console.log(resultado)
+
       return resultado
     }
   },
@@ -141,11 +182,11 @@ export default {
       } else {
         if (detalhes.vencedor !== null) {
           if (detalhes.vencedor === userId) {
-            resultado = 'ganhou'
+            resultado = 'ganhei'
           } else if (detalhes.vencedor === -1) {
-            resultado = 'empatou'
+            resultado = 'empate'
           } else {
-            resultado = 'perdeu'
+            resultado = 'perdi'
           }
         }
       }
@@ -184,7 +225,7 @@ export default {
       }
     },
     async solicitarCancelamento () {
-      if (!confirm('Solicitar o cancelamento da partida?\nA partida somente será cancelada se o seu adversário concordar. Use o chat.')) {
+      if (!confirm('Solicitar o cancelamento da partida?\n\nA partida somente será cancelada se o seu adversário também solicitar o cancelamento. Caso o adversário tenha informado qualquer outro resultado, ele prevalecerá ao invés do cancelamento. Use o chat para chegar a um acordo.')) {
         return false
       }
 
@@ -262,11 +303,22 @@ export default {
   padding: 5px;
   background-color: #ffdd57;
   color: rgba(0, 0, 0, 0.7);
+  /* margin-left: -10px;
+  margin-right: -10px;
+  margin-top: -20px;
+  margin-bottom: 20px; */
+  font-size: 9pt;
+  border: 3px solid white;
+}
+
+.resultado-timer {
+  padding: 5px;
+  background-color: #ffdd57;
+  color: rgba(0, 0, 0, 0.7);
   margin-left: -10px;
   margin-right: -10px;
   margin-top: -20px;
   margin-bottom: 20px;
   font-size: 9pt;
-  border-top: 1px solid #888;
 }
 </style>
