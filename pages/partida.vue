@@ -9,33 +9,11 @@
     <div class="columns is-gapless is-mobile has-text-centered" v-if="partida.user1">
       <div class="column">
         <user :user="partida.user1" size="58"></user>
-        <div v-if="user.id === partida.user1.id">
-          <div v-if="resultado.eu" class="resultado-adversario has-text-centered">
-            marcou
-            <strong>{{ resultado.eu }}</strong>
-          </div>
-        </div>
-        <div v-if="user.id === partida.user2.id">
-          <div class="resultado-adversario has-text-centered">
-            marcou
-            <strong>{{ resultado.eu }}</strong>
-          </div>
-        </div>
+        <resposta-partida :partida="partida" :user="partida.user1"></resposta-partida>
       </div>
       <div class="column">
         <user :user="partida.user2" size="58"></user>
-        <div v-if="user.id === partida.user2.id">
-          <div v-if="resultado.eu" class="resultado-adversario has-text-centered">
-            marcou
-            <strong>{{ resultado.eu }}</strong>
-          </div>
-        </div>
-        <div v-if="user.id === partida.user2.id">
-          <div class="resultado-adversario has-text-centered">
-            marcou
-            <strong>{{ resultado.eu }}</strong>
-          </div>
-        </div>
+        <resposta-partida :partida="partida" :user="partida.user2"></resposta-partida>
       </div>
     </div>
 
@@ -69,17 +47,17 @@
         <b-tab-item label="Resultado" icon="pencil">
           <div class="columns is-mobile" ref="abaResultado">
             <div class="column has-text-right">
-              <button class="button is-success is-fullwidth" :class="{'is-outlined' : resultado.eu !== 'ganhei'}" @click.stop="informarResultado('vitoria')">ganhei</button>
+              <button class="button is-success is-fullwidth is-outlined" @click="informarResultado('vitoria')">ganhei</button>
             </div>
             <div class="column has-text-centered">
-              <button class="button is-dark is-fullwidth" :class="{'is-outlined' : resultado.eu !== 'empate'}" @click.stop="informarResultado('empate')">empate</button>
+              <button class="button is-info is-fullwidth is-outlined" @click="informarResultado('empate')">empate</button>
             </div>
             <div class="column has-text-left">
-              <button class="button is-danger is-fullwidth" :class="{'is-outlined' : resultado.eu !== 'perdi'}" @click.stop="informarResultado('derrota')">perdi</button>
+              <button class="button is-danger is-fullwidth is-outlined" @click="informarResultado('derrota')">perdi</button>
             </div>
           </div>
 
-          <button class="button is-warning is-fullwidth" :class="{'is-outlined' : resultado.eu !== 'cancelamento'}" @click="solicitarCancelamento()">solicitar cancelamento</button>
+          <button class="button is-dark is-fullwidth is-outlined" @click="solicitarCancelamento()">solicitar cancelamento</button>
 
           <br><br>
 
@@ -106,12 +84,13 @@
 
 <script>
 import User from '~/components/User'
+import RespostaPartida from '~/components/RespostaPartida'
 import Countdown from '@xkeshi/vue-countdown'
 import moment from 'moment'
 
 export default {
   middleware: 'auth',
-  components: { User, Countdown },
+  components: { User, Countdown, RespostaPartida },
 
   data () {
     return {
@@ -131,7 +110,6 @@ export default {
     } else {
       this.partida = data
       this.carregado = true
-
       this.$echo.channel('partida-' + this.partida.id).listen('.PartidaAtualizadaEvent', (payload) => {
         this.partida = payload.partida
         this.tratar()
@@ -150,49 +128,17 @@ export default {
 
       return diff
     },
-    resultadoLancado () {
-      if (this.resultado.eu || this.resultado.adversario) {
-        return true
-      }
-    },
-    resultado () {
-      let euId = this.user.id
-      let adversarioId = (this.user.id === this.partida.user1_id) ? this.partida.user2_id : this.partida.user1_id
-      let resultado = {
-        eu: null,
-        adversario: null
-      }
+    meuResultado () {
+      // let resultado = this.resultado
 
-      if (this.partida.detalhes) {
-        resultado.eu = this.parseResultado(this.partida.detalhes[euId], euId)
-        resultado.adversario = this.parseResultado(this.partida.detalhes[adversarioId], adversarioId)
-      }
-
-      // console.log(resultado)
-
-      return resultado
+      // if (this.user.id === this.partida.user1_id) {
+      //   return resultado.user1
+      // } else {
+      //   return resultado.user2
+      // }
     }
   },
   methods: {
-    parseResultado (detalhes, userId) {
-      let resultado = null
-
-      if (detalhes.solicitou_cancelamento === true) {
-        resultado = 'cancelamento'
-      } else {
-        if (detalhes.vencedor !== null) {
-          if (detalhes.vencedor === userId) {
-            resultado = 'ganhei'
-          } else if (detalhes.vencedor === -1) {
-            resultado = 'empate'
-          } else {
-            resultado = 'perdi'
-          }
-        }
-      }
-
-      return resultado
-    },
     async tratar () {
       if (this.partida.status === 'FINALIZADA') {
         this.$router.replace({ path: '/home' })
@@ -287,28 +233,9 @@ export default {
   margin-bottom: 5px;
 }
 
-.versus {
-  font-weight: bold;
-  padding-top: 20px;
-  color: #c0c0c0;
-  font-size: 14pt;
-}
-
 .resultado-info {
   font-size: 9pt;
   padding: 10px !important;
-}
-
-.resultado-adversario {
-  padding: 5px;
-  background-color: #ffdd57;
-  color: rgba(0, 0, 0, 0.7);
-  /* margin-left: -10px;
-  margin-right: -10px;
-  margin-top: -20px;
-  margin-bottom: 20px; */
-  font-size: 9pt;
-  border: 3px solid white;
 }
 
 .resultado-timer {
