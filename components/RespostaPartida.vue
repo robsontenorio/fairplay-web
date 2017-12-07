@@ -33,7 +33,7 @@ export default {
 
       if (detalhes.solicitou_cancelamento === true) {
         resultado = 'cancelamento'
-        this.tag = 'is-dark'
+        this.tag = 'is-light'
       } else {
         if (detalhes.vencedor !== null) {
           if (detalhes.vencedor === userId) {
@@ -41,7 +41,7 @@ export default {
             this.tag = 'is-success'
           } else if (detalhes.vencedor === -1) {
             resultado = 'empate'
-            this.tag = 'is-info'
+            this.tag = 'is-dark'
           } else {
             resultado = 'perdi'
             this.tag = 'is-danger'

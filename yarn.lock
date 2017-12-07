@@ -1875,6 +1875,10 @@ domutils@^1.5.1:
     dom-serializer "0"
     domelementtype "1"
 
+dropzone@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/dropzone/-/dropzone-5.2.0.tgz#2fdf6ac6472f4c62d03d3e9fc22aaa0229d299de"
+
 duplexer@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.1.tgz#ace6ff808c1ce66b57d1ebf97977acb02334cfc1"
@@ -3038,6 +3042,10 @@ inquirer@^3.0.6:
     string-width "^2.1.0"
     strip-ansi "^4.0.0"
     through "^2.3.6"
+
+install@^0.10.2:
+  version "0.10.2"
+  resolved "https://registry.yarnpkg.com/install/-/install-0.10.2.tgz#f1f71902797e5a900069fb9ab80c94055025ffdc"
 
 interpret@^1.0.0:
   version "1.1.0"
@@ -6028,6 +6036,12 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-chat-scroll@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/vue-chat-scroll/-/vue-chat-scroll-1.2.1.tgz#54f123004b887d91f2f7fb69b9bebdf6f61ea9b4"
+  dependencies:
+    vue "^2.1.10"
+
 vue-echo@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/vue-echo/-/vue-echo-1.0.1.tgz#f845650a0e71408603f70b22a28918c99696a1f0"
@@ -6106,7 +6120,13 @@ vue-template-es2015-compiler@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.6.0.tgz#dc42697133302ce3017524356a6c61b7b69b4a18"
 
-vue@^2.5.2:
+vue2-dropzone@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/vue2-dropzone/-/vue2-dropzone-3.0.0.tgz#f0635509c5ea9f6c5cf8812fe60f8867ac32f774"
+  dependencies:
+    dropzone "^5.2.0"
+
+vue@^2.1.10, vue@^2.5.2:
   version "2.5.9"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.9.tgz#b2380cd040915dca69881dafd121d760952e65f7"
 

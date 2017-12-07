@@ -18,7 +18,7 @@
     </div>
 
     <div>
-      <b-tabs size="is-small" type="is-full-width" expanded>
+      <b-tabs size="is-small" type="is-toggle" position="is-centered" expanded>
         <b-tab-item label="Instruções" icon="list">
           <div class="instrucoes has-text-left">
             <ol>
@@ -41,23 +41,23 @@
         </b-tab-item>
         <b-tab-item label="Chat" icon="comment">
           <div class="chat">
-            chat...
+            <chat :eu="user" :partida="partida"></chat>
           </div>
         </b-tab-item>
         <b-tab-item label="Resultado" icon="pencil">
           <div class="columns is-mobile" ref="abaResultado">
             <div class="column has-text-right">
-              <button class="button is-success is-fullwidth is-outlined" @click="informarResultado('vitoria')">ganhei</button>
+              <button class="button is-success is-fullwidth" @click="informarResultado('vitoria')">ganhei</button>
             </div>
             <div class="column has-text-centered">
-              <button class="button is-info is-fullwidth is-outlined" @click="informarResultado('empate')">empate</button>
+              <button class="button is-dark is-fullwidth" @click="informarResultado('empate')">empate</button>
             </div>
             <div class="column has-text-left">
-              <button class="button is-danger is-fullwidth is-outlined" @click="informarResultado('derrota')">perdi</button>
+              <button class="button is-danger is-fullwidth" @click="informarResultado('derrota')">perdi</button>
             </div>
           </div>
 
-          <button class="button is-dark is-fullwidth is-outlined" @click="solicitarCancelamento()">solicitar cancelamento</button>
+          <button class="button is-light is-fullwidth" @click="solicitarCancelamento()">solicitar cancelamento</button>
 
           <br><br>
 
@@ -84,18 +84,20 @@
 
 <script>
 import User from '~/components/User'
+import Chat from '~/components/Chat'
 import RespostaPartida from '~/components/RespostaPartida'
 import Countdown from '@xkeshi/vue-countdown'
 import moment from 'moment'
 
 export default {
   middleware: 'auth',
-  components: { User, Countdown, RespostaPartida },
+  components: { User, Chat, Countdown, RespostaPartida },
 
   data () {
     return {
       carregado: false,
-      partida: {}
+      partida: {},
+      mensagens: []
     }
   },
 
@@ -103,17 +105,24 @@ export default {
     // TODO nao funciona em SPA?
   },
   async mounted () {
-    let { data } = await this.$axios.get(`/partida`)
+    let { data } = await this.$axios.get(`/partida?appends=mensagens`)
 
     if (data === '' || (data.status !== 'JOGANDO' && data.status !== 'RESULTADO')) {
       this.$router.replace({ path: '/home' })
     } else {
       this.partida = data
       this.carregado = true
-      this.$echo.channel('partida-' + this.partida.id).listen('.PartidaAtualizadaEvent', (payload) => {
-        this.partida = payload.partida
-        this.tratar()
-      })
+
+      this.$echo.channel('partida-' + this.partida.id)
+        .listen('.PartidaAtualizadaEvent', (payload) => {
+          this.partida = payload.partida
+          this.tratar()
+        })
+        .listen('.MensagemRecebidaEvent', (payload) => {
+          // if (payload.mensagem.from_id !== this.user.id) {
+          this.partida.mensagens.push(payload.mensagem)
+          // }
+        })
     }
   },
   computed: {
@@ -226,7 +235,7 @@ export default {
 
 <style scoped>
 .instrucoes {
-  font-size: 11pt;
+  font-size: 9pt;
 }
 
 .instrucoes li {
