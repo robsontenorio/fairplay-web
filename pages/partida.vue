@@ -41,7 +41,7 @@
         </b-tab-item>
         <b-tab-item label="Chat" icon="comment">
           <div class="chat">
-            <chat :eu="user" :partida="partida"></chat>
+            <chat :eu="eu" :adversario="adversario" :chatId="chat.id" :mensagens="mensagens"></chat>
           </div>
         </b-tab-item>
         <b-tab-item label="Resultado" icon="pencil">
@@ -97,37 +97,53 @@ export default {
     return {
       carregado: false,
       partida: {},
+      chat: {},
       mensagens: []
     }
   },
 
   async asyncData ({ app, params }) {
     // TODO nao funciona em SPA?
+    // TODO usar metodo FETCH() ??
   },
   async mounted () {
-    let { data } = await this.$axios.get(`/partida?appends=mensagens`)
+    let { data } = await this.$axios.get(`/partida`)
 
     if (data === '' || (data.status !== 'JOGANDO' && data.status !== 'RESULTADO')) {
       this.$router.replace({ path: '/home' })
     } else {
       this.partida = data
       this.carregado = true
+      this.chat = data.chat
+
+      let mensagens = await this.$axios.get(`/chats/${this.chat.id}`)
+
+      this.mensagens = mensagens.data
 
       this.$echo.channel('partida-' + this.partida.id)
         .listen('.PartidaAtualizadaEvent', (payload) => {
           this.partida = payload.partida
           this.tratar()
         })
+
+      this.$echo.channel('chat-' + this.chat.id)
         .listen('.MensagemRecebidaEvent', (payload) => {
-          // if (payload.mensagem.from_id !== this.user.id) {
-          this.partida.mensagens.push(payload.mensagem)
-          // }
+          this.mensagens.push(payload.mensagem)
         })
     }
   },
   computed: {
-    user () {
+    eu () {
       return this.$store.state.auth.user
+    },
+    adversario () {
+      let adversario = null
+
+      if (this.eu) {
+        adversario = (this.eu.id === this.partida.user1_id) ? this.partida.user2 : this.partida.user1
+      }
+
+      return adversario
     },
     finalizaEm () {
       let trinta = 1000 * 60 * 30
@@ -205,9 +221,9 @@ export default {
       }
 
       if (tipo === 'vitoria') {
-        userId = this.user.id
+        userId = this.eu.id
       } else if (tipo === 'derrota') {
-        if (this.user.id === this.partida.user1.id) {
+        if (this.eu.id === this.partida.user1.id) {
           userId = this.partida.user2.id
         } else {
           userId = this.partida.user1.id

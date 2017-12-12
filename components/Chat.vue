@@ -1,16 +1,23 @@
 <template>
   <div>
-    <!-- <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"></vue-dropzone> -->
-    <div class="chat-wrapper" ref="chatWrapper">
-      <div v-for="mensagem in partida.mensagens" :key="mensagem.id">
+    <vue-dropzone id="dropzone" :options="dropzoneOptions" @vdropzone-success="syncMensagem"></vue-dropzone>
+    <div v-if="mensagens" class="chat-wrapper" ref="chatWrapper" v-chat-scroll>
+      <div v-for="mensagem in mensagens" :key="mensagem.id">
         <div class="mensagem-wrapper" :class="{'has-text-right' : mensagem.from_id === eu.id}">
-          <div class="mensagem" :class="[mensagem.from_id === eu. id ? 'mensagem-minha' : 'mensagem-amigo']">{{ mensagem.mensagem }}</div>
+          <div class="mensagem" :class="[mensagem.from_id === eu.id ? 'mensagem-minha' : 'mensagem-amigo']">
+            <div v-if="mensagem.mensagem">
+              {{ mensagem.mensagem }}
+            </div>
+            <div v-if="mensagem.media">
+              <img :src="`http://fairplay-api.dev/storage/${mensagem.media}`" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
     <div class="mensagem-composer">
       <b-field>
-        <b-input placeholder="Mensagem ..." v-model="mensagem" @keyup.native.enter="enviar()"></b-input>
+        <b-input placeholder="Mensagem ..." v-model="params.mensagem" @keyup.native.enter="enviar()"></b-input>
       </b-field>
     </div>
   </div>
@@ -20,49 +27,53 @@ import vue2Dropzone from 'vue2-dropzone'
 
 export default {
   name: 'chat',
-  props: ['eu', 'partida'],
+  props: ['eu', 'adversario', 'chatId', 'mensagens'],
   components: {
     vueDropzone: vue2Dropzone
   },
   data () {
     return {
-      mensagem: null,
+      params: {
+        chat_id: null,
+        from_id: null,
+        to_id: null,
+        mensagem: null,
+        media: null
+      },
       dropzoneOptions: {
-        url: 'https://httpbin.org/post',
+        url: 'http://fairplay-api.dev/api/upload',
         thumbnailWidth: 150,
-        maxFilesize: 0.5,
-        headers: { 'My-Awesome-Header': 'header value' }
+        maxFilesize: 10,
+        resizeWidth: 800
+        // headers: { 'My-Awesome-Header': 'header value' }
       }
     }
   },
   watch: {
-    'partida.mensagens' () {
-      this.scroll()
-    }
-  },
-  computed: {
-    adversario () {
-      let adversario = null
-
-      if (this.partida && this.eu) {
-        adversario = (this.eu.id === this.partida.user1_id) ? this.partida.user2 : this.partida.user1
-      }
-
-      return adversario
+    'mensagens' () {
+      // this.scroll()
     }
   },
   methods: {
-    enviar () {
-      let params = {
-        mensagem: this.mensagem,
-        chat_id: this.partida.id,
-        from_id: this.eu.id,
-        to_id: this.adversario.id
+    syncMensagem (file, response) {
+      this.params.media = response
+      this.enviar()
+      console.log(file)
+      console.log(response)
+    },
+    async enviar () {
+      if (this.params.mensagem === null && this.params.media === null) {
+        return
       }
 
-      this.$axios.post(`/mensagens`, params)
+      this.params.chat_id = this.chatId
+      this.params.from_id = this.eu.id
+      this.params.to_id = this.adversario.id
 
-      this.mensagem = null
+      await this.$axios.post(`/mensagens`, this.params)
+
+      this.params.mensagem = null
+      this.params.media = null
     },
     scroll () {
       let container = this.$refs.chatWrapper
@@ -75,6 +86,7 @@ export default {
 .chat-wrapper {
   height: 200px;
   overflow: scroll;
+  padding: 0 10px;
 }
 
 .mensagem-composer {
