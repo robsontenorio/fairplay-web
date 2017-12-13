@@ -1,9 +1,10 @@
+let API_URL = (process.env.NODE_ENV !== 'production') ? 'http://fairplay-api.dev/api/' : 'http://IP/api/'
+let API_URL_SOCKET = (process.env.NODE_ENV !== 'production') ? 'http://fairplay-api.dev:6001' : 'http://IP:6001'
+let API_URL_STORAGE = (process.env.NODE_ENV !== 'production') ? 'http://fairplay-api.dev/storage/' : 'http://IP:6001'
+
 module.exports = {
   ssr: false,
   mode: 'spa',
-  /*
-  ** Headers of the page
-  */
   head: {
     title: 'Arena Fair Play',
     meta: [
@@ -15,9 +16,6 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
-  /*
-  ** Customize the progress bar color
-  */
   loading: {
     color: 'green',
     height: '4px'
@@ -28,27 +26,27 @@ module.exports = {
     color: 'blue',
     background: 'white'
   },
-
   router: {
     linkActiveClass: 'is-active'
   },
-
   plugins: [
     '~plugins/buefy',
     '~plugins/socket.io'
   ],
-
   modules: [
     '@nuxtjs/font-awesome',
     '@nuxtjs/auth',
     '@nuxtjs/axios'
   ],
-
-
+  env: {
+    API_URL: API_URL,
+    API_URL_SOCKET: API_URL_SOCKET,
+    API_URL_STORAGE: API_URL_STORAGE
+  },
   axios: {
     proxyHeaders: false,
     credentials: false,
-    baseURL: (process.env.NODE_ENV !== 'production') ? 'http://fairplay-api.dev/api/' : 'http://IP:88/api/',
+    baseURL: API_URL,
     requestInterceptor: (config, { store }) => {
       if (store.state['auth']['token']) {
         config.headers.common['Authorization'] = 'Bearer ' + store.state['auth']['token']

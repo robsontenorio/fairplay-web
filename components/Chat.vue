@@ -1,6 +1,5 @@
 <template>
   <div>
-    <vue-dropzone id="dropzone" :options="dropzoneOptions" @vdropzone-success="syncMensagem"></vue-dropzone>
     <div v-if="mensagens" class="chat-wrapper" ref="chatWrapper" v-chat-scroll>
       <div v-for="mensagem in mensagens" :key="mensagem.id">
         <div class="mensagem-wrapper" :class="{'has-text-right' : mensagem.from_id === eu.id}">
@@ -9,7 +8,7 @@
               {{ mensagem.mensagem }}
             </div>
             <div v-if="mensagem.media">
-              <img :src="`http://fairplay-api.dev/storage/${mensagem.media}`" />
+              <img :src="`${API_URL_STORAGE}/${mensagem.media}`" />
             </div>
           </div>
         </div>
@@ -17,9 +16,17 @@
     </div>
     <div class="mensagem-composer">
       <b-field>
-        <b-input placeholder="Mensagem ..." v-model="params.mensagem" @keyup.native.enter="enviar()"></b-input>
+        <div class="control">
+          <div class="button">
+            <vue-dropzone ref="dropZone" id="dropzone" :options="dropzoneOptions" @vdropzone-success="syncMensagem" @vdropzone-file-added="fazendoUpload" @vdropzone-sending="fazendoUpload">
+            </vue-dropzone>
+          </div>
+        </div>
+        <b-input placeholder="Mensagem ..." type="text" v-model="params.mensagem" @keyup.native.enter="enviar()" expanded></b-input>
       </b-field>
     </div>
+    <b-loading :active.sync="loading"></b-loading>
+
   </div>
 </template>
 <script>
@@ -33,6 +40,7 @@ export default {
   },
   data () {
     return {
+      loading: false,
       params: {
         chat_id: null,
         from_id: null,
@@ -41,11 +49,13 @@ export default {
         media: null
       },
       dropzoneOptions: {
-        url: 'http://fairplay-api.dev/api/upload',
+        url: process.env.API_URL + 'upload',
+        dictDefaultMessage: '<i class="fa fa-camera"></i>',
+        previewsContainer: false,
         thumbnailWidth: 150,
         maxFilesize: 10,
-        resizeWidth: 800
-        // headers: { 'My-Awesome-Header': 'header value' }
+        resizeWidth: 800,
+        acceptedFiles: 'image/*'
       }
     }
   },
@@ -54,12 +64,19 @@ export default {
       // this.scroll()
     }
   },
+  computed: {
+    API_URL_STORAGE () {
+      return process.env.API_URL_STORAGE
+    }
+  },
   methods: {
     syncMensagem (file, response) {
       this.params.media = response
       this.enviar()
-      console.log(file)
-      console.log(response)
+      this.loading = false
+    },
+    fazendoUpload () {
+      this.loading = true
     },
     async enviar () {
       if (this.params.mensagem === null && this.params.media === null) {

@@ -5,5 +5,5 @@ window.io = io
 
 Vue.use(VueEcho, {
   broadcaster: 'socket.io',
-  host: 'http://fairplay-api.dev:6001'
+  host: process.env.API_URL_SOCKET
 })
