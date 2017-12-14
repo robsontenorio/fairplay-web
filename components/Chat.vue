@@ -1,16 +1,14 @@
 <template>
   <div>
-    <div v-if="mensagens" class="chat-wrapper" ref="chatWrapper" v-chat-scroll>
-      <div v-for="mensagem in mensagens" :key="mensagem.id">
-        <div class="mensagem-wrapper" :class="{'has-text-right' : mensagem.from_id === eu.id}">
-          <div class="mensagem" :class="[mensagem.from_id === eu.id ? 'mensagem-minha' : 'mensagem-amigo']">
-            <div v-if="mensagem.mensagem">
-              {{ mensagem.mensagem }}
-            </div>
-            <div v-if="mensagem.media">
-              <img :src="`${API_URL_STORAGE}/${mensagem.media}`" />
-            </div>
-          </div>
+    <div class="chat-wrapper" ref="chatWrapper">
+      <div class="messages-wrapper">
+        <div v-for="mensagem in mensagens" :key="mensagem.id" class="message" :class="[mensagem.from_id === eu.id ? 'to' : 'from']">
+          <span v-if="mensagem.mensagem">
+            {{ mensagem.mensagem }}
+          </span>
+          <span v-if="mensagem.media">
+            <img :src="`${API_URL_STORAGE}/${mensagem.media}`" />
+          </span>
         </div>
       </div>
     </div>
@@ -59,11 +57,6 @@ export default {
       }
     }
   },
-  watch: {
-    'mensagens' () {
-      // this.scroll()
-    }
-  },
   computed: {
     API_URL_STORAGE () {
       return process.env.API_URL_STORAGE
@@ -91,45 +84,47 @@ export default {
 
       this.params.mensagem = null
       this.params.media = null
-    },
-    scroll () {
-      let container = this.$refs.chatWrapper
-      container.scrollTop = container.scrollHeight
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 .chat-wrapper {
-  height: 200px;
-  overflow: scroll;
-  padding: 0 10px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.messages-wrapper {
+  color: #ffffff;
+}
+.message {
+  border-radius: 10px;
+  margin: 0 15px 10px;
+  padding: 5px 10px;
+  font-size: 10pt;
+  clear: both;
+}
+.message.to {
+  background-color: #2095fe;
+  color: #fff;
+  float: right;
+}
+.message.from {
+  background-color: #e5e4e9;
+  color: #363636;
+  float: left;
+}
+
+.message img {
+  border-radius: 10px;
+  padding-top: 5px;
+}
+
+.message.to + .message.to,
+.message.from + .message.from {
+  margin-top: -7px;
 }
 
 .mensagem-composer {
-  clear: both;
-  margin-top: 10px;
-}
-
-.mensagem-wrapper {
-  clear: both;
-}
-
-.mensagem {
-  margin-bottom: 5px;
-  color: white;
-  border-radius: 10px;
-  padding: 1px 8px;
-  font-size: 9pt;
-}
-
-.mensagem-minha {
-  background: #5d62ad;
-  float: right;
-}
-
-.mensagem-amigo {
-  background: #85af85;
-  float: left;
+  margin-bottom: 100px;
 }
 </style>

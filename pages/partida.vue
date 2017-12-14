@@ -130,6 +130,12 @@ export default {
         .listen('.MensagemRecebidaEvent', (payload) => {
           this.mensagens.push(payload.mensagem)
         })
+
+      let socket = this.$echo.connector.socket
+      socket.on('disconnect', function () {
+        alert('Reconectando ...')
+        location.reload()
+      })
     }
   },
   computed: {
