@@ -1,5 +1,5 @@
 <template>
-  <div class="has-text-centered" v-show="carregado">
+  <div class="has-text-centered">
     <div v-show="procurando">
       <img src="/spinner.gif" />
       <h2>Procurando adversário ... </h2>
@@ -69,11 +69,9 @@ export default {
   components: { User, RespostaDesafio },
   data () {
     return {
-      carregado: false,
       procurando: false,
       encontrado: false,
       respondeu: false,
-      timer: null,
       pareamento: {}
     }
   },
@@ -87,10 +85,23 @@ export default {
     if (data !== '' && data.status === 'JOGANDO') {
       this.$router.replace({ path: '/partida' })
     } else {
-      this.carregado = true
+      this.procurando = true
       let { data } = await this.$axios.post(`/pareamentos`)
       this.pareamento = data
-      this.refresh()
+      this.tratar()
+
+      this.$echo.channel('pareamento-' + this.pareamento.id)
+        .listen('.PareamentoAtualizadoEvent', (payload) => {
+          console.log(payload.pareamento)
+          this.pareamento = payload.pareamento
+          this.tratar()
+        })
+
+      let socket = this.$echo.connector.socket
+      socket.on('disconnect', function () {
+        alert('Reconectando ...')
+        location.reload()
+      })
     }
   },
   computed: {
@@ -99,20 +110,9 @@ export default {
     }
   },
   methods: {
-    refresh () {
-      this.procurando = true
-      this.timer = setInterval(function () {
-        this.parear()
-      }.bind(this), 2000)
-    },
     async cancelar () {
-      this.parar()
       await this.$axios.patch(`/pareamentos/${this.pareamento.id}`, { status: 'CANCELADO' })
       this.$router.replace({ path: '/home' })
-    },
-    parar () {
-      this.procurando = false
-      clearInterval(this.timer)
     },
     responder (decisao) {
       if (decisao === true && !confirm('Ao aceitar o desafio você se compromente com os termos FAIR PLAY')) {
@@ -124,9 +124,7 @@ export default {
       }
 
       this.respondeu = true
-
       let user = (this.user.id === this.pareamento.user1_id) ? 1 : 2
-
       user = 'user' + user + '_aceitou'
 
       let params = {
@@ -135,35 +133,20 @@ export default {
 
       this.$axios.patch(`/pareamentos/${this.pareamento.id}`, params)
     },
-    async parear () {
-      try {
-        let { data } = await this.$axios.get(`/pareamentos/${this.pareamento.id}`)
-        this.pareamento = data
+    async tratar () {
+      if (this.pareamento.status === 'MATCH') {
+        this.encontrado = true
+        this.procurando = false
+      }
 
-        if (this.pareamento.status === 'MATCH') {
-          this.encontrado = true
-          this.procurando = false
-        }
+      if (this.pareamento.status === 'SUCESSO') {
+        this.$router.replace({ path: '/partida' })
+      }
 
-        if (this.pareamento.status === 'SUCESSO') {
-          this.parar()
-          this.$router.replace({ path: '/partida' })
-        }
-
-        if (this.pareamento.status === 'CANCELADO') {
-          this.parar()
-          this.$router.replace({ path: '/home' })
-          this.$toast.open({
-            message: 'O desafio foi cancelado, pois um dos jogadores recusou o confronto.',
-            type: 'is-danger',
-            position: 'is-bottom'
-          })
-        }
-      } catch (error) {
-        this.parar()
+      if (this.pareamento.status === 'CANCELADO') {
         this.$router.replace({ path: '/home' })
         this.$toast.open({
-          message: error.response.data.message,
+          message: 'O desafio foi cancelado, pois um dos jogadores recusou o confronto.',
           type: 'is-danger',
           position: 'is-bottom'
         })
@@ -186,6 +169,5 @@ h2 {
   font-size: 14pt;
   font-weight: bold;
   margin-top: 0px !important;
-  margin-bottom: 30px;
 }
 </style>

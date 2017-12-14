@@ -117,7 +117,6 @@ export default {
       this.chat = data.chat
 
       let mensagens = await this.$axios.get(`/chats/${this.chat.id}`)
-
       this.mensagens = mensagens.data
 
       this.$echo.channel('partida-' + this.partida.id)
@@ -158,15 +157,6 @@ export default {
       let diff = trinta - agora.diff(resultadoEm)
 
       return diff
-    },
-    meuResultado () {
-      // let resultado = this.resultado
-
-      // if (this.user.id === this.partida.user1_id) {
-      //   return resultado.user1
-      // } else {
-      //   return resultado.user2
-      // }
     }
   },
   methods: {
