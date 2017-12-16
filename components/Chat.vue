@@ -80,7 +80,9 @@ export default {
       this.params.from_id = this.eu.id
       this.params.to_id = this.adversario.id
 
-      await this.$axios.post(`/mensagens`, this.params)
+      let params = { ...this.params }
+
+      this.$emit('enviarMensagem', params)
 
       this.params.mensagem = null
       this.params.media = null

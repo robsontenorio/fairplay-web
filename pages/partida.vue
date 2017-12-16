@@ -41,7 +41,7 @@
         </b-tab-item>
         <b-tab-item label="Chat" icon="comment">
           <div class="chat">
-            <chat :eu="eu" :adversario="adversario" :chatId="chat.id" :mensagens="mensagens"></chat>
+            <chat :eu="eu" :adversario="adversario" :chatId="chat.id" :mensagens="mensagens" @enviarMensagem="enviarMensagem"></chat>
           </div>
         </b-tab-item>
         <b-tab-item label="Resultado" icon="pencil">
@@ -240,12 +240,15 @@ export default {
           position: 'is-bottom'
         })
       }
+    },
+    async enviarMensagem (params) {
+      await this.$axios.post(`/mensagens`, params)
     }
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .instrucoes {
   font-size: 9pt;
 }

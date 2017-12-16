@@ -11,7 +11,7 @@ export default {
   props: ['user', 'size']
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .avatar {
   border-radius: 50%;
 }

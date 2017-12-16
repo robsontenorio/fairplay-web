@@ -1,7 +1,7 @@
 <template>
   <div class="has-text-centered">
     <div v-show="procurando">
-      <img src="/spinner.gif" />
+      <img src="/spinner.gif">
       <h2>Procurando adversário ... </h2>
       <button class="button is-primary" @click="cancelar()">cancelar </button>
     </div>
@@ -9,46 +9,18 @@
       <div class="columns is-gapless is-mobile has-text-centered">
         <div class="column">
           <div class="user-avatar ">
-            <user :user="pareamento.user1" size="128"></user>
+            <user :user="eu" size="128" />
           </div>
-          <div v-show="pareamento.user1.id == user.id">
-            <div v-show="!pareamento.user1_aceitou">
-              <button class="button is-success is-large" @click="responder(true)" :disabled="respondeu">
-                <i class="fa fa-check"></i>
-              </button> &nbsp;
-              <button class="button is-danger is-large" @click="responder(false)" :disabled="respondeu">
-                <i class="fa fa-times"></i>
-              </button>
-            </div>
-            <resposta-desafio :resposta="pareamento.user1_aceitou" v-show="pareamento.user1_aceitou"></resposta-desafio>
-            <button style="margin-top: 20px" class="button is-danger is-small is-outlined" @click="responder(false)" v-show="pareamento.user1_aceitou">
-              <i class="fa fa-times"></i> &nbsp; desistir
-            </button>
-          </div>
-          <div v-show="pareamento.user2.id == user.id">
-            <resposta-desafio :resposta="pareamento.user1_aceitou"></resposta-desafio>
+          <div>
+            <resposta-pareamento :pareamento="pareamento" :eu="eu" @respondeu="responder" />
           </div>
         </div>
         <div class="column">
           <div class="user-avatar">
-            <user :user="pareamento.user2" size="128"></user>
+            <user :user="adversario" size="128" />
           </div>
-          <div v-show="pareamento.user2.id == user.id">
-            <div v-show="!pareamento.user2_aceitou">
-              <button class="button is-success is-large" @click="responder(true)" :disabled="respondeu">
-                <i class="fa fa-check"></i>
-              </button> &nbsp;
-              <button class="button is-danger is-large" @click="responder(false)" :disabled="respondeu">
-                <i class="fa fa-times"></i>
-              </button>
-            </div>
-            <resposta-desafio :resposta="pareamento.user2_aceitou" v-show="pareamento.user2_aceitou"></resposta-desafio>
-            <button style="margin-top: 20px" class="button is-danger is-small is-inverted" @click="responder(false)" v-show="pareamento.user2_aceitou">
-              <i class="fa fa-times"></i> &nbsp; desistir
-            </button>
-          </div>
-          <div v-show="pareamento.user1.id == user.id">
-            <resposta-desafio :resposta="pareamento.user2_aceitou"></resposta-desafio>
+          <div>
+            <resposta-pareamento :pareamento="pareamento" :adversario="adversario" />
           </div>
         </div>
       </div>
@@ -62,16 +34,15 @@
 <script>
 
 import User from '~/components/User'
-import RespostaDesafio from '~/components/RespostaDesafio'
+import RespostaPareamento from '~/components/RespostaPareamento'
 
 export default {
   middleware: 'auth',
-  components: { User, RespostaDesafio },
+  components: { User, RespostaPareamento },
   data () {
     return {
       procurando: false,
       encontrado: false,
-      respondeu: false,
       pareamento: {}
     }
   },
@@ -104,9 +75,22 @@ export default {
       })
     }
   },
+  beforeDestroy () {
+    this.cancelar()
+    this.$echo.leave('pareamento-' + this.pareamento.id)
+  },
   computed: {
-    user () {
+    eu () {
       return this.$store.state.auth.user
+    },
+    adversario () {
+      let adversario = null
+
+      if (this.eu) {
+        adversario = (this.eu.id === this.pareamento.user1_id) ? this.pareamento.user2 : this.pareamento.user1
+      }
+
+      return adversario
     }
   },
   methods: {
@@ -114,23 +98,7 @@ export default {
       await this.$axios.patch(`/pareamentos/${this.pareamento.id}`, { status: 'CANCELADO' })
       this.$router.replace({ path: '/home' })
     },
-    responder (decisao) {
-      if (decisao === true && !confirm('Ao aceitar o desafio você se compromente com os termos FAIR PLAY')) {
-        return false
-      }
-
-      if (decisao === false && !confirm('Seu adversário ainda não respondeu. Deseja abandonar o confronto?')) {
-        return false
-      }
-
-      this.respondeu = true
-      let user = (this.user.id === this.pareamento.user1_id) ? 1 : 2
-      user = 'user' + user + '_aceitou'
-
-      let params = {
-        [user]: decisao
-      }
-
+    async responder (params) {
       this.$axios.patch(`/pareamentos/${this.pareamento.id}`, params)
     },
     async tratar () {
@@ -156,7 +124,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .user-avatar {
   margin-bottom: 20px;
 }

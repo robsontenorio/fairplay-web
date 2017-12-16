@@ -1,6 +1,6 @@
-let API_URL = (process.env.NODE_ENV !== 'production') ? 'http://192.168.15.6:8000/api/' : 'http://IP/api/'
-let API_URL_SOCKET = (process.env.NODE_ENV !== 'production') ? 'http://192.168.15.6:6001' : 'http://IP:6001'
-let API_URL_STORAGE = (process.env.NODE_ENV !== 'production') ? 'http://192.168.15.6:8000/storage/' : 'http://IP:6001'
+let API_URL = (process.env.NODE_ENV !== 'production') ? 'http://192.168.1.103:8000/api/' : 'http://IP/api/'
+let API_URL_SOCKET = (process.env.NODE_ENV !== 'production') ? 'http://192.168.1.103:6001' : 'http://IP:6001'
+let API_URL_STORAGE = (process.env.NODE_ENV !== 'production') ? 'http://192.168.1.103:8000/storage/' : 'http://IP:6001'
 
 module.exports = {
   ssr: false,

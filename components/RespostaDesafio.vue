@@ -26,7 +26,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .decisao-1 {
   color: green;
 }

@@ -54,7 +54,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .is-empty {
   border: 1px dashed #c0c0c0;
 }
