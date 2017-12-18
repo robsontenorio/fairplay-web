@@ -53,7 +53,7 @@ export default {
   async mounted () {
     let { data } = await this.$axios.get(`/partida`)
 
-    if (data !== '' && data.status === 'JOGANDO') {
+    if ((data !== '' && data.status === 'JOGANDO') || (data.status === 'RESULTADO' && data.detalhes[this.eu.id].vencedor === null)) {
       this.$router.replace({ path: '/partida' })
     } else {
       this.procurando = true
@@ -76,8 +76,7 @@ export default {
     }
   },
   beforeDestroy () {
-    this.cancelar()
-    this.$echo.leave('pareamento-' + this.pareamento.id)
+    this.parar()
   },
   computed: {
     eu () {
@@ -94,8 +93,14 @@ export default {
     }
   },
   methods: {
+    async parar () {
+      if (this.pareamento.id) {
+        this.$echo.leave('pareamento-' + this.pareamento.id)
+        await this.$axios.patch(`/pareamentos/${this.pareamento.id}`, { status: 'CANCELADO' })
+      }
+    },
     async cancelar () {
-      await this.$axios.patch(`/pareamentos/${this.pareamento.id}`, { status: 'CANCELADO' })
+      this.parar()
       this.$router.replace({ path: '/home' })
     },
     async responder (params) {

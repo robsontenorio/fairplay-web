@@ -57,7 +57,7 @@
             </div>
           </div>
 
-          <button class="button is-light is-fullwidth" @click="solicitarCancelamento()">solicitar cancelamento</button>
+          <button class="button is-light is-fullwidth" @click="informarResultado('cancelamento')">solicitar cancelamento</button>
 
           <br><br>
 
@@ -137,6 +137,10 @@ export default {
       })
     }
   },
+  beforeDestroy () {
+    this.$echo.leave('partida-' + this.partida.id)
+    this.$echo.leave('chat-' + this.chat.id)
+  },
   computed: {
     eu () {
       return this.$store.state.auth.user
@@ -191,29 +195,17 @@ export default {
         })
       }
     },
-    async solicitarCancelamento () {
-      if (!confirm('Solicitar o cancelamento da partida?\n\nA partida somente será cancelada se o seu adversário também solicitar o cancelamento. Caso o adversário tenha informado qualquer outro resultado, ele prevalecerá ao invés do cancelamento. Use o chat para chegar a um acordo.')) {
-        return false
-      }
-
-      let params = {
-        solicitou_cancelamento: true
-      }
-      try {
-        await this.$axios.patch(`/partidas/${this.partida.id}`, params)
-      } catch (error) {
-        this.$toast.open({
-          message: error.response.data.message,
-          type: 'is-danger',
-          position: 'is-bottom'
-        })
-      }
-    },
     async informarResultado (tipo) {
       let userId
 
-      if (!confirm('Você confirma o resultado informado?\nCaso informe um resultado falso você será banido')) {
-        return false
+      if (tipo === 'cancelamento') {
+        if (!confirm('Solicitar o cancelamento da partida?\n\nA partida somente será cancelada se o seu adversário também solicitar o cancelamento. Caso o adversário tenha informado qualquer outro resultado, a partida irá a JULGAMENTO. Use o chat para chegar a um acordo.')) {
+          return false
+        }
+      } else {
+        if (!confirm('Você confirma o resultado informado?\nCaso informe um resultado falso você será banido')) {
+          return false
+        }
       }
 
       if (tipo === 'vitoria') {
@@ -224,7 +216,9 @@ export default {
         } else {
           userId = this.partida.user1.id
         }
-      } else {
+      } else if (tipo === 'empate') {
+        userId = 0
+      } else if (tipo === 'cancelamento') {
         userId = -1
       }
 

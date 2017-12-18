@@ -31,21 +31,19 @@ export default {
     parseResultado (detalhes, userId) {
       let resultado = null
 
-      if (detalhes.solicitou_cancelamento === true) {
-        resultado = 'cancelamento'
-        this.tag = 'is-light'
-      } else {
-        if (detalhes.vencedor !== null) {
-          if (detalhes.vencedor === userId) {
-            resultado = 'ganhei'
-            this.tag = 'is-success'
-          } else if (detalhes.vencedor === -1) {
-            resultado = 'empate'
-            this.tag = 'is-dark'
-          } else {
-            resultado = 'perdi'
-            this.tag = 'is-danger'
-          }
+      if (detalhes.vencedor !== null) {
+        if (detalhes.vencedor === -1) {
+          resultado = 'cancelamento'
+          this.tag = 'is-light'
+        } else if (detalhes.vencedor === 0) {
+          resultado = 'empate'
+          this.tag = 'is-dark'
+        } else if (detalhes.vencedor === userId) {
+          resultado = 'ganhei'
+          this.tag = 'is-success'
+        } else {
+          resultado = 'perdi'
+          this.tag = 'is-danger'
         }
       }
 
