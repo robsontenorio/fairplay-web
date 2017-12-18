@@ -6,7 +6,8 @@ import '~/assets/app.scss'
 
 Vue.use(Buefy, {
   defaultIconPack: 'fa',
-  defaultToastDuration: 5000
+  defaultToastDuration: 5000,
+  defaultSnackbarDuration: 10000
 })
 
 Vue.use(VueChatScroll)

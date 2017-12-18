@@ -1,8 +1,11 @@
 <template>
   <div class="has-text-centered">
     <div v-show="procurando">
-      <img src="/spinner.gif">
-      <h2>Procurando adversário ... </h2>
+      <br><br>
+      <img src="/spinner2.gif" width="100px">
+      <br><br>
+      <h3>Procurando adversário ... </h3>
+      <br><br>
       <button class="button is-primary" @click="cancelar()">cancelar </button>
     </div>
     <div v-if="encontrado">
@@ -118,7 +121,7 @@ export default {
 
       if (this.pareamento.status === 'CANCELADO') {
         this.$router.replace({ path: '/home' })
-        this.$toast.open({
+        this.$snackbar.open({
           message: 'O desafio foi cancelado, pois um dos jogadores recusou o confronto.',
           type: 'is-danger',
           position: 'is-bottom'

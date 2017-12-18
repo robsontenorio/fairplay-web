@@ -5,8 +5,9 @@
         <div class="container is-fluid">
           <div class="navbar-brand">
             <a class="navbar-item" href="/">
-              <i class="fa fa-heart" style="color: #ff8f8f"></i> &nbsp;
-              <strong> FAIR PLAY</strong>
+              <i class="fa fa-bullseye"></i> &nbsp;
+              <strong> FAIR</strong>
+              <span style="font-weight: 300">PLAY</span>
             </a>
 
             <div class="navbar-burger burger" @click="showNav = !showNav" :class="{ 'is-active' : showNav }">

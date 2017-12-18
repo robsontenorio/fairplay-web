@@ -66,15 +66,17 @@
           </div>
           <div class="resultado-info is-default has-text-justified">
             Se houver
-            <strong>divergência</strong> entre os resultados ambos jogadores vão a julgamento pela comunidade, podendo ser banido.
+            <strong>divergência</strong> entre os resultados ambos jogadores vão a
+            <strong>julgamento</strong> pela comunidade, podendo ser banido.
           </div>
           <div class="resultado-info is-default has-text-justified">
             No momento em que um dos jogadores informa o resultado, o adversário tem
             <strong>30 minutos</strong> para também informar o resultado. Após este prazo o resultado será confirmado automaticamente pelo sistema.
           </div>
           <div class="resultado-info is-default has-text-justified">
-            A partida somente será cancelada se o seu adversário também solicitar o cancelamento. Caso o adversário tenha informado qualquer outro resultado, ele prevalecerá ao invés do cancelamento. Use o
-            <strong>chat</strong> chegar a um acordo.
+            A partida somente será cancelada se o seu adversário também solicitar o cancelamento. Caso o adversário informe qualquer outro resultado, a partida irá a
+            <strong>julgamento</strong>. Use o
+            <strong>chat</strong> para chegar a um acordo
           </div>
         </b-tab-item>
       </b-tabs>
@@ -178,7 +180,7 @@ export default {
       if (this.partida.status === 'JULGAMENTO') {
         this.$router.replace({ path: '/home' })
 
-        this.$toast.open({
+        this.$snackbar.open({
           message: 'Os resultados informados foram divergentes. Partida vai a JULGAMENTO',
           type: 'is-danger',
           position: 'is-bottom'
@@ -188,7 +190,7 @@ export default {
       if (this.partida.status === 'ANULADA') {
         this.$router.replace({ path: '/home' })
 
-        this.$toast.open({
+        this.$snackbar.open({
           message: 'A partida foi anulada, pois ambos jogadores concordaram',
           type: 'is-danger',
           position: 'is-bottom'
@@ -199,7 +201,7 @@ export default {
       let userId
 
       if (tipo === 'cancelamento') {
-        if (!confirm('Solicitar o cancelamento da partida?\n\nA partida somente será cancelada se o seu adversário também solicitar o cancelamento. Caso o adversário tenha informado qualquer outro resultado, a partida irá a JULGAMENTO. Use o chat para chegar a um acordo.')) {
+        if (!confirm('Solicitar o cancelamento da partida?\n\nA partida somente será cancelada se o seu adversário também solicitar o cancelamento. Caso o adversário informe qualquer outro resultado, a partida irá a JULGAMENTO. Use o chat para chegar a um acordo.')) {
           return false
         }
       } else {
@@ -226,9 +228,17 @@ export default {
         vencedor: userId
       }
       try {
-        await this.$axios.patch(`/partidas/${this.partida.id}`, params)
+        let { data } = await this.$axios.patch(`/partidas/${this.partida.id}`, params)
+
+        if (data.status === 'RESULTADO') {
+          this.$snackbar.open({
+            message: 'O adversário tem 30 min para confirmar ou recusar o resultado. Você pode continuar conversando com o aversário ou procurar por uma nova partida.',
+            type: 'is-success',
+            position: 'is-bottom'
+          })
+        }
       } catch (error) {
-        this.$toast.open({
+        this.$snackbar.open({
           message: error.response.data.message,
           type: 'is-danger',
           position: 'is-bottom'
