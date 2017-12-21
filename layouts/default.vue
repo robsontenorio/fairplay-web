@@ -6,8 +6,8 @@
           <div class="navbar-brand">
             <a class="navbar-item" href="/">
               <i class="fa fa-bullseye"></i> &nbsp;
-              <strong> FAIR</strong>
-              <span style="font-weight: 300">PLAY</span>
+              <span style="font-weight: 300">ARENA</span>&nbsp;
+              <strong> FAIRPLAY</strong>
             </a>
 
             <div class="navbar-burger burger" @click="showNav = !showNav" :class="{ 'is-active' : showNav }">
@@ -19,7 +19,7 @@
           <div class="navbar-menu" :class="{ 'is-active' : showNav }">
             <div class="navbar-start">
             </div>
-            <div class="navbar-end">
+            <div class="navbar-end" @click="showNav = !showNav">
               <nuxt-link class="navbar-item" to="/home">Home</nuxt-link>
               <nuxt-link class="navbar-item navbar-item-destacar" to="/buscar">
                 <i class="fa fa-gamepad"></i> &nbsp; Jogar

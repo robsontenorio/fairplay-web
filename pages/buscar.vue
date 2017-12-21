@@ -66,7 +66,6 @@ export default {
 
       this.$echo.channel('pareamento-' + this.pareamento.id)
         .listen('.PareamentoAtualizadoEvent', (payload) => {
-          console.log(payload.pareamento)
           this.pareamento = payload.pareamento
           this.tratar()
         })
@@ -99,11 +98,11 @@ export default {
     async parar () {
       if (this.pareamento.id) {
         this.$echo.leave('pareamento-' + this.pareamento.id)
-        await this.$axios.patch(`/pareamentos/${this.pareamento.id}`, { status: 'CANCELADO' })
       }
     },
     async cancelar () {
       this.parar()
+      await this.$axios.patch(`/pareamentos/${this.pareamento.id}`, { status: 'CANCELADO' })
       this.$router.replace({ path: '/home' })
     },
     async responder (params) {

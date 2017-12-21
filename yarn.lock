@@ -6036,12 +6036,6 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
-vue-chat-scroll@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/vue-chat-scroll/-/vue-chat-scroll-1.2.1.tgz#54f123004b887d91f2f7fb69b9bebdf6f61ea9b4"
-  dependencies:
-    vue "^2.1.10"
-
 vue-echo@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/vue-echo/-/vue-echo-1.0.1.tgz#f845650a0e71408603f70b22a28918c99696a1f0"
@@ -6126,7 +6120,7 @@ vue2-dropzone@^3.0.0:
   dependencies:
     dropzone "^5.2.0"
 
-vue@^2.1.10, vue@^2.5.2:
+vue@^2.5.2:
   version "2.5.9"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.9.tgz#b2380cd040915dca69881dafd121d760952e65f7"
 

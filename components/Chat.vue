@@ -1,6 +1,8 @@
 <template>
   <div>
     <div class="chat-wrapper" ref="chatWrapper">
+      <div v-if="mensagens.length === 0" class="empty">
+        <i class="fa fa-comments"></i> Conversas são publicas</div>
       <div class="messages-wrapper">
         <div v-for="mensagem in mensagens" :key="mensagem.id" class="message" :class="[mensagem.from_id === eu.id ? 'to' : 'from']">
           <span v-if="mensagem.mensagem">
@@ -128,5 +130,13 @@ export default {
 
 .mensagem-composer {
   margin-bottom: 100px;
+}
+
+.empty {
+  color: silver;
+  font-size: 14pt;
+  text-align: center;
+  margin-bottom: 50px;
+  margin-top: 20px;
 }
 </style>

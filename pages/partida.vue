@@ -22,24 +22,24 @@
         <b-tab-item label="Instruções" icon="list">
           <div class="instrucoes has-text-left">
             <ol>
-              <li>Use o
-                <strong>chat</strong> para combinar a partida.</li>
-              <li>Conversas, fotos e vídeos são
-                <strong>públicos</strong>.</li>
-              <li>Ao
-                <strong>final da partida</strong> informe o resultado.</li>
-              <li>Resultados divergentes são
-                <strong>julgados pela comunidade</strong>.</li>
-              <li>Jogadores de péssima reputação serão
-                <strong>banidos</strong>.</li>
+              <li>Você joga limpo!</li>
               <li>Vencendo ou perdendo sua
                 <strong>reputação é mantida</strong>.</li>
-              <li>Você joga limpo!</li>
+              <li>Use o
+                <strong>chat</strong> para combinar a partida.</li>
+              <li>Conversas são
+                <strong>públicas</strong>.</li>
+              <li>Ao final da partida informe o resultado.</li>
+              <li>Resultados divergentes são
+                <strong>julgados pela comunidade</strong>.</li>
+              <li>Capture algumas imagens do jogo, caso seja necessário comprovar o resultado.</li>
+              <li>Jogadores de péssima reputação serão
+                <strong>banidos</strong>.</li>
             </ol>
           </div>
 
         </b-tab-item>
-        <b-tab-item label="Chat" icon="comment">
+        <b-tab-item label="Chat" icon="comments">
           <div class="chat">
             <chat :eu="eu" :adversario="adversario" :chatId="chat.id" :mensagens="mensagens" @enviarMensagem="enviarMensagem"></chat>
           </div>
@@ -197,18 +197,23 @@ export default {
         })
       }
     },
-    async informarResultado (tipo) {
-      let userId
-
+    informarResultado (tipo) {
+      let texto
       if (tipo === 'cancelamento') {
-        if (!confirm('Solicitar o cancelamento da partida?\n\nA partida somente será cancelada se o seu adversário também solicitar o cancelamento. Caso o adversário informe qualquer outro resultado, a partida irá a JULGAMENTO. Use o chat para chegar a um acordo.')) {
-          return false
-        }
+        texto = 'A partida somente será cancelada se o seu adversário também solicitar o cancelamento. Caso o adversário informe qualquer outro resultado, a partida irá a <strong>julgamento</strong>. Use o chat para chegar a um acordo.'
       } else {
-        if (!confirm('Você confirma o resultado informado?\nCaso informe um resultado falso você será banido')) {
-          return false
-        }
+        texto = 'Caso informe um resultado falso você será <strong>banido.</strong>'
       }
+
+      this.$dialog.confirm({
+        message: texto,
+        type: 'is-warning',
+        hasIcon: true,
+        onConfirm: () => this.postResultado(tipo)
+      })
+    },
+    async postResultado (tipo) {
+      let userId
 
       if (tipo === 'vitoria') {
         userId = this.eu.id
@@ -231,11 +236,7 @@ export default {
         let { data } = await this.$axios.patch(`/partidas/${this.partida.id}`, params)
 
         if (data.status === 'RESULTADO') {
-          this.$snackbar.open({
-            message: 'O adversário tem 30 min para confirmar ou recusar o resultado. Você pode continuar conversando com o aversário ou procurar por uma nova partida.',
-            type: 'is-success',
-            position: 'is-bottom'
-          })
+          this.$modal.open(`O adversário tem 30 minutos para confirmar ou recusar o resultado. Você ainda pode alterar o resultado informado, continuar conversando com o aversário ou procurar por uma nova partida.`)
         }
       } catch (error) {
         this.$snackbar.open({
@@ -259,6 +260,10 @@ export default {
 
 .instrucoes li {
   margin-bottom: 5px;
+}
+
+.instrucoes ol {
+  margin-top: 0 !important;
 }
 
 .resultado-info {
