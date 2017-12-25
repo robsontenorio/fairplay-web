@@ -1,6 +1,6 @@
-let API_URL = (process.env.NODE_ENV !== 'production') ? 'http://192.168.15.6:8000/api/' : 'http://192.168.15.6:8000/api/'
-let API_URL_SOCKET = (process.env.NODE_ENV !== 'production') ? 'http://192.168.15.6:6001' : 'http://192.168.15.6:6001'
-let API_URL_STORAGE = (process.env.NODE_ENV !== 'production') ? 'http://192.168.15.6:8000/storage/' : 'http://192.168.15.6:8000/storage/'
+let API_URL = (process.env.NODE_ENV !== 'production') ? 'http://localhost:8000/api/' : 'http://localhost:8000/api/'
+let API_URL_SOCKET = (process.env.NODE_ENV !== 'production') ? 'http://localhost:6001' : 'http://localhost:6001'
+let API_URL_STORAGE = (process.env.NODE_ENV !== 'production') ? 'http://localhost:8000/storage/' : 'http://localhost:8000/storage/'
 
 module.exports = {
   ssr: false,
