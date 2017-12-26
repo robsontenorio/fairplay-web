@@ -1,6 +1,6 @@
 <template>
   <div class="has-text-centered">
-    <h1>Login</h1>
+    <h1>ENTRAR</h1>
     <br>
     <b-field>
       <a class="button facebook is-fullwidth" @click="login('facebook')">

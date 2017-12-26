@@ -5,12 +5,12 @@
 </template>
 <script>
 export default {
-  name: 'user',
   props: ['imagem', 'size']
 }
 </script>
 <style lang="scss" scoped>
 .avatar {
   border-radius: 50%;
+  border: 4px solid white;
 }
 </style>

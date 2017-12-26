@@ -33,8 +33,8 @@
 import vue2Dropzone from 'vue2-dropzone'
 
 export default {
-  name: 'chat',
-  props: ['eu', 'adversario', 'chatId', 'mensagens'],
+
+  props: ['eu', 'adversario', 'partidaId', 'mensagens'],
   components: {
     vueDropzone: vue2Dropzone
   },
@@ -42,7 +42,7 @@ export default {
     return {
       loading: false,
       params: {
-        chat_id: null,
+        partida_id: null,
         from_id: null,
         to_id: null,
         mensagem: null,
@@ -78,7 +78,7 @@ export default {
         return
       }
 
-      this.params.chat_id = this.chatId
+      this.params.partida_id = this.partidaId
       this.params.from_id = this.eu.id
       this.params.to_id = this.adversario.id
 

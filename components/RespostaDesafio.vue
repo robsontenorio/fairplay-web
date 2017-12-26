@@ -12,7 +12,6 @@
 </template>
 <script>
 export default {
-  name: 'resposta-desafio',
   props: ['resposta'],
   computed:
   {

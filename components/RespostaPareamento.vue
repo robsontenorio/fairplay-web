@@ -25,7 +25,6 @@
 import RespostaDesafio from '~/components/RespostaDesafio'
 
 export default {
-  name: 'resposta-pareamento',
   props: ['pareamento', 'eu', 'adversario'],
   components: { RespostaDesafio },
   data () {

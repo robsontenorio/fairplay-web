@@ -41,7 +41,7 @@
         </b-tab-item>
         <b-tab-item label="Chat" icon="comments">
           <div class="chat">
-            <chat :eu="eu" :adversario="adversario" :chatId="chat.id" :mensagens="mensagens" @enviarMensagem="enviarMensagem"></chat>
+            <chat :eu="eu" :adversario="adversario" :partidaId="partida.id" :mensagens="mensagens" @enviarMensagem="enviarMensagem"></chat>
           </div>
         </b-tab-item>
         <b-tab-item label="Resultado" icon="pencil">
@@ -99,7 +99,6 @@ export default {
     return {
       carregado: false,
       partida: {},
-      chat: {},
       mensagens: []
     }
   },
@@ -109,16 +108,15 @@ export default {
     // TODO usar metodo FETCH() ??
   },
   async mounted () {
-    let { data } = await this.$axios.get(`/partida`)
+    let { data } = await this.$axios.get(`/partidas/ultima`)
 
     if (data === '' || (data.status !== 'JOGANDO' && data.status !== 'RESULTADO')) {
       this.$router.replace({ path: '/home' })
     } else {
       this.partida = data
       this.carregado = true
-      this.chat = data.chat
 
-      let mensagens = await this.$axios.get(`/chats/${this.chat.id}`)
+      let mensagens = await this.$axios.get(`/partidas/${this.partida.id}/mensagens`)
       this.mensagens = mensagens.data
 
       this.$echo.channel('partida-' + this.partida.id)
@@ -127,7 +125,7 @@ export default {
           this.tratar()
         })
 
-      this.$echo.channel('chat-' + this.chat.id)
+      this.$echo.channel('chat-' + this.partida.id)
         .listen('.MensagemRecebidaEvent', (payload) => {
           this.mensagens.push(payload.mensagem)
         })
@@ -141,7 +139,7 @@ export default {
   },
   beforeDestroy () {
     this.$echo.leave('partida-' + this.partida.id)
-    this.$echo.leave('chat-' + this.chat.id)
+    this.$echo.leave('chat-' + this.partida.id)
   },
   computed: {
     eu () {
@@ -247,7 +245,7 @@ export default {
       }
     },
     async enviarMensagem (params) {
-      await this.$axios.post(`/mensagens`, params)
+      await this.$axios.post(`/partidas/${this.partida.id}/mensagens`, params)
     }
   }
 }

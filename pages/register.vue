@@ -46,7 +46,7 @@ export default {
 
   },
   async mounted () {
-    this.$modal.open(`Preencha atentamente as informações. Caso você modifique posteriormente, seu histórico será reiniciado e você voltará para a última divisão da temporada.`)
+    this.$modal.open(`Preencha atentamente as informações. Caso você modifique posteriormente, seu histórico será perdido em todas as temporadas e você voltará para a última posição.`)
     let response
 
     response = await this.$axios.get(`/plataformas`)

@@ -20,12 +20,21 @@
             <div class="navbar-start">
             </div>
             <div class="navbar-end" @click="showNav = !showNav">
-              <nuxt-link class="navbar-item" to="/home">Home</nuxt-link>
-              <nuxt-link class="navbar-item navbar-item-destacar" to="/buscar">
-                <i class="fa fa-gamepad"></i> &nbsp; Jogar
+              <nuxt-link class="navbar-item" to="/home" v-show="loggedIn">
+                <i class="fa fa-user"></i> &nbsp; Meu perfil
               </nuxt-link>
-              <nuxt-link v-show="!loggedIn" class="navbar-item" to="/login">Login</nuxt-link>
-              <a class="navbar-item" href="###" v-show="loggedIn" @click="logout">Logout</a>
+              <nuxt-link class="navbar-item" to="/buscar">
+                <i class="fa fa-play"></i> &nbsp; Jogar
+              </nuxt-link>
+              <nuxt-link class="navbar-item" to="/divisoes">
+                <i class="fa fa-signal"></i> &nbsp; Divisões
+              </nuxt-link>
+              <nuxt-link class="navbar-item" to="/login" v-show="!loggedIn">
+                <i class="fa fa-sign-in"></i> &nbsp; Entrar
+              </nuxt-link>
+              <a class="navbar-item" href="###" v-show="loggedIn" @click="logout">
+                <i class="fa fa-power-off"></i> &nbsp; Sair
+              </a>
             </div>
           </div>
         </div>

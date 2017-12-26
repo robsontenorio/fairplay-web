@@ -8,7 +8,6 @@
 </template>
 <script>
 export default {
-  name: 'resposta-partida',
   props: ['partida', 'user'],
   data () {
     return {

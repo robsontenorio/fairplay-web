@@ -5,14 +5,14 @@
       <img src="/spinner2.gif" width="100px">
       <br><br>
       <h3>Procurando adversário ... </h3>
-      <br><br>
+
       <button class="button is-primary" @click="cancelar()">cancelar </button>
     </div>
     <div v-if="encontrado">
       <div class="columns is-gapless is-mobile has-text-centered">
         <div class="column">
           <div class="user-avatar ">
-            <user :user="eu" size="128" />
+            <user :user="eu" size="96" />
           </div>
           <div>
             <resposta-pareamento :pareamento="pareamento" :eu="eu" @respondeu="responder" />
@@ -20,7 +20,7 @@
         </div>
         <div class="column">
           <div class="user-avatar">
-            <user :user="adversario" size="128" />
+            <user :user="adversario" size="96" />
           </div>
           <div>
             <resposta-pareamento :pareamento="pareamento" :adversario="adversario" />
@@ -54,7 +54,7 @@ export default {
     // TODO nao funciona em SPA?
   },
   async mounted () {
-    let { data } = await this.$axios.get(`/partida`)
+    let { data } = await this.$axios.get(`/partidas/ultima`)
 
     if ((data !== '' && data.status === 'JOGANDO') || (data.status === 'RESULTADO' && data.detalhes[this.eu.id].vencedor === null)) {
       this.$router.replace({ path: '/partida' })
