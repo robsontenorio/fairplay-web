@@ -2,21 +2,51 @@
   <div class="has-text-centered">
     <div>
       <profile :user="user"></profile>
-      <div class="temporadas">
-        <b-select placeholder="Temporadas" icon="calendar" v-model="temporada_ativa.id" @input="carregarClassificacoes" expanded>
-          <option v-for="temporada in temporadas" :value="temporada.id" :key="temporada.id">
-            {{ temporada.nome }}
-          </option>
-        </b-select>
-      </div>
-      <div class="temporada">
-        <classificacoes :user="user" :classificacoes="classificacoes"></classificacoes>
-      </div>
+      <div class="tabs">
+        <b-tabs size="is-small" type="is-toggle" position="is-centered" expanded>
+          <b-tab-item label="Geral" icon="list">
+            <div v-if="user.jogo">
+              <p class="posicao">
+                <b-tag type="is-warning">
+                  <i class="fa fa-line-chart"></i>&nbsp;
+                  <small>geral</small>
+                </b-tag>
+                <b-tag type="is-dark">{{ user.posicao }} °</b-tag>
+                &nbsp;&nbsp;
 
-      <small v-if="user.jogo">Sua colocação geral e estatísticas para
-        <strong> {{ user.jogo.nome }} </strong>
-        <strong>{{ user.plataforma.nome }}</strong>.
-      </small>
+                <!-- <i class="fa fa-line-chart"></i>&nbsp;
+                <span>{{ user.posicao }}</span> posição &nbsp; &nbsp;
+                <i class="fa fa-star"></i>
+                <span> {{ user.pontos }} </span> pontos -->
+              </p>
+
+              <p class="pontuacoes">
+                <b-tag type="is-info">P</b-tag>
+                <b-tag type="is-dark">{{ user.pontos }}</b-tag>&nbsp;
+                <b-tag type="is-success">V</b-tag>
+                <b-tag type="is-dark">{{ user.vitorias }}</b-tag>&nbsp;
+                <b-tag type="is-light">E</b-tag>
+                <b-tag type="is-dark">{{ user.empates }}</b-tag>&nbsp;
+                <b-tag type="is-danger">D</b-tag>
+                <b-tag type="is-dark">{{ user.derrotas }}</b-tag>&nbsp;
+              </p>
+
+            </div>
+          </b-tab-item>
+          <b-tab-item label="Temporadas" icon="calendar">
+            <div class="temporadas">
+              <b-select placeholder="Temporadas" icon="calendar" v-model="temporada_ultima.id" @input="carregarClassificacoes" expanded>
+                <option v-for="temporada in temporadas" :value="temporada.id" :key="temporada.id">
+                  {{ temporada.nome }}
+                </option>
+              </b-select>
+            </div>
+            <div class="temporada">
+              <classificacoes :user="user" :classificacoes="classificacoes"></classificacoes>
+            </div>
+          </b-tab-item>
+        </b-tabs>
+      </div>
     </div>
   </div>
 </template>
@@ -32,7 +62,7 @@ export default {
     return {
       user: {},
       temporadas: [],
-      temporada_ativa: {},
+      temporada_ultima: {},
       classificacoes: []
     }
   },
@@ -52,19 +82,39 @@ export default {
     response = await this.$axios.get(`/temporadas`)
     this.temporadas = response.data
 
-    response = await this.$axios.get(`/temporadas/ativa`)
-    this.temporada_ativa = response.data
+    response = await this.$axios.get(`/temporadas/ultima`)
+    this.temporada_ultima = response.data
   },
   methods: {
     async carregarClassificacoes (value) {
-      alert(value)
+      let params = {
+        includes: 'user',
+        plataforma_id: this.user.plataforma_id,
+        jogo_id: this.user.jogo_id,
+        order_by: 'posicao,asc'
+      }
+      let { data } = await this.$axios.get(`/temporadas/${this.temporada_ultima.id}/ladder`, { params })
+      this.classificacoes = data
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.temporadas {
+.tabs {
   margin-top: 30px;
+}
+
+.posicao {
+  color: #888;
+}
+
+.posicao span {
+  font-weight: bold;
+  font-size: 14pt;
+}
+
+.tag:not(body).is-light {
+  border: 1px solid #c0c0c0;
 }
 </style>
