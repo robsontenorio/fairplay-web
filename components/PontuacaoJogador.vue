@@ -2,22 +2,32 @@
   <div>
     <div v-if="objeto" class="wrapper">
       <div class="linha posicao">
-        <b-tag type="is-dark">
-          <small>
-            <i class="fa fa-line-chart"></i>&nbsp; posição</small>
-        </b-tag>
-        <b-tag type="is-warning">{{ objeto.posicao }} °</b-tag>
+        <i class="fa fa-line-chart"></i>&nbsp; {{ objeto.posicao }}°
       </div>
 
-      <div class="linha pontuacoes">
-        <b-tag type="is-dark">P</b-tag>
-        <b-tag type="is-info">{{ objeto.pontos }}</b-tag>&nbsp;
-        <b-tag type="is-dark">V</b-tag>
-        <b-tag type="is-success">{{ objeto.vitorias }}</b-tag>&nbsp;
-        <b-tag type="is-dark">E</b-tag>
-        <b-tag type="is-light">{{ objeto.empates }}</b-tag>&nbsp;
-        <b-tag type="is-dark">D</b-tag>
-        <b-tag type="is-danger">{{ objeto.derrotas }}</b-tag>&nbsp;
+      <div class="linha">
+        <div class="columns pontuacoes is-mobile">
+          <div class="column notification is-info">
+            {{ objeto.pontos }}
+            <br>
+            <span>pontos</span>
+          </div>
+          <div class="column notification is-success">
+            {{ objeto.vitorias }}
+            <br>
+            <span>vitorias</span>
+          </div>
+          <div class="column notification is-dark">
+            {{ objeto.empates }}
+            <br>
+            <span>empates</span>
+          </div>
+          <div class="column notification is-danger">
+            {{ objeto.derrotas }}
+            <br>
+            <span>derrotas</span>
+          </div>
+        </div>
       </div>
     </div>
     <b-message class="aviso" v-if="!objeto">
@@ -32,27 +42,48 @@ export default {
 </script>
 <style lang="scss" scoped>
 .posicao {
-  color: #888;
+  font-size: 20pt;
+  font-weight: bold;
 }
 
 .posicao span {
+  font-size: 9pt;
+  font-weight: normal;
+}
+
+// .tag:not(body).is-warning {
+//   border: 1px solid #ffdd57;
+// }
+
+// .tag:not(body).is-light {
+//   border: 1px solid #c0c0c0;
+//   background: #363635;
+//   color: white;
+// }
+// .tag:not(body).is-dark {
+//   color: #363635;
+//   background: white;
+//   border: 1px solid #c0c0c0;
+// }
+
+.notification:not(:last-child) {
+  margin-bottom: 0;
+  margin-right: 10px;
+}
+
+.pontuacoes {
+  margin: 0px;
+}
+.notification {
   font-weight: bold;
-  font-size: 14pt;
 }
 
-.tag:not(body).is-warning {
-  border: 1px solid #ffdd57;
+.notification span {
+  font-size: 9pt;
+  font-weight: normal;
 }
-
-.tag:not(body).is-light {
-  border: 1px solid #c0c0c0;
-  background: #363635;
-  color: white;
-}
-.tag:not(body).is-dark {
-  color: #363635;
-  background: white;
-  border: 1px solid #c0c0c0;
+.notification {
+  padding: 5px;
 }
 
 .linha {
@@ -64,7 +95,9 @@ export default {
 }
 
 .wrapper {
-  background-color: #efefef;
-  padding-top: 20px;
+  // background-color: #616567;
+  // background-color: #f5f5f5;
+  // border-radius: 3px;
+  // padding-top: 20px;
 }
 </style>
