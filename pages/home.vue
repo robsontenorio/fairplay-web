@@ -7,7 +7,6 @@
           <b-tab-item label="Geral" icon="list">
             <div v-if="user.jogo">
               <pontuacao-jogador :objeto="user"></pontuacao-jogador>
-              <h3 class="has-text-left">Top 100 geral</h3>
               <classificacoes :user="user" :classificacoes="classificacoes_geral"></classificacoes>
               <br><br>
               <small>Mostrando os 100 melhores</small>
@@ -25,7 +24,6 @@
             </div>
             <div class="temporada">
               <pontuacao-jogador :objeto="eu_temporada"></pontuacao-jogador>
-              <h3 class="has-text-left">Top 100 da temporada</h3>
               <classificacoes :user="user" :classificacoes="classificacoes_temporada"></classificacoes>
               <br><br>
               <small>Mostrando os 100 melhores</small>

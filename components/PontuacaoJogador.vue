@@ -92,6 +92,7 @@ export default {
 
 .aviso {
   margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .wrapper {
