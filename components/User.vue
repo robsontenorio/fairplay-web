@@ -17,7 +17,6 @@ export default {
 }
 
 .identificador {
-  font-weight: bold;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

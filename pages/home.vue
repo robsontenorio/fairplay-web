@@ -3,7 +3,7 @@
     <div>
       <profile :user="user"></profile>
       <div class="tabs">
-        <b-tabs size="is-small" type="is-toggle" position="is-centered" expanded>
+        <b-tabs size="is-small" position="is-centered" expanded>
           <b-tab-item label="Geral" icon="list">
             <div v-if="user.jogo">
               <pontuacao-jogador :objeto="user"></pontuacao-jogador>

@@ -18,7 +18,7 @@
     </div>
 
     <div>
-      <b-tabs size="is-small" type="is-toggle" position="is-centered" expanded>
+      <b-tabs size="is-small" position="is-centered" expanded>
         <b-tab-item label="Instruções" icon="list">
           <div class="instrucoes has-text-left">
             <ol>
