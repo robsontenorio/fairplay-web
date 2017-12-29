@@ -18,6 +18,11 @@
 //     padding: 0px !important;
 // }
 
+.content h3{
+    color: #444343 !important;
+    font-weight: bold !important;
+}
+
 
 .navbar-item-destacar
 {
@@ -32,6 +37,10 @@
 .b-tabs li+li
 {
     margin-top: 0 !important;
+}
+
+.b-tabs .control.has-icons-left .select select{
+    padding-left: 2.7em !important;
 }
 
 .b-tabs .tab-content{
