@@ -29,6 +29,9 @@
               <small>Mostrando os 100 melhores</small>
             </div>
           </b-tab-item>
+          <b-tab-item label="Resumo" icon="clock-o">
+            posição em cada temporada
+          </b-tab-item>
         </b-tabs>
       </div>
     </div>
@@ -60,7 +63,8 @@ export default {
     let user = await this.$store.state.auth.user
 
     let params = {
-      includes: 'plataforma,jogo'
+      includes: 'plataforma,jogo',
+      appends: 'posicao'
     }
 
     let response
@@ -78,7 +82,7 @@ export default {
       includes: 'user',
       plataforma_id: this.user.plataforma_id,
       jogo_id: this.user.jogo_id,
-      order_by: 'posicao,asc',
+      order_by: 'pontos,desc',
       limit: 100
     }
 
@@ -100,7 +104,7 @@ export default {
         includes: 'user',
         plataforma_id: this.user.plataforma_id,
         jogo_id: this.user.jogo_id,
-        order_by: 'posicao,asc',
+        order_by: 'pontos,desc',
         limit: 100
       }
 

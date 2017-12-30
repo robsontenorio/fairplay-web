@@ -31,7 +31,7 @@
       </div>
     </div>
     <b-message class="aviso" v-if="!objeto">
-      Não pontuou :(
+      Não participou :(
     </b-message>
   </div>
 </template>
@@ -93,12 +93,5 @@ export default {
 .aviso {
   margin-top: 20px;
   margin-bottom: 20px;
-}
-
-.wrapper {
-  // background-color: #616567;
-  // background-color: #f5f5f5;
-  // border-radius: 3px;
-  // padding-top: 20px;
 }
 </style>

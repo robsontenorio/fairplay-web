@@ -1,8 +1,8 @@
 <template>
   <div>
     <b-tooltip label="Resultado informado pelo jogador" type="is-dark" position="is-top" size="is-small" multilined>
-      <span v-show="tag" class="tag" :class="tag">{{ resultado }}</span>
-      <span v-show="!tag" class="tag is-empty">?</span>
+      <button v-show="tag" class="button tag" :class="tag">{{ resultado }}</button>
+      <button v-show="!tag" class="button tag is-empty">?</button>
     </b-tooltip>
   </div>
 </template>
@@ -58,5 +58,7 @@ export default {
 
 .tag {
   font-weight: bold;
+  padding: 0px 5px;
+  border-radius: 10px;
 }
 </style>

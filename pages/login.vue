@@ -3,15 +3,16 @@
     <h1>ENTRAR</h1>
     <br>
     <b-field>
-      <a class="button facebook is-fullwidth" @click="login('facebook')">
+      <a class="button facebook is-fullwidth is-medium" @click="login('facebook')">
         <span class="icon">
           <i class="fa fa-facebook"></i>
         </span>
         <span>Facebook</span>
       </a>
     </b-field>
+    <br>
     <b-field>
-      <a class="button google is-fullwidth" @click="login('google')">
+      <a class="button google is-fullwidth is-medium" @click="login('google')">
         <span class="icon">
           <i class="fa fa-google"></i>
         </span>

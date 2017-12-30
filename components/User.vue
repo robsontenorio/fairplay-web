@@ -2,7 +2,9 @@
   <div>
     <img :width="size" class="avatar" :src="user.avatar" />
     <br>
-    <div class="identificador">{{ user.identificador }}</div>
+    <div class="identificador">
+      <span>{{ user.identificador }}</span>
+    </div>
   </div>
 </template>
 <script>
@@ -17,9 +19,15 @@ export default {
 }
 
 .identificador {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
   white-space: nowrap;
+}
+
+.identificador > span {
+  display: table-cell;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 200px;
 }
 </style>

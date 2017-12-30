@@ -3,7 +3,7 @@
     <b-table :data="classificacoes" :mobile-cards=" false " :narrowed="true " :striped="true " :loading="classificacoes.length===0 ">
       <template slot-scope="props ">
         <b-table-column label="#">
-          <strong>{{ props.row.posicao }}</strong>
+          <strong>{{ props.index + 1 }}</strong>
         </b-table-column>
         <b-table-column label="PSN / Gamertag ">
           {{ props.row.user.identificador }}
@@ -20,7 +20,18 @@
 </template>
 <script>
 export default {
-  props: ['classificacoes', 'user']
+  props: ['classificacoes', 'user'],
+  data () {
+    return {
+      i: 1
+    }
+  },
+  methods: {
+    posicao () {
+      return this.posicao++
+    }
+  }
+
 }
 </script>
 <style lang="scss" scoped>
