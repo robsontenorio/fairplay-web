@@ -20,18 +20,7 @@
 </template>
 <script>
 export default {
-  props: ['classificacoes', 'user'],
-  data () {
-    return {
-      i: 1
-    }
-  },
-  methods: {
-    posicao () {
-      return this.posicao++
-    }
-  }
-
+  props: ['classificacoes', 'user']
 }
 </script>
 <style lang="scss" scoped>

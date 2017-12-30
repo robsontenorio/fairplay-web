@@ -51,6 +51,7 @@ export default {
       user: {},
       temporadas: [],
       temporada_ultima: {},
+      eu_temporada: {},
       classificacoes_temporada: [],
       classificacoes_geral: []
     }
@@ -89,18 +90,22 @@ export default {
     response = await this.$axios.get(`/temporadas/ladder`, { params })
     this.classificacoes_geral = response.data
   },
-  computed: {
-    eu_temporada () {
-      return this.classificacoes_temporada.find(x => {
-        return x.user_id === this.user.id
-      })
-    }
-  },
   methods: {
     async carregarClassificacoes (value) {
       let loading = this.$loading.open()
 
       let params = {
+        user_id: this.user.id,
+        appends: 'posicao'
+      }
+
+      let response
+
+      response = await this.$axios.get(`/temporadas/${value}/ladder`, { params })
+      this.eu_temporada = response.data[0]
+      console.log(this.eu_temporada)
+
+      params = {
         includes: 'user',
         plataforma_id: this.user.plataforma_id,
         jogo_id: this.user.jogo_id,
@@ -108,9 +113,7 @@ export default {
         limit: 100
       }
 
-      let response
-
-      response = await this.$axios.get(`/temporadas/${this.temporada_ultima.id}/ladder`, { params })
+      response = await this.$axios.get(`/temporadas/${value}/ladder`, { params })
       this.classificacoes_temporada = response.data
 
       loading.close()
