@@ -29,8 +29,8 @@
               <small>Mostrando os 100 melhores</small>
             </div>
           </b-tab-item>
-          <b-tab-item label="Resumo" icon="clock-o">
-            posição em cada temporada
+          <b-tab-item label="Histórico" icon="clock-o">
+            <historico-jogador :historico="historico"></historico-jogador>
           </b-tab-item>
         </b-tabs>
       </div>
@@ -42,10 +42,11 @@
 import Profile from '~/components/Profile'
 import Classificacoes from '~/components/Classificacoes'
 import PontuacaoJogador from '~/components/PontuacaoJogador'
+import HistoricoJogador from '~/components/HistoricoJogador'
 
 export default {
   middleware: 'auth',
-  components: { Profile, Classificacoes, PontuacaoJogador },
+  components: { Profile, Classificacoes, PontuacaoJogador, HistoricoJogador },
   data () {
     return {
       user: {},
@@ -53,7 +54,8 @@ export default {
       temporada_ultima: {},
       eu_temporada: {},
       classificacoes_temporada: [],
-      classificacoes_geral: []
+      classificacoes_geral: [],
+      historico: []
     }
   },
 
@@ -89,6 +91,15 @@ export default {
 
     response = await this.$axios.get(`/temporadas/ladder`, { params })
     this.classificacoes_geral = response.data
+
+    params = {
+      appends: 'posicao',
+      includes: 'temporada',
+      order_by: 'temporada_id,desc'
+    }
+    this.$axios.get(`/users/${this.user.id}/classificacoes`, { params }).then(response => {
+      this.historico = response.data
+    })
   },
   methods: {
     async carregarClassificacoes (value) {
@@ -103,7 +114,6 @@ export default {
 
       response = await this.$axios.get(`/temporadas/${value}/ladder`, { params })
       this.eu_temporada = response.data[0]
-      console.log(this.eu_temporada)
 
       params = {
         includes: 'user',

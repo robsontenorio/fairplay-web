@@ -24,11 +24,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-tr.is-warning {
-  background: #ffdd57 !important;
-}
 
-.b-table th {
-  background-color: red !important;
-}
 </style>
