@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development HOST=0.0.0.0 nuxt",
     "build": "cross-env NODE_ENV=production nuxt build --spa",
+    "clean": "rm -rf node_modules && yarn cache clean",
     "start": "nuxt start",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
