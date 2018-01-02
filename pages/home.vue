@@ -63,7 +63,7 @@ export default {
     // TODO nao funciona em SPA?
   },
   async mounted () {
-    let user = await this.$store.state.auth.user
+    this.user = await this.$store.state.auth.user
 
     let params = {
       includes: 'plataforma,jogo',
@@ -71,9 +71,6 @@ export default {
     }
 
     let response
-
-    response = await this.$axios.get(`/users/${user.id}`, { params })
-    this.user = response.data
 
     response = await this.$axios.get(`/temporadas`)
     this.temporadas = response.data
@@ -89,8 +86,9 @@ export default {
       limit: 100
     }
 
-    response = await this.$axios.get(`/temporadas/ladder`, { params })
-    this.classificacoes_geral = response.data
+    this.$axios.get(`/temporadas/ladder`, { params }).then(response => {
+      this.classificacoes_geral = response.data
+    })
 
     params = {
       appends: 'posicao',
@@ -112,8 +110,9 @@ export default {
 
       let response
 
-      response = await this.$axios.get(`/temporadas/${value}/ladder`, { params })
-      this.eu_temporada = response.data[0]
+      this.$axios.get(`/temporadas/${value}/ladder`, { params }).then(response => {
+        this.eu_temporada = response.data[0]
+      })
 
       params = {
         includes: 'user',

@@ -108,7 +108,8 @@ export default {
     // TODO usar metodo FETCH() ??
   },
   async mounted () {
-    let { data } = await this.$axios.get(`/partidas/ultima`)
+    let user = this.$store.state.auth.user
+    let { data } = await this.$axios.get(`/users/${user.id}/partidas?ultima`)
 
     if (data === '' || (data.status !== 'JOGANDO' && data.status !== 'RESULTADO')) {
       this.$router.replace({ path: '/home' })
