@@ -86,18 +86,16 @@ export default {
       limit: 100
     }
 
-    this.$axios.get(`/temporadas/ladder`, { params }).then(response => {
-      this.classificacoes_geral = response.data
-    })
+    response = this.$axios.get(`/temporadas/ladder`, { params })
+    this.classificacoes_geral = response.data
 
     params = {
       appends: 'posicao',
       includes: 'temporada',
       order_by: 'temporada_id,desc'
     }
-    this.$axios.get(`/users/${this.user.id}/classificacoes`, { params }).then(response => {
-      this.historico = response.data
-    })
+    response = await this.$axios.get(`/users/${this.user.id}/classificacoes`, { params })
+    this.historico = response.data
   },
   methods: {
     async carregarClassificacoes (value) {
