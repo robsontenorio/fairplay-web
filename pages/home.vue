@@ -63,7 +63,7 @@ export default {
     // TODO nao funciona em SPA?
   },
   async mounted () {
-    this.user = await this.$store.state.auth.user
+    let user = await this.$store.state.auth.user
 
     let params = {
       includes: 'plataforma,jogo',
@@ -71,6 +71,9 @@ export default {
     }
 
     let response
+
+    response = await this.$axios.get(`/users/${user.id}`, { params })
+    this.user = response.data
 
     response = await this.$axios.get(`/temporadas`)
     this.temporadas = response.data
