@@ -86,7 +86,7 @@ export default {
       limit: 100
     }
 
-    response = this.$axios.get(`/temporadas/ladder`, { params })
+    response = await this.$axios.get(`/temporadas/ladder`, { params })
     this.classificacoes_geral = response.data
 
     params = {
