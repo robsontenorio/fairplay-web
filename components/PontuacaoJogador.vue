@@ -31,7 +31,7 @@
       </div>
     </div>
     <b-message class="aviso" v-if="!objeto">
-      Não participou :(
+      Não pontuou :(
     </b-message>
   </div>
 </template>

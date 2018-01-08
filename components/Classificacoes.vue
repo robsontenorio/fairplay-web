@@ -6,7 +6,7 @@
           <strong>{{ props.index + 1 }}</strong>
         </b-table-column>
         <b-table-column label="PSN / Gamertag ">
-          {{ props.row.user.identificador }}
+          {{ props.row.identificador || props.row.user.identificador }}
         </b-table-column>
         <b-table-column label="P ">
           {{ props.row.pontos }}

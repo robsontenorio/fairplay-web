@@ -26,9 +26,6 @@
               <nuxt-link class="navbar-item" to="/buscar">
                 <i class="fa fa-play"></i> &nbsp; Jogar
               </nuxt-link>
-              <nuxt-link class="navbar-item" to="/divisoes">
-                <i class="fa fa-signal"></i> &nbsp; Divisões
-              </nuxt-link>
               <nuxt-link class="navbar-item" to="/login" v-show="!loggedIn">
                 <i class="fa fa-sign-in"></i> &nbsp; Entrar
               </nuxt-link>
