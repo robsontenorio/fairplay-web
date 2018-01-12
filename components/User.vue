@@ -13,8 +13,8 @@ export default {
   props: ['user', 'size']
 }
 </script>
-<style lang="scss" scoped>
-.avatar {
+<style  scoped>
+/* .avatar {
   border-radius: 50%;
 }
 
@@ -29,5 +29,5 @@ export default {
   display: table-cell;
   overflow: hidden;
   text-overflow: ellipsis;
-}
+} */
 </style>

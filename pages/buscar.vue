@@ -132,7 +132,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style  scoped>
 .user-avatar {
   margin-bottom: 20px;
 }

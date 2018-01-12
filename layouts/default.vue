@@ -1,65 +1,69 @@
 <template>
-  <div>
-    <section>
-      <nav class="navbar is-primary">
-        <div class="container is-fluid">
-          <div class="navbar-brand">
-            <a class="navbar-item" href="/">
-              <i class="fa fa-bullseye"></i> &nbsp;
-              <span style="font-weight: 300">ARENA</span>&nbsp;
-              <strong> FAIRPLAY</strong>
-            </a>
-
-            <div class="navbar-burger burger" @click="showNav = !showNav" :class="{ 'is-active' : showNav }">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </div>
-          <div class="navbar-menu" :class="{ 'is-active' : showNav }">
-            <div class="navbar-start">
-            </div>
-            <div class="navbar-end" @click="showNav = !showNav">
-              <nuxt-link class="navbar-item" to="/home" v-show="loggedIn">
-                <i class="fa fa-user"></i> &nbsp; Meu perfil
-              </nuxt-link>
-              <nuxt-link class="navbar-item" to="/buscar">
-                <i class="fa fa-play"></i> &nbsp; Jogar
-              </nuxt-link>
-              <nuxt-link class="navbar-item" to="/login" v-show="!loggedIn">
-                <i class="fa fa-sign-in"></i> &nbsp; Entrar
-              </nuxt-link>
-              <a class="navbar-item" href="###" v-show="loggedIn" @click="logout">
-                <i class="fa fa-power-off"></i> &nbsp; Sair
-              </a>
-            </div>
-          </div>
+  <v-app>
+    <v-navigation-drawer v-model="drawer" app>
+      <v-list>
+        <div v-if="loggedIn">
+          <v-list-tile avatar>
+            <v-list-tile-avatar>
+              <img :src="user.avatar" />
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title>{{ user.identificador }}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-divider></v-divider>
+          <v-list-tile router to="/home">
+            <v-list-tile-action>
+              <v-icon>person</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Meu perfil</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-list-tile router to="/buscar">
+            <v-list-tile-action>
+              <v-icon>play_arrow</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Jogar</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-list-tile @click="logout">
+            <v-list-tile-action>
+              <v-icon>power_settings_new</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Sair</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
         </div>
-      </nav>
-    </section>
-    <section class="content">
-      <div class="container is-fuild">
-        <nuxt/>
-      </div>
-    </section>
-    <!-- <footer class="footer">
-      <div class="container">
-        <div class="content has-text-centered">
-          <p>
-            ARENA
-            <strong>FAIR PLAY</strong>
-          </p>
-        </div>
-      </div>
-    </footer> -->
-  </div>
+        <v-list-tile router to="/login" v-if="!loggedIn">
+          <v-list-tile-action>
+            <v-icon>account_box</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Entrar</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+    <v-toolbar app absolute dense flat dark color="blue-grey darken-1">
+      <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title>FAIRPLAY</v-toolbar-title>
+    </v-toolbar>
+    <v-content>
+      <v-container class="py-0 px-0">
+        <nuxt />
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
 export default {
   data () {
     return {
-      showNav: false
+      drawer: false
     }
   },
   computed: {

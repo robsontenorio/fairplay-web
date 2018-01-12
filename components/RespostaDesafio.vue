@@ -25,8 +25,8 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.decisao-1 {
+<style  scoped>
+/* .decisao-1 {
   color: green;
 }
 
@@ -36,5 +36,5 @@ export default {
 
 .tag {
   font-size: 21pt;
-}
+} */
 </style>

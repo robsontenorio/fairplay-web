@@ -252,7 +252,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style  scoped>
 .instrucoes {
   font-size: 9pt;
 }

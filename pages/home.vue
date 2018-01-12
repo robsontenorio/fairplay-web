@@ -1,40 +1,47 @@
 <template>
-  <div class="has-text-centered">
-    <div>
-      <profile :user="user"></profile>
-      <div class="tabs">
-        <b-tabs size="is-small" position="is-centered" expanded>
-          <b-tab-item label="Geral" icon="list">
-            <div v-if="user.jogo">
-              <pontuacao-jogador :objeto="user"></pontuacao-jogador>
-              <classificacoes :user="user" :classificacoes="classificacoes_geral"></classificacoes>
-              <br><br>
-              <small>Mostrando os 100 melhores</small>
-            </div>
-          </b-tab-item>
-          <b-tab-item label="Temporadas" icon="calendar">
-            <div class="temporadas">
-              <b-field>
-                <b-select placeholder="Temporadas" icon="calendar" v-model="temporada_ultima.id" @input="carregarClassificacoes" expanded>
-                  <option v-for="temporada in temporadas" :value="temporada.id" :key="temporada.id">
-                    {{ temporada.nome }}
-                  </option>
-                </b-select>
-              </b-field>
-            </div>
-            <div class="temporada">
-              <pontuacao-jogador :objeto="eu_temporada"></pontuacao-jogador>
-              <classificacoes :user="user" :classificacoes="classificacoes_temporada"></classificacoes>
-              <br><br>
-              <small>Mostrando os 100 melhores</small>
-            </div>
-          </b-tab-item>
-          <b-tab-item label="Histórico" icon="clock-o">
-            <historico-jogador :historico="historico"></historico-jogador>
-          </b-tab-item>
-        </b-tabs>
-      </div>
-    </div>
+  <div>
+    <profile :user="user" class="mb-1"></profile>
+    <v-progress-linear class="ma-0" height="2" v-bind:indeterminate="loading"></v-progress-linear>
+    <v-tabs grow icons-and-text centered>
+      <v-tabs-slider color="blue-grey darken-3"></v-tabs-slider>
+      <v-tab href="#tab-1">
+        Geral
+        <v-icon>list</v-icon>
+      </v-tab>
+      <v-tab href="#tab-2">
+        Temporadas
+        <v-icon>event</v-icon>
+      </v-tab>
+      <v-tab href="#tab-3">
+        Histórico
+        <v-icon>access_time</v-icon>
+      </v-tab>
+      <v-tab-item id="tab-1">
+        <v-card flat>
+          <v-card-text>
+            <pontuacao-jogador :objeto="user" class="mb-3"></pontuacao-jogador>
+            <classificacoes :user="user" :classificacoes="classificacoes_geral"></classificacoes>
+            <div v-if="classificacoes_geral === 100">Mostrando os 100 melhores</div>
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item id="tab-2">
+        <v-card flat>
+          <v-card-text>
+            <pontuacao-jogador :objeto="eu_temporada" class="mb-3"></pontuacao-jogador>
+            <v-select :items="temporadas" v-model="temporada_ultima.id" item-text="nome" item-value="id" single-line bottom prepend-icon="event" @input="carregarTemporada" class="mb-2"></v-select>
+            <classificacoes :user="user" :classificacoes="classificacoes_temporada"></classificacoes>
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item id="tab-3">
+        <v-card flat>
+          <v-card-text>
+            histórico
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+    </v-tabs>
   </div>
 </template>
 
@@ -49,6 +56,7 @@ export default {
   components: { Profile, Classificacoes, PontuacaoJogador, HistoricoJogador },
   data () {
     return {
+      loading: false,
       user: {},
       temporadas: [],
       temporada_ultima: {},
@@ -63,6 +71,8 @@ export default {
     // TODO nao funciona em SPA?
   },
   async mounted () {
+    this.loading = true
+
     let user = await this.$store.state.auth.user
 
     let params = {
@@ -98,10 +108,14 @@ export default {
     }
     response = await this.$axios.get(`/users/${this.user.id}/classificacoes`, { params })
     this.historico = response.data
+
+    this.carregarTemporada(this.temporada_ultima.id)
+
+    this.loading = false
   },
   methods: {
-    async carregarClassificacoes (value) {
-      let loading = this.$loading.open()
+    async carregarTemporada (value) {
+      this.loading = true
 
       let params = {
         user_id: this.user.id,
@@ -125,13 +139,13 @@ export default {
       response = await this.$axios.get(`/temporadas/${value}/ladder`, { params })
       this.classificacoes_temporada = response.data
 
-      loading.close()
+      this.loading = false
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style  scoped>
 .tabs {
   margin-top: 30px;
 }

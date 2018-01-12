@@ -1,38 +1,49 @@
 <template>
   <div>
-    <div v-if="objeto" class="wrapper">
-      <div class="linha posicao">
-        <i class="fa fa-line-chart"></i>&nbsp; {{ objeto.posicao }}°
-      </div>
-
-      <div class="linha">
-        <div class="columns pontuacoes is-mobile">
-          <div class="column notification is-info">
-            {{ objeto.pontos }}
-            <br>
-            <span>pontos</span>
-          </div>
-          <div class="column notification is-success">
-            {{ objeto.vitorias }}
-            <br>
-            <span>vitorias</span>
-          </div>
-          <div class="column notification is-dark">
-            {{ objeto.empates }}
-            <br>
-            <span>empates</span>
-          </div>
-          <div class="column notification is-danger">
-            {{ objeto.derrotas }}
-            <br>
-            <span>derrotas</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <b-message class="aviso" v-if="!objeto">
+    <v-alert outline color="warning" icon="priority_high" :value="!objeto">
       Não pontuou :(
-    </b-message>
+    </v-alert>
+    <v-container v-if="objeto" grid-list-md text-xs-center>
+      <v-layout row wrap>
+        <v-flex xs12 class="mb-2">
+          <v-card flat class="display-2">
+            <v-icon class="display-2" color="black">timeline</v-icon> {{ objeto.posicao }}°
+          </v-card>
+        </v-flex>
+        <v-flex xs3>
+          <v-card dark color="primary">
+            <v-card-text class="px-0 py-2">
+              <strong>{{ objeto.pontos }}</strong>
+              <div class="caption">pontos</div>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+        <v-flex xs3>
+          <v-card dark color="green">
+            <v-card-text class="px-0 py-2">
+              <strong>{{ objeto.vitorias }}</strong>
+              <div class="caption">vitórias</div>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+        <v-flex xs3>
+          <v-card dark color="grey darken-4">
+            <v-card-text class="px-0 py-2">
+              <strong>{{ objeto.empates }}</strong>
+              <div class="caption">empates</div>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+        <v-flex xs3>
+          <v-card dark color="red">
+            <v-card-text class="px-0 py-2">
+              <strong>{{ objeto.derrotas }}</strong>
+              <div class="caption">derrotas</div>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </div>
 </template>
 <script>
@@ -40,8 +51,8 @@ export default {
   props: ['objeto']
 }
 </script>
-<style lang="scss" scoped>
-.posicao {
+<style  scoped>
+/* .posicao {
   font-size: 20pt;
   font-weight: bold;
 }
@@ -50,21 +61,6 @@ export default {
   font-size: 9pt;
   font-weight: normal;
 }
-
-// .tag:not(body).is-warning {
-//   border: 1px solid #ffdd57;
-// }
-
-// .tag:not(body).is-light {
-//   border: 1px solid #c0c0c0;
-//   background: #363635;
-//   color: white;
-// }
-// .tag:not(body).is-dark {
-//   color: #363635;
-//   background: white;
-//   border: 1px solid #c0c0c0;
-// }
 
 .notification:not(:last-child) {
   margin-bottom: 0;
@@ -93,5 +89,5 @@ export default {
 .aviso {
   margin-top: 20px;
   margin-bottom: 20px;
-}
+} */
 </style>

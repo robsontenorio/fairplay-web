@@ -92,8 +92,8 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.chat-wrapper {
+<style  scoped>
+/* .chat-wrapper {
   overflow-x: hidden;
   overflow-y: scroll;
 }
@@ -138,5 +138,5 @@ export default {
   text-align: center;
   margin-bottom: 50px;
   margin-top: 20px;
-}
+} */
 </style>

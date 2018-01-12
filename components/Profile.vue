@@ -1,26 +1,34 @@
 <template>
-  <div class="profile-container">
-    <div class="has-text-centered">
-      <avatar :imagem="user.avatar"></avatar>
-      <p class="identificador">{{ user.identificador }}</p>
-      <div class="categoria" v-if="user.jogo">
-        <b-tag type="is-info">{{ user.jogo.nome }}</b-tag>
-        <b-tag type="is-light">{{ user.plataforma.nome }}</b-tag>
-      </div>
-    </div>
+  <div>
+    <v-card flat>
+      <v-card-media :src="user.avatar" height="200px"></v-card-media>
+      <v-card-title>
+        <v-flex xs6>
+          <div class="headline">
+            {{ user.identificador }}
+          </div>
+        </v-flex>
+        <v-flex xs6 class="text-xs-right">
+          <span v-if="user.jogo">
+            <v-chip small text-color="white" color="blue-grey darken-3">{{ user.jogo.nome }}</v-chip>
+            <v-chip small text-color="white" color="blue-grey lighten-3">{{ user.plataforma.nome }}</v-chip>
+          </span>
+        </v-flex>
+      </v-card-title>
+    </v-card>
   </div>
 </template>
 <script>
 
-import Avatar from '~/components/Avatar'
+// import Avatar from '~/components/Avatar'
 
 export default {
-  props: ['user'],
-  components: { Avatar }
+  props: ['user']
+  // components: { Avatar }
 }
 </script>
-<style lang="scss" scoped>
-.profile-container {
+<style  scoped>
+/* .profile-container {
   margin: -20px -10px;
   background-image: url("/static/profile-background.jpg");
   background-size: cover;
@@ -40,5 +48,5 @@ export default {
   color: white;
   font-weight: bold;
   font-size: 18pt;
-}
+} */
 </style>

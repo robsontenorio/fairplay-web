@@ -8,9 +8,9 @@ export default {
   props: ['imagem', 'size']
 }
 </script>
-<style lang="scss" scoped>
-.avatar {
+<style  scoped>
+/* .avatar {
   border-radius: 50%;
   border: 4px solid white;
-}
+} */
 </style>

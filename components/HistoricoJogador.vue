@@ -32,6 +32,6 @@ export default {
   props: ['historico']
 }
 </script>
-<style lang="scss" scoped>
+<style  scoped>
 
 </style>

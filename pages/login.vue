@@ -1,24 +1,13 @@
 <template>
-  <div class="has-text-centered">
-    <h1>ENTRAR</h1>
-    <br>
-    <b-field>
-      <a class="button facebook is-fullwidth is-medium" @click="login('facebook')">
-        <span class="icon">
-          <i class="fa fa-facebook"></i>
-        </span>
-        <span>Facebook</span>
-      </a>
-    </b-field>
-    <br>
-    <b-field>
-      <a class="button google is-fullwidth is-medium" @click="login('google')">
-        <span class="icon">
-          <i class="fa fa-google"></i>
-        </span>
-        <span>Google</span>
-      </a>
-    </b-field>
+  <div class="text-xs-center">
+    <v-btn color="blue" @click="login('facebook')">
+      <v-icon dark>facebook-box</v-icon>
+      Facebook
+    </v-btn>
+    <v-btn color="red" @click="login('google')">
+      <v-icon dark>google</v-icon>
+      Google
+    </v-btn>
   </div>
 </template>
 
@@ -36,14 +25,13 @@ export default {
   },
   methods: {
     async login (provider) {
-      this.$loading.open()
       window.location = process.env.API_URL + 'auth/social/login?provider=' + provider
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style  scoped>
 .button {
   color: white;
 }

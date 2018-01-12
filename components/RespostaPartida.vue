@@ -51,8 +51,8 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.is-empty {
+<style  scoped>
+/* .is-empty {
   border: 1px dashed #c0c0c0;
 }
 
@@ -60,5 +60,5 @@ export default {
   font-weight: bold;
   padding: 0px 5px;
   border-radius: 10px;
-}
+} */
 </style>

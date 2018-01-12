@@ -13,9 +13,13 @@ module.exports = {
       { hid: 'description', name: 'description', content: 'Você joga limpo?' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
     ]
   },
+  css: [
+    '~/assets/style/app.styl'
+  ],
   loading: {
     color: '#23d160',
     height: '4px'
@@ -30,11 +34,10 @@ module.exports = {
     linkActiveClass: 'is-active'
   },
   plugins: [
-    '~plugins/buefy',
+    '~plugins/vuetify',
     '~plugins/socket.io'
   ],
   modules: [
-    '@nuxtjs/font-awesome',
     '@nuxtjs/auth',
     '@nuxtjs/axios'
   ],
@@ -59,6 +62,9 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    vendor: [
+      '~/plugins/vuetify.js'
+    ],
     /*
     ** Run ESLint on save
     */
@@ -71,13 +77,13 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-    },
-    postcss: {
-      plugins: {
-        'postcss-custom-properties': {
-          warnings: false
-        }
-      }
     }
+    // postcss: {
+    //   plugins: {
+    //     'postcss-custom-properties': {
+    //       warnings: false
+    //     }
+    //   }
+    // }
   }
 }

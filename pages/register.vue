@@ -23,10 +23,10 @@
 </template>
 
 <script>
-import Avatar from '~/components/Avatar'
+// import Avatar from '~/components/Avatar'
 
 export default {
-  components: { Avatar },
+  // components: { Avatar },
   data () {
     return {
       form: {
@@ -77,7 +77,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style  scoped>
 .field {
   margin-bottom: 20px;
 }

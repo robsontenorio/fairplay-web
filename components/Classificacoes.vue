@@ -1,21 +1,30 @@
 <template>
   <div>
-    <b-table :data="classificacoes" :mobile-cards=" false " :narrowed="true " :striped="true " :loading="classificacoes.length===0 ">
-      <template slot-scope="props ">
-        <b-table-column label="#">
-          <strong>{{ props.index + 1 }}</strong>
-        </b-table-column>
-        <b-table-column label="PSN / Gamertag ">
-          {{ props.row.identificador || props.row.user.identificador }}
-        </b-table-column>
-        <b-table-column label="P ">
-          {{ props.row.pontos }}
-        </b-table-column>
+    <v-data-table dense :items="classificacoes" hide-actions class="elevation-1">
+      <template slot="headers" slot-scope="props">
+        <tr>
+          <th class="pl-3 pr-0 text-xs-left">#</th>
+          <th class="px-2 text-xs-left">ID</th>
+          <th class="px-2 ">P</th>
+          <th class="px-2 ">V</th>
+          <th class="px-2 ">E</th>
+          <th class="px-2 ">D</th>
+        </tr>
       </template>
-      <template slot="empty ">
-        ...
+      <template slot="items" slot-scope="props">
+        <td class="pl-3 pr-0">
+          <strong>{{ props.index + 1}}</strong>
+        </td>
+        <td class="px-2">{{ props.item.identificador || props.item.user.identificador }}</td>
+        <td class="px-2">{{ props.item.pontos }}</td>
+        <td class="px-2">{{ props.item.vitorias }}</td>
+        <td class="px-2">{{ props.item.empates }}</td>
+        <td class="px-2">{{ props.item.derrotas }}</td>
       </template>
-    </b-table>
+      <template slot="no-data">
+        -
+      </template>
+    </v-data-table>
   </div>
 </template>
 <script>
@@ -23,6 +32,6 @@ export default {
   props: ['classificacoes', 'user']
 }
 </script>
-<style lang="scss" scoped>
+<style  scoped>
 
 </style>
