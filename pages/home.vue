@@ -2,11 +2,10 @@
   <div>
     <profile :user="user" class="mb-1"></profile>
     <v-progress-linear class="ma-0" height="2" v-bind:indeterminate="loading"></v-progress-linear>
-    <v-tabs grow icons-and-text centered>
-      <v-tabs-slider color="blue-grey darken-3"></v-tabs-slider>
+    <v-tabs grow icons-and-text centered slider-color="blue-grey darken-">
       <v-tab href="#tab-1">
         Geral
-        <v-icon>list</v-icon>
+        <v-icon>fa-globe</v-icon>
       </v-tab>
       <v-tab href="#tab-2">
         Temporadas
@@ -16,6 +15,7 @@
         Histórico
         <v-icon>access_time</v-icon>
       </v-tab>
+      <!-- GERAL -->
       <v-tab-item id="tab-1">
         <v-card flat>
           <v-card-text>
@@ -25,6 +25,7 @@
           </v-card-text>
         </v-card>
       </v-tab-item>
+      <!-- TEMPORADAS -->
       <v-tab-item id="tab-2">
         <v-card flat>
           <v-card-text>
@@ -34,6 +35,7 @@
           </v-card-text>
         </v-card>
       </v-tab-item>
+      <!-- HISTÓRICO -->
       <v-tab-item id="tab-3">
         <v-card flat>
           <v-card-text>

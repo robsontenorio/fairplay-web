@@ -1,27 +1,52 @@
 <template>
-  <div v-show="carregado">
-    <div v-if="finalizaEm > 0" class="resultado-timer has-text-centered">
+  <div class="pa-2">
+    <div v-if="carregado && finalizaEm > 0" class="resultado-timer has-text-centered">
       <countdown :time="finalizaEm">
         <template slot-scope="props">Finaliza em
           <strong>{{ props.minutes }}</strong> minutos e {{ props.seconds }}s</template>
       </countdown>
     </div>
-    <div class="columns is-gapless is-mobile has-text-centered" v-if="partida.user1">
-      <div class="column">
-        <user :user="partida.user1" size="58"></user>
-        <resposta-partida :partida="partida" :user="partida.user1"></resposta-partida>
-      </div>
-      <div class="column">
-        <user :user="partida.user2" size="58"></user>
-        <resposta-partida :partida="partida" :user="partida.user2"></resposta-partida>
-      </div>
-    </div>
-
-    <div>
-      <b-tabs size="is-small" position="is-centered" expanded>
-        <b-tab-item label="Instruções" icon="list">
-          <div class="instrucoes has-text-left">
-            <ol>
+    <v-card flat>
+      <v-layout text-xs-center class="pt-3 mb-1">
+        <v-flex xs6 v-if="partida.user1">
+          <v-avatar size="58" class="mb-2">
+            <img :src="partida.user1.avatar" />
+          </v-avatar>
+          <div>
+            {{ partida.user1.identificador }}
+          </div>
+          <resposta-partida :partida="partida" :user="partida.user1"></resposta-partida>
+        </v-flex>
+        <v-flex xs6 v-if="partida.user1">
+          <v-avatar size="58" class="mb-2">
+            <img :src="partida.user2.avatar" />
+          </v-avatar>
+          <div>
+            {{ partida.user2.identificador }}
+          </div>
+          <resposta-partida :partida="partida" :user="partida.user2"></resposta-partida>
+        </v-flex>
+      </v-layout>
+    </v-card>
+    <!-- TABS -->
+    <v-tabs grow icons-and-text centered slider-color="blue-grey darken-3">
+      <v-tab href="#tab-1">
+        Instruções
+        <v-icon>fa-book</v-icon>
+      </v-tab>
+      <v-tab href="#tab-2">
+        Chat
+        <v-icon>chat</v-icon>
+      </v-tab>
+      <v-tab href="#tab-3">
+        Resultado
+        <v-icon>mode_edit</v-icon>
+      </v-tab>
+      <!-- INSTRUÇÕES -->
+      <v-tab-item id="tab-1">
+        <v-card flat>
+          <v-card-text>
+            <ul class="ml-3">
               <li>Você joga limpo!</li>
               <li>Vencendo ou perdendo sua
                 <strong>reputação é mantida</strong>.</li>
@@ -35,52 +60,60 @@
               <li>Capture algumas imagens do jogo, caso seja necessário comprovar o resultado.</li>
               <li>Jogadores de péssima reputação serão
                 <strong>banidos</strong>.</li>
-            </ol>
-          </div>
-
-        </b-tab-item>
-        <b-tab-item label="Chat" icon="comments">
-          <div class="chat">
-            <chat :eu="eu" :adversario="adversario" :partidaId="partida.id" :mensagens="mensagens" @enviarMensagem="enviarMensagem"></chat>
-          </div>
-        </b-tab-item>
-        <b-tab-item label="Resultado" icon="pencil">
-          <div class="columns is-mobile" ref="abaResultado">
-            <div class="column has-text-right">
-              <button class="button is-success is-fullwidth" @click="informarResultado('vitoria')">ganhei</button>
-            </div>
-            <div class="column has-text-centered">
-              <button class="button is-dark is-fullwidth" @click="informarResultado('empate')">empate</button>
-            </div>
-            <div class="column has-text-left">
-              <button class="button is-danger is-fullwidth" @click="informarResultado('derrota')">perdi</button>
-            </div>
-          </div>
-
-          <button class="button is-light is-fullwidth" @click="informarResultado('cancelamento')">solicitar cancelamento</button>
-
-          <br><br>
-
-          <div class="resultado-info is-default has-text-justified">
-            <strong>Caso informe um resultado falso você será banido.</strong> Lembre-se que perdendo ou vencendo sua reputação será mantida.
-          </div>
-          <div class="resultado-info is-default has-text-justified">
-            Se houver
-            <strong>divergência</strong> entre os resultados ambos jogadores vão a
-            <strong>julgamento</strong> pela comunidade, podendo ser banido.
-          </div>
-          <div class="resultado-info is-default has-text-justified">
-            No momento em que um dos jogadores informa o resultado, o adversário tem
-            <strong>30 minutos</strong> para também informar o resultado. Após este prazo o resultado será confirmado automaticamente pelo sistema.
-          </div>
-          <div class="resultado-info is-default has-text-justified">
-            A partida somente será cancelada se o seu adversário também solicitar o cancelamento. Caso o adversário informe qualquer outro resultado, a partida irá a
-            <strong>julgamento</strong>. Use o
-            <strong>chat</strong> para chegar a um acordo
-          </div>
-        </b-tab-item>
-      </b-tabs>
-    </div>
+            </ul>
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+      <!-- CHAT -->
+      <v-tab-item id="tab-2">
+        <v-card flat>
+          <v-card-text>
+            X
+            <!-- <chat :eu="eu" :adversario="adversario" :partidaId="partida.id" :mensagens="mensagens" @enviarMensagem="enviarMensagem"></chat> -->
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+      <!-- RESULTADO -->
+      <v-tab-item id="tab-3">
+        <v-card flat>
+          <v-card-text>
+            <v-layout>
+              <v-flex xs4>
+                <v-btn block color="success" @click="informarResultado('vitoria')">ganhei</v-btn>
+              </v-flex>
+              <v-flex xs4>
+                <v-btn block class="mx-2" color="black" @click="informarResultado('empate')">ganhei</v-btn>
+              </v-flex>
+              <v-flex xs4>
+                <v-btn block color="error" class="white--text" @click="informarResultado('derrota')">perdi</v-btn>
+              </v-flex>
+            </v-layout>
+            <v-layout>
+              <v-flex xs12>
+                <v-btn block color="danger" @click="informarResultado('cancelamento')">solicitar cancelamento</v-btn>
+              </v-flex>
+            </v-layout>
+            <p class="mt-5">
+              <strong>Caso informe um resultado falso você será banido.</strong> Lembre-se que perdendo ou vencendo sua reputação será mantida.
+            </p>
+            <p>
+              Se houver
+              <strong>divergência</strong> entre os resultados ambos jogadores vão a
+              <strong>julgamento</strong> pela comunidade, podendo ser banido.
+            </p>
+            <p>
+              No momento em que um dos jogadores informa o resultado, o adversário tem
+              <strong>30 minutos</strong> para também informar o resultado. Após este prazo o resultado será confirmado automaticamente pelo sistema.
+            </p>
+            <p>
+              A partida somente será cancelada se o seu adversário também solicitar o cancelamento. Caso o adversário informe qualquer outro resultado, a partida irá a
+              <strong>julgamento</strong>. Use o
+              <strong>chat</strong> para chegar a um acordo
+            </p>
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+    </v-tabs>
   </div>
 </template>
 

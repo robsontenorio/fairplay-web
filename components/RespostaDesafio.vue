@@ -2,7 +2,6 @@
   <div>
     <div v-show="resposta">
       <v-icon large color="success">{{ decisao }}</v-icon>
-      <br> respondeu
     </div>
     <div v-show="!resposta">
       <img width="58px" src="/spinner2.gif" /> <br>
