@@ -1,9 +1,8 @@
 <template>
   <div>
     <div v-show="resposta">
-      <span class="tag" :class="`decisao-${resposta}`">
-        <i :class="`fa fa-${decisao}`"></i>
-      </span>
+      <v-icon large color="success">{{ decisao }}</v-icon>
+      <br> respondeu
     </div>
     <div v-show="!resposta">
       <img width="58px" src="/spinner2.gif" /> <br>
@@ -19,7 +18,7 @@ export default {
       if (this.resposta === 1) {
         return 'check'
       } else if (this.resposta === 0) {
-        return 'times'
+        return 'close'
       }
     }
   }

@@ -2,18 +2,18 @@
   <div>
     <div v-if="eu">
       <div v-show="!resposta">
-        <button class="button is-success is-large" @click="responder(true)" :disabled="respondi">
-          <i class="fa fa-check" />
-        </button> &nbsp;
-        <button class="button is-danger is-large" @click="responder(false)" :disabled="respondi">
-          <i class="fa fa-times" />
-        </button>
+        <v-btn class="success" @click="responder(true)" :disabled="respondi">
+          <v-icon>check</v-icon>
+        </v-btn>
+        <v-btn class="error" @click="responder(false)" :disabled="respondi">
+          <v-icon>close</v-icon>
+        </v-btn>
       </div>
       <div v-show="resposta">
         <resposta-desafio :resposta="resposta" />
-        <button style="margin-top: 20px" class="button is-danger is-small is-outlined" @click="responder(false)">
-          <i class="fa fa-times" /> &nbsp; desistir
-        </button>
+        <v-btn class="error" @click="responder(false)">
+          <v-icon>close</v-icon> desistir
+        </v-btn>
       </div>
     </div>
     <div v-if="adversario">

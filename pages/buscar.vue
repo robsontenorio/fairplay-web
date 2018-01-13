@@ -1,32 +1,28 @@
 <template>
-  <div class="has-text-centered">
+  <div class="text-xs-center pt-5">
     <div v-show="procurando">
-      <br><br>
+      <br><br><br><br><br><br>
       <img src="/spinner2.gif" width="100px">
       <br><br>
       <h3>Procurando adversário ... </h3>
 
-      <button class="button is-primary" @click="cancelar()">cancelar </button>
+      <v-btn color="primary" @click="cancelar()">cancelar</v-btn>
     </div>
     <div v-if="encontrado">
-      <div class="columns is-gapless is-mobile has-text-centered">
-        <div class="column">
-          <div class="user-avatar ">
-            <user :user="eu" size="96" />
-          </div>
-          <div>
-            <resposta-pareamento :pareamento="pareamento" :eu="eu" @respondeu="responder" />
-          </div>
-        </div>
-        <div class="column">
-          <div class="user-avatar">
-            <user :user="adversario" size="96" />
-          </div>
-          <div>
-            <resposta-pareamento :pareamento="pareamento" :adversario="adversario" />
-          </div>
-        </div>
-      </div>
+      <v-layout>
+        <v-flex xs6>
+          <v-avatar size="96" class="mb-3">
+            <img :src="eu.avatar" />
+          </v-avatar>
+          <resposta-pareamento :pareamento="pareamento" :eu="eu" @respondeu="responder" />
+        </v-flex>
+        <v-flex xs6>
+          <v-avatar size="96" class="mb-3">
+            <img :src="adversario.avatar" />
+          </v-avatar>
+          <resposta-pareamento :pareamento="pareamento" :adversario="adversario" />
+        </v-flex>
+      </v-layout>
       <br><br>
       <h2>Você está pronto?</h2>
       <small>Na tela seguinte você poderá conversar com o jogador antes de iniciar a partida.</small>
@@ -133,7 +129,7 @@ export default {
 </script>
 
 <style  scoped>
-.user-avatar {
+/* .user-avatar {
   margin-bottom: 20px;
 }
 
@@ -145,5 +141,5 @@ h2 {
   font-size: 14pt;
   font-weight: bold;
   margin-top: 0px !important;
-}
+} */
 </style>
