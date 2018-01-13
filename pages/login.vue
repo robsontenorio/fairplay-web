@@ -1,11 +1,11 @@
 <template>
-  <div class="text-xs-center">
-    <v-btn color="blue" @click="login('facebook')">
-      <v-icon dark>facebook-box</v-icon>
+  <div class="text-xs-center pa-3">
+    <v-btn block color="blue" class="white--text mb-3" :disabled="loading" @click="login('facebook')">
+      <v-icon dark left>fa-facebook</v-icon>
       Facebook
     </v-btn>
-    <v-btn color="red" @click="login('google')">
-      <v-icon dark>google</v-icon>
+    <v-btn block color="red" class="white--text" :disabled="loading" @click="login('google')">
+      <v-icon dark left>fa-google</v-icon>
       Google
     </v-btn>
   </div>
@@ -16,6 +16,7 @@
 export default {
   data () {
     return {
+      loading: false
     }
   },
   mounted () {
@@ -25,6 +26,7 @@ export default {
   },
   methods: {
     async login (provider) {
+      this.loading = true
       window.location = process.env.API_URL + 'auth/social/login?provider=' + provider
     }
   }

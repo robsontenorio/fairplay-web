@@ -1,24 +1,15 @@
 <template>
-  <div>
-    <b-field>
-      <avatar class="has-text-centered" :imagem="form.avatar" size="128"></avatar>
-    </b-field>
-    <b-field>
-      <b-select placeholder="Jogo" icon="bullseye" v-model="form.jogo_id" expanded>
-        <option v-for="jogo in jogos" :value="jogo.id" :key="jogo.id">{{ jogo.nome }}</option>
-      </b-select>
-    </b-field>
-    <b-field>
-      <b-select placeholder="Plataforma" icon="gamepad" v-model="form.plataforma_id" expanded>
-        <option v-for="plataforma in plataformas" :value="plataforma.id" :key="plataforma.id">{{ plataforma.nome }}</option>
-      </b-select>
-    </b-field>
-    <b-field label="PSN / GAMERTAG">
-      <b-input v-model="form.identificador" expanded></b-input>
-    </b-field>
-    <b-field>
-      <button class="button is-primary is-fullwidth" :class="{'is-loading' : carregando}" expanded @click="registrar()">registrar</button>
-    </b-field>
+  <div class="pa-3 text-xs-center">
+    <v-avatar :size="96" class="mb-3">
+      <img :src="form.avatar" alt="avatar">
+    </v-avatar>
+    <v-form ref="form" lazy-validation>
+      <v-select :items="jogos" label="Jogo" v-model="form.jogo_id" prepend-icon="album" item-text="nome" item-value="id" required></v-select>
+      <v-select :items="plataformas" label="Plataforma" v-model="form.plataforma_id" prepend-icon="games" item-text="nome" item-value="id" required></v-select>
+      <v-text-field label="PSN ou GAMERTAG" v-model="form.identificador" required prepend-icon="person"></v-text-field>
+      <v-btn block color="primary" @click="registrar" :loading="carregando">registrar</v-btn>
+    </v-form>
+    <v-snackbar multi-line color="red" :value="error"> {{ error }} </v-snackbar>
   </div>
 </template>
 
@@ -29,6 +20,7 @@ export default {
   // components: { Avatar },
   data () {
     return {
+      error: null,
       form: {
         identificador: null,
         email: null,
@@ -46,7 +38,7 @@ export default {
 
   },
   async mounted () {
-    this.$modal.open(`Preencha atentamente as informações. Caso você modifique posteriormente, seu histórico será perdido em todas as temporadas e você voltará para a última posição.`)
+    // this.$modal.open(`Preencha atentamente as informações. Caso você modifique posteriormente, seu histórico será perdido em todas as temporadas e você voltará para a última posição.`)
     let response
 
     response = await this.$axios.get(`/plataformas`)
@@ -67,10 +59,7 @@ export default {
         this.$router.replace({ path: '/auth', query: this.$route.query })
       } catch (error) {
         this.carregando = false
-        this.$toast.open({
-          message: error.response.data.errors,
-          type: 'is-danger'
-        })
+        this.error = error.response.data.errors
       }
     }
   }

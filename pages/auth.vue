@@ -1,8 +1,10 @@
 <template>
-  <div class="has-text-centered">
+  <div class="text-xs-center pa-3">
     <br><br>
     <img src="/spinner2.gif" width="100px">
     <h2>Autenticando ...</h2>
+
+    <v-snackbar color="red" :value="error"> {{ error }} </v-snackbar>
   </div>
 </template>
 
@@ -11,6 +13,7 @@
 export default {
   data () {
     return {
+      error: null,
       form: {
         provider: {}
       }
@@ -26,14 +29,10 @@ export default {
         await this.$store.dispatch('auth/login', {
           fields: this.form
         })
-        this.$router.push({ path: '/home' })
       } catch (error) {
-        this.$toast.open({
-          message: error.response.data.error,
-          type: 'is-danger',
-          position: 'is-bottom'
-        })
+        this.error = error.response.data.error
       }
+      this.$router.replace({ path: '/home' })
     }
   }
 }
