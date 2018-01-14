@@ -217,7 +217,7 @@ export default {
       if (this.partida.status === 'FINALIZADA') {
         this.$router.replace({ path: '/home' })
 
-        this.$toast.open({
+        this.$snackbar.open({
           message: 'Partida finalizada',
           type: 'is-success',
           position: 'is-bottom'

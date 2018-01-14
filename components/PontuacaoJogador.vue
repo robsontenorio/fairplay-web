@@ -3,7 +3,7 @@
     <v-alert outline color="warning" icon="priority_high" :value="!objeto">
       Não pontuou :(
     </v-alert>
-    <v-container v-if="objeto" grid-list-md text-xs-center>
+    <v-container v-if="objeto" grid-list-md text-xs-center class="px-0">
       <v-layout row wrap>
         <v-flex xs12 class="mb-2">
           <v-card flat class="display-2">

@@ -1,6 +1,32 @@
 <template>
   <div>
-    <v-data-table dense :items="classificacoes" hide-actions class="elevation-1">
+
+    <v-subheader>TOP 100</v-subheader>
+    <v-list two-line>
+      <template v-for="(item, index) in classificacoes">
+        <v-divider></v-divider>
+        <v-list-tile avatar :key="item.id" @click="">
+          <v-list-tile-avatar>
+            <img :src="item.avatar || item.user.avatar">
+          </v-list-tile-avatar>
+          <v-list-tile-content>
+            <v-list-tile-title>
+              <strong>{{ item.identificador || item.user.identificador }}</strong>
+            </v-list-tile-title>
+            <v-list-tile-sub-title>
+              {{ item.pontos }}P&nbsp; {{ item.vitorias }}V&nbsp; {{ item.empates }}E&nbsp; {{ item.derrotas }}D&nbsp;
+            </v-list-tile-sub-title>
+          </v-list-tile-content>
+          <v-list-tile-action>
+            <v-btn icon flat small>
+              <v-chip label>{{ index + 1 }}</v-chip>
+            </v-btn>
+          </v-list-tile-action>
+        </v-list-tile>
+      </template>
+    </v-list>
+
+    <!-- <v-data-table dense :items="classificacoes" hide-actions class="elevation-1">
       <template slot="headers" slot-scope="props">
         <tr>
           <th class="pl-3 pr-0 text-xs-left">#</th>
@@ -24,7 +50,7 @@
       <template slot="no-data">
         -
       </template>
-    </v-data-table>
+    </v-data-table> -->
   </div>
 </template>
 <script>
@@ -32,6 +58,5 @@ export default {
   props: ['classificacoes', 'user']
 }
 </script>
-<style  scoped>
-
+<style lang="stylus"  scoped>
 </style>
