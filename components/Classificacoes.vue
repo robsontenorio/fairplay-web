@@ -19,7 +19,7 @@
           </v-list-tile-content>
           <v-list-tile-action>
             <v-btn icon flat small>
-              <v-chip label>{{ index + 1 }}</v-chip>
+              <v-chip dark>{{ index + 1 }}</v-chip>
             </v-btn>
           </v-list-tile-action>
         </v-list-tile>

@@ -39,7 +39,7 @@
       <v-tab-item id="tab-3">
         <v-card flat>
           <v-card-text>
-            histórico
+            {{ historico }}
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -104,11 +104,9 @@ export default {
     this.classificacoes_geral = response.data
 
     params = {
-      appends: 'posicao',
-      includes: 'temporada',
-      order_by: 'temporada_id,desc'
+      order_by: 'created_at,desc'
     }
-    response = await this.$axios.get(`/users/${this.user.id}/classificacoes`, { params })
+    response = await this.$axios.get(`/users/${this.user.id}/partidas`, { params })
     this.historico = response.data
 
     this.carregarTemporada(this.temporada_ultima.id)
