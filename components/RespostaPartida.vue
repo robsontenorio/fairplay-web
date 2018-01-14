@@ -1,10 +1,13 @@
 <template>
   <div>
-    R?
-    <!-- <b-tooltip label="Resultado informado pelo jogador" type="is-dark" position="is-top" size="is-small" multilined>
-      <button v-show="tag" class="button tag" :class="tag">{{ resultado }}</button>
-      <button v-show="!tag" class="button tag is-empty">?</button>
-    </b-tooltip> -->
+    <v-tooltip top>
+      <v-btn slot="activator" flat small v-if="resultado" :ripple="false" :color="tag">{{ resultado }}</v-btn>
+      <span>Resultado informado pelo jogador</span>
+    </v-tooltip>
+    <v-tooltip top>
+      <v-chip v-if="!resultado" slot="activator" small :ripple="false">---</v-chip>
+      <span>Resultado informado pelo jogador</span>
+    </v-tooltip>
   </div>
 </template>
 <script>
@@ -34,16 +37,16 @@ export default {
       if (detalhes.vencedor !== null) {
         if (detalhes.vencedor === -1) {
           resultado = 'cancelamento'
-          this.tag = 'is-light'
+          this.tag = 'default'
         } else if (detalhes.vencedor === 0) {
           resultado = 'empate'
-          this.tag = 'is-dark'
+          this.tag = 'default'
         } else if (detalhes.vencedor === userId) {
           resultado = 'ganhei'
-          this.tag = 'is-success'
+          this.tag = 'success'
         } else {
           resultado = 'perdi'
-          this.tag = 'is-danger'
+          this.tag = 'error'
         }
       }
 

@@ -15,17 +15,15 @@
       </div>
     </div>
     <div class="mensagem-composer">
-      <b-field>
-        <div class="control">
-          <div class="button">
-            <vue-dropzone ref="dropZone" id="dropzone" :options="dropzoneOptions" @vdropzone-success="syncMensagem" @vdropzone-file-added="fazendoUpload" @vdropzone-sending="fazendoUpload">
-            </vue-dropzone>
-          </div>
+
+      <div class="control">
+        <div class="button">
+          <vue-dropzone ref="dropZone" id="dropzone" :options="dropzoneOptions" @vdropzone-success="syncMensagem" @vdropzone-file-added="fazendoUpload" @vdropzone-sending="fazendoUpload">
+          </vue-dropzone>
         </div>
-        <b-input placeholder="Mensagem ..." type="text" v-model="params.mensagem" @keyup.native.enter="enviar()" expanded></b-input>
-      </b-field>
+      </div>
+      <v-text-field prepend-icon="camera_alt" :prepend-icon-cb="openFile" v-model="params.mensagem" label="Mensagem..." auto-grow @keyup.native.enter="enviar()"></v-text-field>
     </div>
-    <b-loading :active.sync="loading"></b-loading>
 
   </div>
 </template>
@@ -50,7 +48,7 @@ export default {
       },
       dropzoneOptions: {
         url: process.env.API_URL + 'upload',
-        dictDefaultMessage: '<i class="fa fa-camera"></i>',
+        dictDefaultMessage: "<i class='fa fa-camera'></i>",
         previewsContainer: false,
         thumbnailWidth: 150,
         maxFilesize: 10,
@@ -65,6 +63,10 @@ export default {
     }
   },
   methods: {
+    openFile () {
+      this.$refs.dropZone.processQueue()
+      alert(1)
+    },
     syncMensagem (file, response) {
       this.params.media = response
       this.enviar()
@@ -93,7 +95,7 @@ export default {
 }
 </script>
 <style  scoped>
-/* .chat-wrapper {
+.chat-wrapper {
   overflow-x: hidden;
   overflow-y: scroll;
 }
@@ -138,5 +140,5 @@ export default {
   text-align: center;
   margin-bottom: 50px;
   margin-top: 20px;
-} */
+}
 </style>

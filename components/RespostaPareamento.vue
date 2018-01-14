@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="px-4">
     <div v-if="eu">
       <div v-show="!resposta">
-        <v-btn class="success" @click="responder(true)" :disabled="respondi">
-          <v-icon>check</v-icon>
+        <v-btn block class="success mb-3" @click="responder(true)" :disabled="respondi">
+          <v-icon left>check</v-icon> aceitar
         </v-btn>
-        <v-btn class="error" @click="responder(false)" :disabled="respondi">
-          <v-icon>close</v-icon>
+        <v-btn block class="error" @click="responder(false)" :disabled="respondi">
+          <v-icon left>close</v-icon> desistir
         </v-btn>
       </div>
       <div v-show="resposta">

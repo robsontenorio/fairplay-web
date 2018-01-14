@@ -1,15 +1,15 @@
 <template>
-  <div class="pa-2">
-    <div v-if="carregado && finalizaEm > 0" class="resultado-timer has-text-centered">
+  <div>
+    <div v-if="carregado && finalizaEm > 0" class="pa-2 text-xs-center yellow accent-4">
       <countdown :time="finalizaEm">
         <template slot-scope="props">Finaliza em
           <strong>{{ props.minutes }}</strong> minutos e {{ props.seconds }}s</template>
       </countdown>
     </div>
     <v-card flat>
-      <v-layout text-xs-center class="pt-3 mb-1">
+      <v-layout text-xs-center class="pt-3 mb-2 pb-2">
         <v-flex xs6 v-if="partida.user1">
-          <v-avatar size="58" class="mb-2">
+          <v-avatar size="96" class="mb-2">
             <img :src="partida.user1.avatar" />
           </v-avatar>
           <div>
@@ -18,7 +18,7 @@
           <resposta-partida :partida="partida" :user="partida.user1"></resposta-partida>
         </v-flex>
         <v-flex xs6 v-if="partida.user1">
-          <v-avatar size="58" class="mb-2">
+          <v-avatar size="96" class="mb-2">
             <img :src="partida.user2.avatar" />
           </v-avatar>
           <div>
@@ -68,8 +68,7 @@
       <v-tab-item id="tab-2">
         <v-card flat>
           <v-card-text>
-            X
-            <!-- <chat :eu="eu" :adversario="adversario" :partidaId="partida.id" :mensagens="mensagens" @enviarMensagem="enviarMensagem"></chat> -->
+            <chat :eu="eu" :adversario="adversario" :partidaId="partida.id" :mensagens="mensagens" @enviarMensagem="enviarMensagem"></chat>
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -78,19 +77,19 @@
         <v-card flat>
           <v-card-text>
             <v-layout>
-              <v-flex xs4>
+              <v-flex xs4 class="pr-2">
                 <v-btn block color="success" @click="informarResultado('vitoria')">ganhei</v-btn>
               </v-flex>
-              <v-flex xs4>
-                <v-btn block class="mx-2" color="black" @click="informarResultado('empate')">ganhei</v-btn>
+              <v-flex xs4 class="pr-2">
+                <v-btn block color="black" class="white--text" @click="informarResultado('empate')">empate</v-btn>
               </v-flex>
               <v-flex xs4>
                 <v-btn block color="error" class="white--text" @click="informarResultado('derrota')">perdi</v-btn>
               </v-flex>
             </v-layout>
-            <v-layout>
+            <v-layout class="mt-2">
               <v-flex xs12>
-                <v-btn block color="danger" @click="informarResultado('cancelamento')">solicitar cancelamento</v-btn>
+                <v-btn block @click="informarResultado('cancelamento')">solicitar cancelamento</v-btn>
               </v-flex>
             </v-layout>
             <p class="mt-5">
@@ -114,6 +113,17 @@
         </v-card>
       </v-tab-item>
     </v-tabs>
+    <v-dialog v-model="dialog.show" persistent>
+      <v-card>
+        <v-card-title class="headline">Importante!</v-card-title>
+        <v-card-text v-html="dialog.texto"></v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="success" flat @click.native="postResultado">confirmar</v-btn>
+          <v-btn color="error" flat @click.native="dialog.show = false">cancelar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -130,6 +140,11 @@ export default {
 
   data () {
     return {
+      dialog: {
+        show: false,
+        texto: '',
+        tipo: ''
+      },
       carregado: false,
       partida: {},
       mensagens: []
@@ -230,22 +245,20 @@ export default {
       }
     },
     informarResultado (tipo) {
-      let texto
+      this.dialog.tipo = tipo
+
       if (tipo === 'cancelamento') {
-        texto = 'A partida somente será cancelada se o seu adversário também solicitar o cancelamento. Caso o adversário informe qualquer outro resultado, a partida irá a <strong>julgamento</strong>. Use o chat para chegar a um acordo.'
+        this.dialog.texto = 'A partida somente será cancelada se o seu adversário também solicitar o cancelamento. Caso o adversário informe qualquer outro resultado, a partida irá a <strong>julgamento</strong>. Use o chat para chegar a um acordo.'
       } else {
-        texto = 'Caso informe um resultado falso você será <strong>banido.</strong>'
+        this.dialog.texto = 'Caso informe um resultado falso você será <strong>banido.</strong>'
       }
 
-      this.$dialog.confirm({
-        message: texto,
-        type: 'is-warning',
-        hasIcon: true,
-        onConfirm: () => this.postResultado(tipo)
-      })
+      this.dialog.show = true
     },
-    async postResultado (tipo) {
+    async postResultado () {
+      this.dialog.show = false
       let userId
+      let tipo = this.dialog.tipo
 
       if (tipo === 'vitoria') {
         userId = this.eu.id
@@ -264,6 +277,7 @@ export default {
       let params = {
         vencedor: userId
       }
+
       try {
         let { data } = await this.$axios.patch(`/partidas/${this.partida.id}`, params)
 
@@ -286,31 +300,7 @@ export default {
 </script>
 
 <style  scoped>
-.instrucoes {
-  font-size: 9pt;
-}
-
-.instrucoes li {
-  margin-bottom: 5px;
-}
-
-.instrucoes ol {
-  margin-top: 0 !important;
-}
-
-.resultado-info {
-  font-size: 9pt;
-  padding: 10px !important;
-}
-
-.resultado-timer {
-  padding: 5px;
-  background-color: #ffdd57;
-  color: rgba(0, 0, 0, 0.7);
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-top: -20px;
-  margin-bottom: 20px;
-  font-size: 9pt;
+li {
+  margin-bottom: 10px;
 }
 </style>

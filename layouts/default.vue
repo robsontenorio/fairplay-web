@@ -52,7 +52,7 @@
       <v-toolbar-title>FAIRPLAY</v-toolbar-title>
     </v-toolbar>
     <v-content>
-      <v-container class="py-0 px-0">
+      <v-container class="py-2 px-2">
         <nuxt />
       </v-container>
     </v-content>

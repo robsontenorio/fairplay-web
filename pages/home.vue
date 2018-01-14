@@ -1,8 +1,8 @@
 <template>
   <div>
-    <profile :user="user" class="mb-1"></profile>
-    <v-progress-linear class="ma-0" height="2" v-bind:indeterminate="loading"></v-progress-linear>
-    <v-tabs grow icons-and-text centered slider-color="blue-grey darken-">
+    <profile :user="user"></profile>
+    <!-- <v-progress-linear class="ma-0" height="2" v-bind:indeterminate="loading"></v-progress-linear> -->
+    <v-tabs grow icons-and-text centered slider-color="blue-grey darken-3" class="mt-1">
       <v-tab href="#tab-1">
         Geral
         <v-icon>fa-globe</v-icon>
