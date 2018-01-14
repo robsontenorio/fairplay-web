@@ -3,10 +3,10 @@
     <div v-if="eu">
       <div v-show="!resposta">
         <v-btn block class="success mb-3" @click="responder(true)" :disabled="respondi">
-          <v-icon left>check</v-icon> aceitar
+          <v-icon>check</v-icon> aceitar
         </v-btn>
         <v-btn block class="error" @click="responder(false)" :disabled="respondi">
-          <v-icon left>close</v-icon> desistir
+          <v-icon>close</v-icon> desistir
         </v-btn>
       </div>
       <div v-show="resposta">

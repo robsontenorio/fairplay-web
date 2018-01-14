@@ -15,16 +15,15 @@
       </div>
     </div>
     <div class="mensagem-composer">
-
-      <div class="control">
-        <div class="button">
-          <vue-dropzone ref="dropZone" id="dropzone" :options="dropzoneOptions" @vdropzone-success="syncMensagem" @vdropzone-file-added="fazendoUpload" @vdropzone-sending="fazendoUpload">
-          </vue-dropzone>
-        </div>
-      </div>
-      <v-text-field prepend-icon="camera_alt" :prepend-icon-cb="openFile" v-model="params.mensagem" label="Mensagem..." auto-grow @keyup.native.enter="enviar()"></v-text-field>
+      <v-layout>
+        <v-flex xs1 class="pt-4">
+          <vue-dropzone id="dropzone" :options="dropzoneOptions" @vdropzone-success="syncMensagem" @vdropzone-file-added="fazendoUpload" @vdropzone-sending="fazendoUpload"></vue-dropzone>
+        </v-flex>
+        <v-flex>
+          <v-text-field v-model="params.mensagem" auto-grow multi-line rows="1" label="Mensagem..." append-icon="send" :append-icon-cb="enviar" @keydown.enter.prevent></v-text-field>
+        </v-flex>
+      </v-layout>
     </div>
-
   </div>
 </template>
 <script>
@@ -63,10 +62,6 @@ export default {
     }
   },
   methods: {
-    openFile () {
-      this.$refs.dropZone.processQueue()
-      alert(1)
-    },
     syncMensagem (file, response) {
       this.params.media = response
       this.enviar()
@@ -123,6 +118,7 @@ export default {
 .message img {
   border-radius: 10px;
   padding-top: 5px;
+  max-width: 100%;
 }
 
 .message.to + .message.to,
