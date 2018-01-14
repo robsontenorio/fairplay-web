@@ -1,7 +1,9 @@
 <template>
   <div>
-
     <v-subheader>TOP 100</v-subheader>
+    <div class="text-xs-center">
+      <v-progress-circular v-if="classificacoes.length === 0" indeterminate color="primary"></v-progress-circular>
+    </div>
     <v-list two-line>
       <template v-for="(item, index) in classificacoes">
         <v-divider></v-divider>

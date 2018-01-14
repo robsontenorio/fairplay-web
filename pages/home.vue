@@ -1,7 +1,6 @@
 <template>
   <div>
     <profile :user="user"></profile>
-    <!-- <v-progress-linear class="ma-0" height="2" v-bind:indeterminate="loading"></v-progress-linear> -->
     <v-tabs grow icons-and-text centered slider-color="blue-grey darken-3" class="mt-1">
       <v-tab href="#tab-1">
         Geral
@@ -87,11 +86,12 @@ export default {
     response = await this.$axios.get(`/users/${user.id}`, { params })
     this.user = response.data
 
-    response = await this.$axios.get(`/temporadas`)
-    this.temporadas = response.data
-
     response = await this.$axios.get(`/temporadas/ultima`)
     this.temporada_ultima = response.data
+
+    this.$axios.get(`/temporadas`).then(response => {
+      this.temporadas = response.data
+    })
 
     params = {
       plataforma_id: this.user.plataforma_id,
@@ -100,14 +100,17 @@ export default {
       limit: 100
     }
 
-    response = await this.$axios.get(`/temporadas/ladder`, { params })
-    this.classificacoes_geral = response.data
+    this.$axios.get(`/temporadas/ladder`, { params }).then(response => {
+      this.classificacoes_geral = response.data
+    })
 
     params = {
+      includes: 'user1,user2',
       order_by: 'created_at,desc'
     }
-    response = await this.$axios.get(`/users/${this.user.id}/partidas`, { params })
-    this.historico = response.data
+    this.$axios.get(`/users/${this.user.id}/partidas`, { params }).then(response => {
+      this.historico = response.data
+    })
 
     this.carregarTemporada(this.temporada_ultima.id)
 
