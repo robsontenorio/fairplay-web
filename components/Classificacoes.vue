@@ -4,10 +4,10 @@
     <div class="text-xs-center">
       <v-progress-circular v-if="classificacoes.length === 0" indeterminate color="primary"></v-progress-circular>
     </div>
-    <v-list two-line>
+    <v-list dense two-line>
       <template v-for="(item, index) in classificacoes">
         <v-divider></v-divider>
-        <v-list-tile avatar :key="item.id" @click="">
+        <v-list-tile avatar :key="item.id" @click="verPerfil(item.identificador || item.user.identificador)">
           <v-list-tile-avatar>
             <img :src="item.avatar || item.user.avatar">
           </v-list-tile-avatar>
@@ -27,37 +27,17 @@
         </v-list-tile>
       </template>
     </v-list>
-
-    <!-- <v-data-table dense :items="classificacoes" hide-actions class="elevation-1">
-      <template slot="headers" slot-scope="props">
-        <tr>
-          <th class="pl-3 pr-0 text-xs-left">#</th>
-          <th class="px-2 text-xs-left">ID</th>
-          <th class="px-2 ">P</th>
-          <th class="px-2 ">V</th>
-          <th class="px-2 ">E</th>
-          <th class="px-2 ">D</th>
-        </tr>
-      </template>
-      <template slot="items" slot-scope="props">
-        <td class="pl-3 pr-0">
-          <strong>{{ props.index + 1}}</strong>
-        </td>
-        <td class="px-2">{{ props.item.identificador || props.item.user.identificador }}</td>
-        <td class="px-2">{{ props.item.pontos }}</td>
-        <td class="px-2">{{ props.item.vitorias }}</td>
-        <td class="px-2">{{ props.item.empates }}</td>
-        <td class="px-2">{{ props.item.derrotas }}</td>
-      </template>
-      <template slot="no-data">
-        -
-      </template>
-    </v-data-table> -->
   </div>
 </template>
 <script>
 export default {
-  props: ['classificacoes', 'user']
+  props: ['classificacoes', 'user'],
+  methods: {
+    verPerfil (value) {
+      this.$emit('perfilSelecionado', value)
+    }
+  }
+
 }
 </script>
 <style lang="stylus"  scoped>

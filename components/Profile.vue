@@ -2,13 +2,13 @@
   <div>
     <v-card flat>
       <v-card-media :src="user.avatar" height="200px"></v-card-media>
-      <v-card-title>
-        <v-flex xs6>
-          <div class="headline">
+      <v-card-title class="px-1">
+        <v-flex xs7>
+          <div class="title">
             {{ user.identificador }}
           </div>
         </v-flex>
-        <v-flex xs6 class="text-xs-right">
+        <v-flex xs5 class="text-xs-right">
           <span v-if="user.jogo">
             <v-chip small text-color="white" color="blue-grey darken-3">{{ user.jogo.nome }}</v-chip>
             <v-chip small text-color="white" color="blue-grey lighten-3">{{ user.plataforma.nome }}</v-chip>
