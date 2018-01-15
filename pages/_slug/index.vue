@@ -97,7 +97,7 @@ export default {
       plataforma_id: this.user.plataforma_id,
       jogo_id: this.user.jogo_id,
       order_by: 'pontos,desc',
-      limit: 100
+      limit: 50
     }
 
     this.$axios.get(`/temporadas/ladder`, { params }).then(response => {
@@ -141,7 +141,7 @@ export default {
         plataforma_id: this.user.plataforma_id,
         jogo_id: this.user.jogo_id,
         order_by: 'pontos,desc',
-        limit: 100
+        limit: 50
       }
 
       this.$axios.get(`/temporadas/${value}/ladder`, { params }).then(response => {
