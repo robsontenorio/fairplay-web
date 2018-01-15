@@ -93,8 +93,11 @@ export default {
 
     this.user = response.data.data[0]
 
-    response = await this.$axios.get(`/temporadas/ultima`)
-    this.temporada_ultima = response.data
+    this.$axios.get(`/temporadas/ultima`).then(response => {
+      this.temporada_ultima = response.data
+      this.carregarTemporada(this.temporada_ultima.id)
+    })
+
 
     this.$axios.get(`/temporadas`).then(response => {
       this.temporadas = response.data
@@ -118,8 +121,6 @@ export default {
     this.$axios.get(`/users/${this.user.id}/partidas`, { params }).then(response => {
       this.historico = response.data
     })
-
-    this.carregarTemporada(this.temporada_ultima.id)
 
     this.loading = false
   },
