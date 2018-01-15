@@ -93,16 +93,6 @@ export default {
 
     this.user = response.data.data[0]
 
-    this.$axios.get(`/temporadas/ultima`).then(response => {
-      this.temporada_ultima = response.data
-      this.carregarTemporada(this.temporada_ultima.id)
-    })
-
-
-    this.$axios.get(`/temporadas`).then(response => {
-      this.temporadas = response.data
-    })
-
     params = {
       plataforma_id: this.user.plataforma_id,
       jogo_id: this.user.jogo_id,
@@ -112,6 +102,15 @@ export default {
 
     this.$axios.get(`/temporadas/ladder`, { params }).then(response => {
       this.classificacoes_geral = response.data
+    })
+
+    this.$axios.get(`/temporadas/ultima`).then(response => {
+      this.temporada_ultima = response.data
+      this.carregarTemporada(this.temporada_ultima.id)
+    })
+
+    this.$axios.get(`/temporadas`).then(response => {
+      this.temporadas = response.data
     })
 
     params = {
