@@ -20,7 +20,9 @@
           <vue-dropzone id="dropzone" :options="dropzoneOptions" @vdropzone-success="syncMensagem" @vdropzone-file-added="fazendoUpload" @vdropzone-sending="fazendoUpload"></vue-dropzone>
         </v-flex>
         <v-flex>
-          <v-text-field v-model="params.mensagem" auto-grow multi-line rows="1" label="Mensagem..." append-icon="send" :append-icon-cb="enviar" @keydown.enter.prevent></v-text-field>
+          <v-text-field v-model="params.mensagem" auto-grow multi-line :loading="loading" rows="1" label="Mensagem..." append-icon="send" :append-icon-cb="enviar" @keydown.enter.prevent>
+
+          </v-text-field>
         </v-flex>
       </v-layout>
     </div>
