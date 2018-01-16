@@ -19,6 +19,7 @@
         <v-card flat>
           <v-card-text>
             <pontuacao-jogador :objeto="user" class="mb-3"></pontuacao-jogador>
+            <v-subheader>TOP 50</v-subheader>
             <classificacoes :user="user" :classificacoes="classificacoes_geral" @perfilSelecionado="verPerfil"></classificacoes>
             <div v-if="classificacoes_geral === 100">Mostrando os 100 melhores</div>
           </v-card-text>
@@ -29,7 +30,8 @@
         <v-card flat>
           <v-card-text>
             <pontuacao-jogador :objeto="eu_temporada" class="mb-3"></pontuacao-jogador>
-            <v-select :items="temporadas" v-model="temporada_ultima.id" item-text="nome" item-value="id" single-line bottom prepend-icon="event" @input="carregarTemporada" class="mb-2"></v-select>
+            <v-select :items="temporadas" :loading="loading" v-model="temporada_ultima.id" item-text="nome" item-value="id" single-line bottom prepend-icon="event" @input="carregarTemporada" class="mb-2"></v-select>
+            <v-subheader>TOP 50</v-subheader>
             <classificacoes :user="user" :classificacoes="classificacoes_temporada" @perfilSelecionado="verPerfil"></classificacoes>
           </v-card-text>
         </v-card>
@@ -38,7 +40,8 @@
       <v-tab-item id="tab-3">
         <v-card flat>
           <v-card-text>
-            {{ historico }}
+            <v-subheader>PARTIDAS RECENTES</v-subheader>
+            <historico-partidas :partidas="historico" :user="user"></historico-partidas>
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -50,11 +53,11 @@
 import Profile from '~/components/Profile'
 import Classificacoes from '~/components/Classificacoes'
 import PontuacaoJogador from '~/components/PontuacaoJogador'
-import HistoricoJogador from '~/components/HistoricoJogador'
+import HistoricoPartidas from '~/components/HistoricoPartidas'
 
 export default {
   middleware: 'auth',
-  components: { Profile, Classificacoes, PontuacaoJogador, HistoricoJogador },
+  components: { Profile, Classificacoes, PontuacaoJogador, HistoricoPartidas },
   data () {
     return {
       loading: false,
@@ -118,7 +121,7 @@ export default {
       order_by: 'created_at,desc'
     }
     this.$axios.get(`/users/${this.user.id}/partidas`, { params }).then(response => {
-      this.historico = response.data
+      this.historico = response.data.data
     })
 
     this.loading = false
@@ -146,9 +149,8 @@ export default {
 
       this.$axios.get(`/temporadas/${value}/ladder`, { params }).then(response => {
         this.classificacoes_temporada = response.data
+        this.loading = false
       })
-
-      this.loading = false
     },
     verPerfil (value) {
       this.$router.push('/@' + value)
