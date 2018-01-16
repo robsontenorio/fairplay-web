@@ -63,7 +63,6 @@ export default {
       this.$emit('perfilSelecionado', value)
     }
   }
-
 }
 </script>
 <style lang="stylus"  scoped>
