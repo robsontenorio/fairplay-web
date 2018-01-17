@@ -19,8 +19,10 @@
         <v-card flat>
           <v-card-text>
             <pontuacao-jogador :objeto="user" class="mb-3"></pontuacao-jogador>
-            <v-subheader>TOP 50</v-subheader>
-            <classificacoes :user="user" :classificacoes="classificacoes_geral" :loading="loading.classificacoes_geral" @perfilSelecionado="verPerfil"></classificacoes>
+            <div v-if="user.id === eu.id">
+              <v-subheader>TOP 50</v-subheader>
+              <classificacoes :user="user" :classificacoes="classificacoes_geral" :loading="loading.classificacoes_geral" @perfilSelecionado="verPerfil"></classificacoes>
+            </div>
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -28,10 +30,12 @@
       <v-tab-item id="tab-2">
         <v-card flat>
           <v-card-text>
-            <v-select :items="temporadas" :loading="loading.classificacoes_temporada" v-model="temporada_ultima.id" item-text="nome" item-value="id" single-line bottom prepend-icon="event" @input="carregarTemporada" class="mb-2"></v-select>
+            <v-select :items="temporadas" :loading="loading.temporadas" v-model="temporada_ultima.id" item-text="nome" item-value="id" single-line bottom prepend-icon="event" @input="carregarTemporada" class="mb-2"></v-select>
             <pontuacao-jogador :objeto="eu_temporada" :loading="loading.eu_temporada" class="mb-3"></pontuacao-jogador>
-            <v-subheader>TOP 50</v-subheader>
-            <classificacoes :user="user" :classificacoes="classificacoes_temporada" :loading="loading.classificacoes_temporada" @perfilSelecionado="verPerfil"></classificacoes>
+            <div v-if="user.id === eu.id">
+              <v-subheader>TOP 50</v-subheader>
+              <classificacoes :user="user" :classificacoes="classificacoes_temporada" :loading="loading.classificacoes_temporada" @perfilSelecionado="verPerfil"></classificacoes>
+            </div>
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -63,8 +67,10 @@ export default {
         classificacoes_geral: true,
         classificacoes_temporada: true,
         eu_temporada: true,
+        temporadas: true,
         historico: true
       },
+      eu: {},
       user: {},
       temporadas: [],
       temporada_ultima: {},
@@ -79,6 +85,8 @@ export default {
     // TODO nao funciona em SPA?
   },
   async mounted () {
+    this.eu = this.$store.state.auth.user
+
     let identificador = this.$route.params.slug.replace('@', '')
 
     let params = {
@@ -98,17 +106,19 @@ export default {
 
     this.user = response.data.data[0]
 
-    params = {
-      plataforma_id: this.user.plataforma_id,
-      jogo_id: this.user.jogo_id,
-      order_by: 'pontos,desc',
-      limit: 50
-    }
+    if (this.user.id === this.eu.id) {
+      params = {
+        plataforma_id: this.user.plataforma_id,
+        jogo_id: this.user.jogo_id,
+        order_by: 'pontos,desc',
+        limit: 50
+      }
 
-    this.$axios.get(`/temporadas/ladder`, { params }).then(response => {
-      this.classificacoes_geral = response.data
-      this.loading.classificacoes_geral = false
-    })
+      this.$axios.get(`/temporadas/ladder`, { params }).then(response => {
+        this.classificacoes_geral = response.data
+        this.loading.classificacoes_geral = false
+      })
+    }
 
     this.$axios.get(`/temporadas/ultima`).then(response => {
       this.temporada_ultima = response.data
@@ -117,6 +127,7 @@ export default {
 
     this.$axios.get(`/temporadas`).then(response => {
       this.temporadas = response.data
+      this.loading.temporadas = false
     })
 
     params = {
@@ -141,19 +152,21 @@ export default {
         this.loading.eu_temporada = false
       })
 
-      params = {
-        includes: 'user',
-        plataforma_id: this.user.plataforma_id,
-        jogo_id: this.user.jogo_id,
-        order_by: 'pontos,desc',
-        limit: 50
-      }
+      if (this.user.id === this.eu.id) {
+        params = {
+          includes: 'user',
+          plataforma_id: this.user.plataforma_id,
+          jogo_id: this.user.jogo_id,
+          order_by: 'pontos,desc',
+          limit: 50
+        }
 
-      this.loading.classificacoes_temporada = true
-      this.$axios.get(`/temporadas/${value}/ladder`, { params }).then(response => {
-        this.classificacoes_temporada = response.data
-        this.loading.classificacoes_temporada = false
-      })
+        this.loading.classificacoes_temporada = true
+        this.$axios.get(`/temporadas/${value}/ladder`, { params }).then(response => {
+          this.classificacoes_temporada = response.data
+          this.loading.classificacoes_temporada = false
+        })
+      }
     },
     verPerfil (value) {
       this.$router.push('/@' + value)
@@ -163,7 +176,7 @@ export default {
 </script>
 
 <style  scoped>
-.tabs {
+/* .tabs {
   margin-top: 30px;
 }
 
@@ -173,5 +186,5 @@ export default {
 
 h3 {
   margin-top: 20px !important;
-}
+} */
 </style>
