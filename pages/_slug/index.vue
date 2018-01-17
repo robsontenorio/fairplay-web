@@ -20,8 +20,7 @@
           <v-card-text>
             <pontuacao-jogador :objeto="user" class="mb-3"></pontuacao-jogador>
             <v-subheader>TOP 50</v-subheader>
-            <classificacoes :user="user" :classificacoes="classificacoes_geral" @perfilSelecionado="verPerfil"></classificacoes>
-            <div v-if="classificacoes_geral === 100">Mostrando os 100 melhores</div>
+            <classificacoes :user="user" :classificacoes="classificacoes_geral" :loading="loading.classificacoes_geral" @perfilSelecionado="verPerfil"></classificacoes>
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -29,10 +28,10 @@
       <v-tab-item id="tab-2">
         <v-card flat>
           <v-card-text>
-            <pontuacao-jogador :objeto="eu_temporada" class="mb-3"></pontuacao-jogador>
-            <v-select :items="temporadas" :loading="loading" v-model="temporada_ultima.id" item-text="nome" item-value="id" single-line bottom prepend-icon="event" @input="carregarTemporada" class="mb-2"></v-select>
+            <v-select :items="temporadas" :loading="loading.classificacoes_temporada" v-model="temporada_ultima.id" item-text="nome" item-value="id" single-line bottom prepend-icon="event" @input="carregarTemporada" class="mb-2"></v-select>
+            <pontuacao-jogador :objeto="eu_temporada" :loading="loading.eu_temporada" class="mb-3"></pontuacao-jogador>
             <v-subheader>TOP 50</v-subheader>
-            <classificacoes :user="user" :classificacoes="classificacoes_temporada" @perfilSelecionado="verPerfil"></classificacoes>
+            <classificacoes :user="user" :classificacoes="classificacoes_temporada" :loading="loading.classificacoes_temporada" @perfilSelecionado="verPerfil"></classificacoes>
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -41,7 +40,7 @@
         <v-card flat>
           <v-card-text>
             <v-subheader>PARTIDAS RECENTES</v-subheader>
-            <historico-partidas :partidas="historico" :user="user"></historico-partidas>
+            <historico-partidas :partidas="historico" :user="user" :loading="loading.historico"></historico-partidas>
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -60,7 +59,12 @@ export default {
   components: { Profile, Classificacoes, PontuacaoJogador, HistoricoPartidas },
   data () {
     return {
-      loading: false,
+      loading: {
+        classificacoes_geral: true,
+        classificacoes_temporada: true,
+        eu_temporada: true,
+        historico: true
+      },
       user: {},
       temporadas: [],
       temporada_ultima: {},
@@ -75,8 +79,6 @@ export default {
     // TODO nao funciona em SPA?
   },
   async mounted () {
-    this.loading = true
-
     let identificador = this.$route.params.slug.replace('@', '')
 
     let params = {
@@ -105,6 +107,7 @@ export default {
 
     this.$axios.get(`/temporadas/ladder`, { params }).then(response => {
       this.classificacoes_geral = response.data
+      this.loading.classificacoes_geral = false
     })
 
     this.$axios.get(`/temporadas/ultima`).then(response => {
@@ -122,21 +125,20 @@ export default {
     }
     this.$axios.get(`/users/${this.user.id}/partidas`, { params }).then(response => {
       this.historico = response.data.data
+      this.loading.historico = false
     })
-
-    this.loading = false
   },
   methods: {
     async carregarTemporada (value) {
-      this.loading = true
-
       let params = {
         user_id: this.user.id,
         appends: 'posicao'
       }
 
+      this.loading.eu_temporada = true
       this.$axios.get(`/temporadas/${value}/ladder`, { params }).then(response => {
         this.eu_temporada = response.data[0]
+        this.loading.eu_temporada = false
       })
 
       params = {
@@ -147,15 +149,15 @@ export default {
         limit: 50
       }
 
+      this.loading.classificacoes_temporada = true
       this.$axios.get(`/temporadas/${value}/ladder`, { params }).then(response => {
         this.classificacoes_temporada = response.data
-        this.loading = false
+        this.loading.classificacoes_temporada = false
       })
     },
     verPerfil (value) {
       this.$router.push('/@' + value)
     }
-
   }
 }
 </script>

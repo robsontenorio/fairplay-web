@@ -2,7 +2,7 @@
   <div>
     <v-card flat>
       <v-card-media :src="user.avatar" height="200px"></v-card-media>
-      <v-card-title class="px-1">
+      <v-card-title class="pr-1">
         <v-flex xs7>
           <div class="title">
             {{ user.identificador }}
@@ -10,7 +10,7 @@
         </v-flex>
         <v-flex xs5 class="text-xs-right">
           <span v-if="user.jogo">
-            <v-chip small text-color="white" color="blue-grey darken-3">{{ user.jogo.nome }}</v-chip>
+            <v-chip small text-color="white" color="mr-0 blue-grey darken-3">{{ user.jogo.nome }}</v-chip>
             <v-chip small text-color="white" color="blue-grey lighten-3">{{ user.plataforma.nome }}</v-chip>
           </span>
         </v-flex>

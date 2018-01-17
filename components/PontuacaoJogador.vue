@@ -1,8 +1,11 @@
 <template>
   <div>
-    <v-alert outline color="warning" icon="priority_high" :value="!objeto">
-      Não pontuou :(
+    <v-alert outline color="warning" icon="priority_high" :value="!objeto && !loading">
+      Não pontuou na temporada :(
     </v-alert>
+    <div class="text-xs-center">
+      <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+    </div>
     <v-container v-if="objeto" grid-list-md text-xs-center class="px-0">
       <v-layout row wrap>
         <v-flex xs12 class="mb-2">
@@ -48,7 +51,7 @@
 </template>
 <script>
 export default {
-  props: ['objeto']
+  props: ['objeto', 'loading']
 }
 </script>
 <style  scoped>

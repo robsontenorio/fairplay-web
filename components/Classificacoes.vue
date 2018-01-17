@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div class="text-xs-center">
-      <v-progress-circular v-if="classificacoes.length === 0" indeterminate color="primary"></v-progress-circular>
-    </div>
     <v-list dense two-line>
       <template v-for="(item, index) in classificacoes">
         <v-divider :key="index"></v-divider>
@@ -24,11 +21,15 @@
         </v-list-tile>
       </template>
     </v-list>
+    <div class="text-xs-center">
+      <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+      <span v-if="!loading && classificacoes.length === 0">Nenhum jogador pontuou</span>
+    </div>
   </div>
 </template>
 <script>
 export default {
-  props: ['classificacoes', 'user'],
+  props: ['classificacoes', 'user', 'loading'],
   methods: {
     verPerfil (value) {
       this.$emit('perfilSelecionado', value)
