@@ -43,7 +43,7 @@
       <v-tab-item id="tab-3">
         <v-card flat>
           <v-card-text>
-            <v-subheader>PARTIDAS RECENTES</v-subheader>
+            <v-subheader>TEMPORADA ATUAL</v-subheader>
             <historico-partidas :partidas="historico" :user="user" :loading="loading.historico"></historico-partidas>
           </v-card-text>
         </v-card>

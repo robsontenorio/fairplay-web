@@ -3,8 +3,6 @@
     <br><br>
     <img src="/spinner2.gif" width="100px">
     <h2>Autenticando ...</h2>
-
-    <v-snackbar color="red" :value="error"> {{ error }} </v-snackbar>
   </div>
 </template>
 
@@ -30,7 +28,7 @@ export default {
           fields: this.form
         })
       } catch (error) {
-        this.error = error.response.data.error
+        alert(error.response.data.error)
       }
       this.$router.replace({ path: '/home' })
     }

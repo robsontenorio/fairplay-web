@@ -113,7 +113,7 @@
         </v-card>
       </v-tab-item>
     </v-tabs>
-    <v-dialog v-model="dialog.show" persistent>
+    <v-dialog persistent v-model="dialog.show">
       <v-card>
         <v-card-title class="headline">Importante!</v-card-title>
         <v-card-text v-html="dialog.texto"></v-card-text>
@@ -121,6 +121,42 @@
           <v-spacer></v-spacer>
           <v-btn color="success" flat @click.native="postResultado">confirmar</v-btn>
           <v-btn color="error" flat @click.native="dialog.show = false">cancelar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog persistent v-model="sheet.show">
+      <v-card tile>
+        <v-card-text>
+          {{ sheet.text }}
+        </v-card-text>
+        <v-spacer></v-spacer>
+        <v-card-actions>
+          <v-btn color="primary" flat @click.native="sheet.show = false">ok</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog persistent v-model="conexao.show">
+      <v-card tile>
+        <v-card-text>
+          A conexão foi perdida ...
+        </v-card-text>
+        <v-spacer></v-spacer>
+        <v-card-actions>
+          <v-btn color="primary" flat @click.native="recarregar">reconectar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog persistent v-model="final.show">
+      <v-card tile>
+        <v-card-text>
+          {{ final.text }}
+        </v-card-text>
+        <v-spacer></v-spacer>
+        <v-card-actions>
+          <v-btn color="primary" flat @click.native="$router.replace({ path: '/home' })">ok</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -144,6 +180,17 @@ export default {
         show: false,
         texto: '',
         tipo: ''
+      },
+      sheet: {
+        show: false,
+        text: ''
+      },
+      final: {
+        show: false,
+        text: ''
+      },
+      conexao: {
+        show: false
       },
       carregado: false,
       partida: {},
@@ -180,9 +227,9 @@ export default {
         })
 
       let socket = this.$echo.connector.socket
+      let self = this
       socket.on('disconnect', function () {
-        alert('Reconectando ...')
-        location.reload()
+        self.conexao.show = true
       })
     }
   },
@@ -213,35 +260,23 @@ export default {
     }
   },
   methods: {
+    recarregar () {
+      location.reload()
+    },
     async tratar () {
       if (this.partida.status === 'FINALIZADA') {
-        this.$router.replace({ path: '/home' })
-
-        this.$snackbar.open({
-          message: 'Partida finalizada',
-          type: 'is-success',
-          position: 'is-bottom'
-        })
+        this.final.show = true
+        this.final.text = 'Partida finalizada'
       }
 
       if (this.partida.status === 'JULGAMENTO') {
-        this.$router.replace({ path: '/home' })
-
-        this.$snackbar.open({
-          message: 'Os resultados informados foram divergentes. Partida vai a JULGAMENTO',
-          type: 'is-danger',
-          position: 'is-bottom'
-        })
+        this.final.show = true
+        this.final.text = 'Os resultados informados foram divergentes. Partida vai a JULGAMENTO'
       }
 
       if (this.partida.status === 'ANULADA') {
-        this.$router.replace({ path: '/home' })
-
-        this.$snackbar.open({
-          message: 'A partida foi anulada, pois ambos jogadores concordaram',
-          type: 'is-danger',
-          position: 'is-bottom'
-        })
+        this.final.show = true
+        this.final.text = 'A partida foi anulada, pois ambos jogadores concordaram'
       }
     },
     informarResultado (tipo) {
@@ -282,14 +317,11 @@ export default {
         let { data } = await this.$axios.patch(`/partidas/${this.partida.id}`, params)
 
         if (data.status === 'RESULTADO') {
-          this.$modal.open(`O adversário tem 30 minutos para confirmar ou recusar o resultado. Você ainda pode alterar o resultado informado, continuar conversando com o aversário ou procurar por uma nova partida.`)
+          this.sheet.text = `O adversário tem 30 minutos para confirmar ou recusar o resultado. Você ainda pode alterar o resultado informado, continuar conversando com o aversário ou procurar por uma nova partida.`
+          this.sheet.show = true
         }
       } catch (error) {
-        this.$snackbar.open({
-          message: error.response.data.message,
-          type: 'is-danger',
-          position: 'is-bottom'
-        })
+        alert(error.response.data.message)
       }
     },
     async enviarMensagem (params) {

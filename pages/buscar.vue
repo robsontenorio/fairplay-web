@@ -116,12 +116,8 @@ export default {
       }
 
       if (this.pareamento.status === 'CANCELADO') {
+        alert('O desafio foi cancelado, pois um dos jogadores recusou o confronto.')
         this.$router.replace({ path: '/home' })
-        this.$snackbar.open({
-          message: 'O desafio foi cancelado, pois um dos jogadores recusou o confronto.',
-          type: 'is-danger',
-          position: 'is-bottom'
-        })
       }
     }
   }

@@ -27,6 +27,9 @@
       <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
       <span v-if="!loading && partidas.length === 0">Nenhuma partida recente</span>
     </div>
+    <div class="dark--text text-xs-center mt-3">
+      Pontuações obtidas em resultados recentes.
+    </div>
   </div>
 </template>
 <script>
@@ -47,7 +50,7 @@ export default {
         if (partida.vencedor === 0) {
           resultado.status = 'EMPATE'
           resultado.pontos = '+1'
-          resultado.cor = 'dark--text'
+          resultado.cor = 'black--text'
         } else if (partida.vencedor === this.user.id) {
           resultado.status = 'VITÓRIA'
           resultado.pontos = '+5'
@@ -57,6 +60,14 @@ export default {
           resultado.pontos = '-2'
           resultado.cor = 'red--text'
         }
+      } else if (partida.status === 'JULGAMENTO') {
+        resultado.status = 'EM JULGAMENTO'
+        resultado.pontos = '--'
+        resultado.cor = 'warning--text'
+      } else if (partida.status === 'ANULADA') {
+        resultado.status = 'ANULADA'
+        resultado.pontos = '--'
+        resultado.cor = 'dark--text'
       } else {
         resultado.status = 'Aguardando resultados'
         resultado.pontos = '--'
