@@ -7,8 +7,8 @@
     <div v-if="julgamentos.length === 0">
       jogar
     </div>
-    <div v-if="julgamentos.length">
-      <v-card :key="julgamento.id" v-for="julgamento in julgamentos">
+    <div v-if="julgamentos.length > 0">
+      <v-card :key="julgamento.id" v-for="julgamento in julgamentos" class="mb-3">
         <v-card-text @click="verJulgamento(julgamento)">
           <v-layout text-xs-center>
             <v-flex xs5>
