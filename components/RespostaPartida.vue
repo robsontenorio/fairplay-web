@@ -19,17 +19,17 @@ export default {
     }
   },
   computed:
-  {
-    resultado () {
-      let resultado = null
+    {
+      resultado () {
+        let resultado = null
 
-      if (this.partida.detalhes) {
-        resultado = this.parseResultado(this.partida.detalhes[this.user.id], this.user.id)
+        if (this.partida.detalhes) {
+          resultado = this.parseResultado(this.partida.detalhes[this.user.id], this.user.id)
+        }
+
+        return resultado
       }
-
-      return resultado
-    }
-  },
+    },
   methods: {
     parseResultado (detalhes, userId) {
       let resultado = null

@@ -44,7 +44,7 @@
         <v-card flat>
           <v-card-text>
             <v-subheader>TEMPORADA ATUAL</v-subheader>
-            <historico-partidas :partidas="historico" :user="user" :loading="loading.historico"></historico-partidas>
+            <historico-partidas :partidas="historico" :user="user" :loading="loading.historico" @partidaSelecionada="verPartida"></historico-partidas>
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -170,6 +170,9 @@ export default {
     },
     verPerfil (value) {
       this.$router.push('/@' + value)
+    },
+    verPartida (partida) {
+      this.$router.push(`partidas/${partida.id}`)
     }
   }
 }

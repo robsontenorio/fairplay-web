@@ -1,8 +1,14 @@
 <template>
   <div>
     <div class="chat-wrapper" ref="chatWrapper">
+      <div v-if="desativado">
+        <v-alert color="warning" icon="info" :value="true" class="mb-3">
+          Histórico da conversa
+        </v-alert>
+      </div>
       <div v-if="mensagens.length === 0" class="empty">
-        <i class="fa fa-comments"></i> Conversas são publicas</div>
+        <i class="fa fa-comments"></i> Conversas são publicas
+      </div>
       <div class="messages-wrapper">
         <div v-for="mensagem in mensagens" :key="mensagem.id" class="message" :class="[mensagem.from_id === eu.id ? 'to' : 'from']">
           <span v-if="mensagem.mensagem">
@@ -14,7 +20,7 @@
         </div>
       </div>
     </div>
-    <div class="mensagem-composer">
+    <div class="mensagem-composer" v-if="!desativado">
       <v-layout>
         <v-flex xs1 class="pt-4">
           <vue-dropzone id="dropzone" :options="dropzoneOptions" @vdropzone-success="syncMensagem" @vdropzone-file-added="fazendoUpload" @vdropzone-sending="fazendoUpload"></vue-dropzone>
@@ -31,7 +37,7 @@ import vue2Dropzone from 'vue2-dropzone'
 
 export default {
 
-  props: ['eu', 'adversario', 'partidaId', 'mensagens'],
+  props: ['eu', 'adversario', 'partidaId', 'mensagens', 'desativado'],
   components: {
     vueDropzone: vue2Dropzone
   },

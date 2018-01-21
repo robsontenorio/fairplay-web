@@ -40,6 +40,7 @@ export default {
   components: { User, RespostaPareamento },
   data () {
     return {
+      user: {},
       procurando: false,
       encontrado: false,
       pareamento: {}
@@ -50,15 +51,25 @@ export default {
     // TODO nao funciona em SPA?
   },
   async mounted () {
-    let user = this.$store.state.auth.user
-    let { data } = await this.$axios.get(`/users/${user.id}/partidas?ultima`)
+    this.user = this.$store.state.auth.user
+    let { data } = await this.$axios.get(`/users/${this.user.id}/partidas?ultima`)
 
     if ((data !== '' && data.status === 'JOGANDO') || (data.status === 'RESULTADO' && data.detalhes[this.eu.id].vencedor === null)) {
-      this.$router.replace({ path: '/partida' })
+      this.$router.replace({ path: `/partidas/${data.id}` })
     } else {
       this.procurando = true
-      let { data } = await this.$axios.post(`/pareamentos`)
-      this.pareamento = data
+      let response
+      try {
+        response = await this.$axios.post(`/pareamentos`)
+      } catch (error) {
+        alert(error.response.data.message)
+
+        if (error.response.data.code === 702) {
+          this.$router.replace({ path: '/julgamentos' })
+        }
+      }
+
+      this.pareamento = response.data
       this.tratar()
 
       this.$echo.channel('pareamento-' + this.pareamento.id)
@@ -112,7 +123,8 @@ export default {
       }
 
       if (this.pareamento.status === 'SUCESSO') {
-        this.$router.replace({ path: '/partida' })
+        let { data } = await this.$axios.get(`/users/${this.user.id}/partidas?ultima`)
+        this.$router.replace({ path: `/partidas/${data.id}` })
       }
 
       if (this.pareamento.status === 'CANCELADO') {

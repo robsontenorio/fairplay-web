@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="partida.id">
     <div v-if="carregado && finalizaEm > 0" class="pa-2 text-xs-center yellow accent-4">
       <countdown :time="finalizaEm">
         <template slot-scope="props">Finaliza em
@@ -204,9 +204,19 @@ export default {
   },
   async mounted () {
     let user = this.$store.state.auth.user
-    let { data } = await this.$axios.get(`/users/${user.id}/partidas?ultima`)
+    let id = this.$route.params.id
+    console.log(id)
+    let { data } = await this.$axios.get(`/partidas/${id}`)
 
-    if (data === '' || (data.status !== 'JOGANDO' && data.status !== 'RESULTADO')) {
+    if (data.status === 'JULGAMENTO') {
+      this.$router.replace({ path: `/julgamentos/${data.id}` })
+    }
+
+    if (data === '' || data.status === 'CANCELADA' || data.status === 'FINALIZADA' || data.status === 'ANULADA') {
+      alert('Partida finalizada.')
+      this.$router.replace({ path: '/home' })
+    } else if (data.user1.id !== user.id && data.user2.id !== user.id) {
+      alert('Você não participa desta partida')
       this.$router.replace({ path: '/home' })
     } else {
       this.partida = data
@@ -283,9 +293,9 @@ export default {
       this.dialog.tipo = tipo
 
       if (tipo === 'cancelamento') {
-        this.dialog.texto = 'A partida somente será cancelada se o seu adversário também solicitar o cancelamento. Caso o adversário informe qualquer outro resultado, a partida irá a <strong>julgamento</strong>. Use o chat para chegar a um acordo.'
+        this.dialog.texto = 'A partida somente será cancelada se o seu adversário também solicitar o cancelamento. Caso o adversário informe qualquer outro resultado a partida irá a <strong>julgamento</strong>. Use o chat para chegar a um acordo.'
       } else {
-        this.dialog.texto = 'Caso informe um resultado falso você será <strong>banido.</strong>'
+        this.dialog.texto = 'Caso informe um resultado falso você será <strong>banido.</strong> Caso o adversário informe um resultado divergente a partida irá a <strong>julgamento</strong>. Use o chat para chegar a um acordo'
       }
 
       this.dialog.show = true

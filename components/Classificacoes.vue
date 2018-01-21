@@ -2,7 +2,7 @@
   <div>
     <v-list dense two-line>
       <template v-for="(item, index) in classificacoes">
-        <v-divider :key="index"></v-divider>
+        <v-divider></v-divider>
         <v-list-tile avatar :key="item.id" @click="verPerfil(item.identificador || item.user.identificador)">
           <v-list-tile-avatar>
             <img :src="item.avatar || item.user.avatar">

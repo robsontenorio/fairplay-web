@@ -3,7 +3,7 @@
     <v-list two-line dense>
       <template v-for="partida in partidas">
         <v-divider></v-divider>
-        <v-list-tile avatar :key="partida.id" @click="verPartida(adversario(partida).identificador)">
+        <v-list-tile avatar :key="partida.id" @click="verPartida(partida)">
           <v-list-tile-avatar>
             <img v-bind:src="adversario(partida).avatar">
           </v-list-tile-avatar>
@@ -75,9 +75,6 @@ export default {
       }
 
       return resultado
-    },
-    pontos (partida) {
-      return '+5'
     },
     verPartida (value) {
       this.$emit('partidaSelecionada', value)
