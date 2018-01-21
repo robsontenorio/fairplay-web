@@ -49,7 +49,7 @@
     </v-navigation-drawer>
     <v-toolbar app absolute dense flat dark color="blue-grey darken-1">
       <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>FAIRPLAY</v-toolbar-title>
+      <v-toolbar-title><img style="vertical-align: middle" height="25px" src="~/static/fairplay.png"></v-toolbar-title>
     </v-toolbar>
     <v-content>
       <v-container class="py-2 px-2">

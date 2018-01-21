@@ -65,6 +65,9 @@
       <v-tab-item id="tab-3">
         <v-card flat>
           <v-card-text v-if="partida.user1">
+            <v-alert type="warning" :value="true" class="mb-3">
+              Qual o seu voto?
+            </v-alert>
             <p>
               <v-btn block color="info" @click="votar(partida.user1_id)">{{ partida.user1.identificador }}</v-btn>
             </p>

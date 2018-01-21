@@ -1,5 +1,5 @@
 <template>
-  <div class="px-4">
+  <div>
     <div v-if="eu">
       <div v-show="!resposta">
         <v-btn block class="success mb-3" @click="responder(true)" :disabled="respondi">
@@ -33,18 +33,18 @@ export default {
     }
   },
   computed:
-  {
-    resposta () {
-      let resposta
-      if (this.eu) {
-        resposta = (this.eu.id === this.pareamento.user1_id) ? this.pareamento.user1_aceitou : this.pareamento.user2_aceitou
-      } else {
-        resposta = (this.adversario.id === this.pareamento.user1_id) ? this.pareamento.user1_aceitou : this.pareamento.user2_aceitou
-      }
+    {
+      resposta () {
+        let resposta
+        if (this.eu) {
+          resposta = (this.eu.id === this.pareamento.user1_id) ? this.pareamento.user1_aceitou : this.pareamento.user2_aceitou
+        } else {
+          resposta = (this.adversario.id === this.pareamento.user1_id) ? this.pareamento.user1_aceitou : this.pareamento.user2_aceitou
+        }
 
-      return resposta
-    }
-  },
+        return resposta
+      }
+    },
   methods: {
     responder (decisao) {
       if (decisao === true && !confirm('Ao aceitar o desafio você se compromente com os termos FAIR PLAY')) {

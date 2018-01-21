@@ -1,32 +1,38 @@
 <template>
-  <div class="text-xs-center pt-5">
-    <div v-show="procurando">
-      <br><br><br><br><br><br>
-      <img src="/spinner2.gif" width="100px">
-      <br><br>
-      <h3>Procurando adversário ... </h3>
+  <div>
+    <v-container text-xs-center px-2>
+      <div v-show="procurando">
 
-      <v-btn color="primary" @click="cancelar()">cancelar</v-btn>
-    </div>
-    <div v-if="encontrado">
-      <v-layout>
-        <v-flex xs6>
-          <v-avatar size="96" class="mb-3">
-            <img :src="eu.avatar" />
-          </v-avatar>
-          <resposta-pareamento :pareamento="pareamento" :eu="eu" @respondeu="responder" />
-        </v-flex>
-        <v-flex xs6>
-          <v-avatar size="96" class="mb-3">
-            <img :src="adversario.avatar" />
-          </v-avatar>
-          <resposta-pareamento :pareamento="pareamento" :adversario="adversario" />
-        </v-flex>
-      </v-layout>
-      <br><br>
-      <h2>Você está pronto?</h2>
-      <small>Na tela seguinte você poderá conversar com o jogador antes de iniciar a partida.</small>
-    </div>
+        <div>
+          <v-progress-circular indeterminate :size="100" color="primary"></v-progress-circular>
+        </div>
+
+        <h3 class="mb-5">Procurando adversário ... </h3>
+        <div>
+          <v-btn block color="primary" @click="cancelar()">cancelar</v-btn>
+        </div>
+
+      </div>
+      <div v-if="encontrado">
+        <v-layout>
+          <v-flex xs6>
+            <v-avatar size="96" class="mb-3">
+              <img :src="eu.avatar" />
+            </v-avatar>
+            <resposta-pareamento :pareamento="pareamento" :eu="eu" @respondeu="responder" />
+          </v-flex>
+          <v-flex xs6>
+            <v-avatar size="96" class="mb-3">
+              <img :src="adversario.avatar" />
+            </v-avatar>
+            <resposta-pareamento :pareamento="pareamento" :adversario="adversario" />
+          </v-flex>
+        </v-layout>
+        <br><br>
+        <h2>Você está pronto?</h2>
+        <small>Na tela seguinte você poderá conversar com o jogador antes de iniciar a partida.</small>
+      </div>
+    </v-container>
   </div>
 </template>
 

@@ -2,7 +2,7 @@
   <div>
     <div class="chat-wrapper" ref="chatWrapper">
       <div v-if="desativado">
-        <v-alert color="warning" icon="info" :value="true" class="mb-3">
+        <v-alert type="warning" :value="true" class="mb-3">
           Histórico da conversa
         </v-alert>
       </div>
@@ -11,11 +11,14 @@
       </div>
       <div class="messages-wrapper">
         <div v-for="mensagem in mensagens" :key="mensagem.id" class="message" :class="[mensagem.from_id === eu.id ? 'to' : 'from']">
+          <v-avatar size="32">
+            <img :src="mensagem.from.avatar">
+          </v-avatar>
           <span v-if="mensagem.mensagem">
             {{ mensagem.mensagem }}
           </span>
           <span v-if="mensagem.media">
-            <img :src="`${API_URL_STORAGE}/${mensagem.media}`" />
+            <img class="imagem" :src="`${API_URL_STORAGE}/${mensagem.media}`" />
           </span>
         </div>
       </div>
@@ -123,7 +126,7 @@ export default {
   float: left;
 }
 
-.message img {
+.message .imagem {
   border-radius: 10px;
   padding-top: 5px;
   max-width: 100%;

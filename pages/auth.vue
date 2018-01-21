@@ -1,7 +1,7 @@
 <template>
   <div class="text-xs-center pa-3">
     <br><br>
-    <img src="/spinner2.gif" width="100px">
+    <v-progress-circular indeterminate :size="100" color="primary"></v-progress-circular>
     <h2>Autenticando ...</h2>
   </div>
 </template>

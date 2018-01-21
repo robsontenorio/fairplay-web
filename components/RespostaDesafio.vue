@@ -4,7 +4,7 @@
       <v-icon large color="success">{{ decisao }}</v-icon>
     </div>
     <div v-show="!resposta">
-      <img width="58px" src="/spinner2.gif" /> <br>
+      <v-progress-circular indeterminate color="primary"></v-progress-circular>
     </div>
   </div>
 </template>
@@ -12,15 +12,15 @@
 export default {
   props: ['resposta'],
   computed:
-  {
-    decisao () {
-      if (this.resposta === 1) {
-        return 'check'
-      } else if (this.resposta === 0) {
-        return 'close'
+    {
+      decisao () {
+        if (this.resposta === 1) {
+          return 'check'
+        } else if (this.resposta === 0) {
+          return 'close'
+        }
       }
     }
-  }
 }
 </script>
 <style  scoped>
