@@ -110,7 +110,7 @@ export default {
       params = {
         plataforma_id: this.user.plataforma_id,
         jogo_id: this.user.jogo_id,
-        order_by: 'pontos,desc',
+        order_by: 'pontos,desc|vitorias,desc|empates,desc|derrotas,asc',
         limit: 50
       }
 
@@ -157,7 +157,7 @@ export default {
           includes: 'user',
           plataforma_id: this.user.plataforma_id,
           jogo_id: this.user.jogo_id,
-          order_by: 'pontos,desc',
+          order_by: 'pontos,desc|vitorias,desc|empates,desc|derrotas,asc',
           limit: 50
         }
 
