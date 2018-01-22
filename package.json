@@ -18,21 +18,20 @@
     "vue-template-compiler": "^2.5.9"
   },
   "dependencies": {
-    "nuxt": "^1.0.0",
-    "vuetify": "next",
     "@nuxtjs/auth": "^3.2.0",
     "@nuxtjs/axios": "^4.5.0",
     "@xkeshi/vue-countdown": "^0.5.0",
-    "moment": "^2.19.3",
     "cross-env": "^5.1.1",
+    "moment": "^2.19.3",
+    "nuxt": "^1.0.0",
     "socket.io-client": "^2.0.4",
+    "vee-validate": "^2.0.3",
     "vue-echo": "^1.0.1",
     "vue-socket.io": "^2.1.1-a",
-    "vue2-dropzone": "^3.0.0"
+    "vue2-dropzone": "^3.0.0",
+    "vuetify": "next"
   },
   "devDependencies": {
-    "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.1",
     "babel-eslint": "^7.2.3",
     "eslint": "^4.3.0",
     "eslint-config-standard": "^10.2.1",
@@ -41,6 +40,8 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1"
+    "eslint-plugin-standard": "^3.0.1",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1"
   }
 }

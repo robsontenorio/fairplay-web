@@ -27,8 +27,8 @@
       <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
       <span v-if="!loading && partidas.length === 0">Nenhuma partida recente</span>
     </div>
-    <div class="dark--text text-xs-center mt-3">
-      Pontuações obtidas em resultados recentes.
+    <div v-if="partidas.length > 0" class="dark--text text-xs-center mt-3">
+      Pontuações obtidas em partidas recentes.
     </div>
   </div>
 </template>

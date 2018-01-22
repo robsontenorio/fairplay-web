@@ -1,15 +1,18 @@
 <template>
-  <div class="pa-3 text-xs-center">
-    <v-avatar :size="96" class="mb-3">
-      <img :src="form.avatar" alt="avatar">
-    </v-avatar>
-    <v-form ref="form" lazy-validation>
-      <v-select :items="jogos" label="Jogo" v-model="form.jogo_id" prepend-icon="album" item-text="nome" item-value="id" required></v-select>
-      <v-select :items="plataformas" label="Plataforma" v-model="form.plataforma_id" prepend-icon="games" item-text="nome" item-value="id" required></v-select>
-      <v-text-field label="PSN ou GAMERTAG" v-model="form.identificador" required prepend-icon="person"></v-text-field>
-      <v-btn block color="primary" @click="registrar" :loading="carregando">registrar</v-btn>
-    </v-form>
-    <v-snackbar multi-line color="red" :value="error"> {{ error }} </v-snackbar>
+  <div>
+    <v-card>
+      <v-card-text class="text-xs-center">
+        <v-avatar :size="96" class="mb-3">
+          <img :src="form.avatar" alt="avatar">
+        </v-avatar>
+        <v-form ref="form" lazy-validation>
+          <v-select :items="jogos" label="Jogo" v-model="form.jogo_id" prepend-icon="album" item-text="nome" item-value="id" :error-messages="erros.jogo_id"></v-select>
+          <v-select :items="plataformas" label="Plataforma" v-model="form.plataforma_id" prepend-icon="games" item-text="nome" item-value="id" :error-messages="erros.plataforma_id"></v-select>
+          <v-text-field label="PSN ou GAMERTAG" v-model="form.identificador" prepend-icon="person" :error-messages="erros.identificador"></v-text-field>
+          <v-btn block color="primary" @click="registrar" :loading="carregando">registrar</v-btn>
+        </v-form>
+      </v-card-text>
+    </v-card>
   </div>
 </template>
 
@@ -18,9 +21,12 @@
 
 export default {
   // components: { Avatar },
+  $_veeValidate: {
+    validator: 'new'
+  },
   data () {
     return {
-      error: null,
+      erros: {},
       form: {
         identificador: null,
         email: null,
@@ -59,7 +65,7 @@ export default {
         this.$router.replace({ path: '/auth', query: this.$route.query })
       } catch (error) {
         this.carregando = false
-        this.error = error.response.data.errors
+        this.erros = error.response.data.errors
       }
     }
   }
