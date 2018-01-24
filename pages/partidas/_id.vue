@@ -107,7 +107,7 @@
             <p>
               A partida somente será cancelada se o seu adversário também solicitar o cancelamento. Caso o adversário informe qualquer outro resultado, a partida irá a
               <strong>julgamento</strong>. Use o
-              <strong>chat</strong> para chegar a um acordo
+              <strong>chat</strong> para chegar a um acordo.
             </p>
           </v-card-text>
         </v-card>
@@ -294,7 +294,7 @@ export default {
       if (tipo === 'cancelamento') {
         this.dialog.texto = 'A partida somente será cancelada se o seu adversário também solicitar o cancelamento. Caso o adversário informe qualquer outro resultado a partida irá a <strong>julgamento</strong>. Use o chat para chegar a um acordo.'
       } else {
-        this.dialog.texto = 'Caso informe um resultado falso você será <strong>banido.</strong> Caso o adversário informe um resultado divergente a partida irá a <strong>julgamento</strong>. Use o chat para chegar a um acordo'
+        this.dialog.texto = 'Caso informe um resultado falso você será <strong>banido.</strong> Caso o adversário informe um resultado divergente a partida irá a <strong>julgamento</strong>. Use o chat para chegar a um acordo.'
       }
 
       this.dialog.show = true

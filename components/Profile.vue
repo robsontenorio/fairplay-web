@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card flat>
-      <v-card-media :src="user.avatar" height="200px"></v-card-media>
+      <v-card-media :src="`${API_URL_STORAGE}/${user.avatar}`" height="300px"></v-card-media>
       <v-card-title class="pr-1">
         <v-flex xs7>
           <div class="title">
@@ -23,8 +23,13 @@
 // import Avatar from '~/components/Avatar'
 
 export default {
-  props: ['user']
+  props: ['user'],
   // components: { Avatar }
+  computed: {
+    API_URL_STORAGE () {
+      return process.env.API_URL_STORAGE
+    }
+  }
 }
 </script>
 <style  scoped>

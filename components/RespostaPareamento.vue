@@ -47,7 +47,7 @@ export default {
     },
   methods: {
     responder (decisao) {
-      if (decisao === true && !confirm('Ao aceitar o desafio você se compromente com os termos FAIR PLAY')) {
+      if (decisao === true && !confirm('Ao aceitar o desafio você se compromete com os termos FAIR PLAY')) {
         return false
       }
 

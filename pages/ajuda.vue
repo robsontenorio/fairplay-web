@@ -7,7 +7,7 @@
 
     <h3> COMO FUNCIONA </h3>
     <div class="conteudo">
-      Semelhante às Divisões Online do FIFA e PES, cada jogador disputa partidas com adversários aleatórios, da mesma plataforma. Em cada temporada rankings são formados com o desempenho de cada jogador.<br><br>
+      Semelhante às Divisões Online do FIFA e PES, cada jogador disputa partidas com adversários aleatórios da mesma plataforma. Em cada temporada rankings são formados com o desempenho de cada jogador.<br><br>
       <ul>
         <li>Clique em JOGAR</li>
         <li>Aceite o desafio</li>
@@ -19,7 +19,7 @@
     <h3>CHAT</h3>
 
     <div class="conteudo">
-      Ao encontrar uma partida utilize o Chat para conversar com o adversário. Ao final da partida é possível enviar fotos para comprovar o resultado. Mantenha sempre contato para chegar à um acordo antes de informar o resultado da partida.
+      Ao encontrar uma partida utilize o Chat para conversar com o adversário. Ao final da partida é possível enviar fotos para comprovar o resultado. Mantenha sempre contato para chegar a um acordo antes de informar o resultado da partida.
     </div>
 
     <h3>PONTUAÇÃO</h3>

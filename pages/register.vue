@@ -66,6 +66,10 @@ export default {
       } catch (error) {
         this.carregando = false
         this.erros = error.response.data.errors
+
+        if (error.response.data.code === 0) {
+          alert(error.response.data.message)
+        }
       }
     }
   }

@@ -5,7 +5,7 @@
         <div v-if="loggedIn">
           <v-list-tile avatar>
             <v-list-tile-avatar>
-              <img :src="user.avatar" />
+              <img :src="`${API_URL_STORAGE}/${user.avatar}`" />
             </v-list-tile-avatar>
             <v-list-tile-content>
               <v-list-tile-title>{{ user.identificador }}</v-list-tile-title>
@@ -77,6 +77,9 @@ export default {
   computed: {
     user () {
       return this.$store.state.auth.user
+    },
+    API_URL_STORAGE () {
+      return process.env.API_URL_STORAGE
     },
     loggedIn () {
       return this.$store.getters['auth/loggedIn']
