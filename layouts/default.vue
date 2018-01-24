@@ -28,6 +28,14 @@
               <v-list-tile-title>Jogar</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
+          <v-list-tile router to="/ajuda">
+            <v-list-tile-action>
+              <v-icon>help</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Ajuda</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
           <v-list-tile @click="logout">
             <v-list-tile-action>
               <v-icon>power_settings_new</v-icon>

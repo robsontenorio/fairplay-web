@@ -172,7 +172,7 @@ export default {
       this.$router.push('/@' + value)
     },
     verPartida (partida) {
-      this.$router.push(`partidas/${partida.id}`)
+      // this.$router.push(`partidas/${partida.id}`)
     }
   }
 }

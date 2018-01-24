@@ -22,6 +22,12 @@ export default {
   mounted () {
     if (this.$store.getters['auth/loggedIn']) {
       this.$router.replace({ path: '/home' })
+      return
+    }
+
+    if (this.$route.query.ipx === undefined) {
+      alert('Em breve')
+      this.$router.replace({ path: '/' })
     }
   },
   methods: {

@@ -205,7 +205,6 @@ export default {
   async mounted () {
     let user = this.$store.state.auth.user
     let id = this.$route.params.id
-    console.log(id)
     let { data } = await this.$axios.get(`/partidas/${id}`)
 
     if (data.status === 'JULGAMENTO') {

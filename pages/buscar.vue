@@ -19,12 +19,14 @@
             <v-avatar size="96" class="mb-3">
               <img :src="eu.avatar" />
             </v-avatar>
+            <div class="mb-3">{{ eu.identificador }}</div>
             <resposta-pareamento :pareamento="pareamento" :eu="eu" @respondeu="responder" />
           </v-flex>
           <v-flex xs6>
             <v-avatar size="96" class="mb-3">
               <img :src="adversario.avatar" />
             </v-avatar>
+            <div class="mb-3">{{ adversario.identificador }}</div>
             <resposta-pareamento :pareamento="pareamento" :adversario="adversario" />
           </v-flex>
         </v-layout>
@@ -33,6 +35,17 @@
         <small>Na tela seguinte você poderá conversar com o jogador antes de iniciar a partida.</small>
       </div>
     </v-container>
+    <v-dialog persistent v-model="conexao.show">
+      <v-card tile>
+        <v-card-text>
+          A conexão foi perdida ...
+        </v-card-text>
+        <v-spacer></v-spacer>
+        <v-card-actions>
+          <v-btn color="primary" flat @click.native="recarregar">reconectar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -49,7 +62,10 @@ export default {
       user: {},
       procurando: false,
       encontrado: false,
-      pareamento: {}
+      pareamento: {},
+      conexao: {
+        show: false
+      }
     }
   },
 
@@ -85,9 +101,9 @@ export default {
         })
 
       let socket = this.$echo.connector.socket
+      let self = this
       socket.on('disconnect', function () {
-        alert('Reconectando ...')
-        location.reload()
+        self.conexao.show = true
       })
     }
   },
@@ -109,6 +125,9 @@ export default {
     }
   },
   methods: {
+    recarregar () {
+      location.reload()
+    },
     async parar () {
       if (this.pareamento.id) {
         this.$echo.leave('pareamento-' + this.pareamento.id)
