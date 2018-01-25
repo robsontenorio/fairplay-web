@@ -3,7 +3,7 @@
     <div class="hidden-xs-only text-xs-center mt-5">
       <br><br><br>
       <v-icon large>phone_iphone</v-icon>
-      <h3 class="mt-3">Disponível somente para dispotivos móveis.</h3>
+      <h3 class="mt-3">Disponível somente para dispositivos móveis.</h3>
     </div>
     <div class="hidden-sm-and-up">
       <v-navigation-drawer v-model="drawer" app>
