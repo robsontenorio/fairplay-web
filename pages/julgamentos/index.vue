@@ -18,7 +18,7 @@
           <v-layout text-xs-center>
             <v-flex xs5>
               <v-avatar size="48" class="mb-2">
-                <img :src="julgamento.partida.user1.avatar" />
+                <img :src="`${API_URL_STORAGE}/${julgamento.partida.user1.avatar}`" />
               </v-avatar>
               <div>
                 <strong>{{ julgamento.partida.user1.identificador }}</strong>
@@ -29,7 +29,7 @@
             </v-flex>
             <v-flex xs5>
               <v-avatar size="48" class="mb-2">
-                <img :src="julgamento.partida.user2.avatar" />
+                <img :src="`${API_URL_STORAGE}/${julgamento.partida.user2.avatar}`" />
               </v-avatar>
               <div>
                 <strong>{{ julgamento.partida.user2.identificador }}</strong>
@@ -68,6 +68,11 @@ export default {
     },
     jogar () {
       this.$router.replace(`/buscar`)
+    }
+  },
+  computed: {
+    API_URL_STORAGE () {
+      return process.env.API_URL_STORAGE
     }
   }
 }

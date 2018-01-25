@@ -11,20 +11,21 @@
         <div>
           <v-btn block color="primary" @click="cancelar()">cancelar</v-btn>
         </div>
-
+        <br><br> Somente aceite o desafio caso você possa jogar a partida
+        <strong>neste momento</strong>. Caso contrário poderá ser punido no julgamento.
       </div>
       <div v-if="encontrado">
         <v-layout>
           <v-flex xs6>
             <v-avatar size="96" class="mb-3">
-              <img :src="eu.avatar" />
+              <img :src="`${API_URL_STORAGE}/${eu.avatar}`" />
             </v-avatar>
             <div class="mb-3">{{ eu.identificador }}</div>
             <resposta-pareamento :pareamento="pareamento" :eu="eu" @respondeu="responder" />
           </v-flex>
           <v-flex xs6>
             <v-avatar size="96" class="mb-3">
-              <img :src="adversario.avatar" />
+              <img :src="`${API_URL_STORAGE}/${adversario.avatar}`" />
             </v-avatar>
             <div class="mb-3">{{ adversario.identificador }}</div>
             <resposta-pareamento :pareamento="pareamento" :adversario="adversario" />
@@ -111,6 +112,9 @@ export default {
     this.parar()
   },
   computed: {
+    API_URL_STORAGE () {
+      return process.env.API_URL_STORAGE
+    },
     eu () {
       return this.$store.state.auth.user
     },

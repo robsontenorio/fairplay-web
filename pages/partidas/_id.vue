@@ -10,7 +10,7 @@
       <v-layout text-xs-center class="pt-3 mb-2 pb-2">
         <v-flex xs6 v-if="partida.user1">
           <v-avatar size="96" class="mb-2">
-            <img :src="partida.user1.avatar" />
+            <img :src="`${API_URL_STORAGE}/${partida.user1.avatar}`" />
           </v-avatar>
           <div>
             {{ partida.user1.identificador }}
@@ -19,7 +19,7 @@
         </v-flex>
         <v-flex xs6 v-if="partida.user1">
           <v-avatar size="96" class="mb-2">
-            <img :src="partida.user2.avatar" />
+            <img :src="`${API_URL_STORAGE}/${partida.user2.avatar}`" />
           </v-avatar>
           <div>
             {{ partida.user2.identificador }}
@@ -247,6 +247,9 @@ export default {
     this.$echo.leave('chat-' + this.partida.id)
   },
   computed: {
+    API_URL_STORAGE () {
+      return process.env.API_URL_STORAGE
+    },
     eu () {
       return this.$store.state.auth.user
     },

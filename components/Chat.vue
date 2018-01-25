@@ -12,7 +12,7 @@
       <div class="messages-wrapper">
         <div v-for="mensagem in mensagens" :key="mensagem.id" class="message" :class="[mensagem.from_id === eu.id ? 'to' : 'from']">
           <v-avatar size="32">
-            <img :src="mensagem.from.avatar">
+            <img :src="`${API_URL_STORAGE}/${mensagem.from.avatar}`">
           </v-avatar>
           <span v-if="mensagem.mensagem">
             {{ mensagem.mensagem }}

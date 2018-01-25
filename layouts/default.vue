@@ -26,7 +26,7 @@
                 <v-list-tile-title>Meu perfil</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile router to="/temporada">
+            <v-list-tile router to="/buscar">
               <v-list-tile-action>
                 <v-icon>play_arrow</v-icon>
               </v-list-tile-action>
