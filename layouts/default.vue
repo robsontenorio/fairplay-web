@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <div class="hidden-xs-only text-xs-center mt-5">
-      <br><br><br>
+      <br><br>
       <v-icon large>phone_iphone</v-icon>
       <h3 class="mt-3">Disponível somente para dispositivos móveis.</h3>
     </div>
