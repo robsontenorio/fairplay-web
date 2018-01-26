@@ -53,7 +53,12 @@ export default {
     response = await this.$axios.get(`/jogos`)
     this.jogos = response.data
 
-    this.form.provider = this.$route.query
+    this.form.provider.avatar = this.$route.query.avatar
+    this.form.provider.email = this.$route.query.email
+    this.form.provider.provider = this.$route.query.provider
+    this.form.provider.provider_id = this.$route.query.provider_id
+    this.form.provider.provider_token = this.$route.query.provider_token
+
     this.form.email = this.$route.query.email
     this.form.avatar = this.$route.query.avatar
   },
@@ -62,7 +67,7 @@ export default {
       try {
         this.carregando = true
         await this.$axios.post(`/auth/register`, this.form)
-        this.$router.replace({ path: '/auth', query: this.$route.query })
+        this.$router.replace({ path: '/auth', query: this.form.provider })
       } catch (error) {
         this.carregando = false
         this.erros = error.response.data.errors
