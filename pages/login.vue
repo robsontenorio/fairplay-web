@@ -9,6 +9,7 @@
         <v-icon dark left>fa-google</v-icon>
         Google
       </v-btn>
+      <br> Acesse sempre usando o mesmo provedor, caso contrário uma conta nova será criada no FAIRPLAY, se elas possuirem e-mails diferentes.
     </div>
     <div v-if="loading">
       <v-progress-circular indeterminate :size="100" color="primary"></v-progress-circular>
