@@ -65,6 +65,9 @@ export default {
   methods: {
     async registrar () {
       try {
+        if (this.form.email === undefined) {
+          alert('Você não autorizou visualizar seu e-mail. Por favor, faça login novamente.')
+        }
         this.carregando = true
         await this.$axios.post(`/auth/register`, this.form)
         this.$router.replace({ path: '/auth', query: this.form.provider })
