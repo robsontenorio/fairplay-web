@@ -5,7 +5,7 @@
         <v-divider></v-divider>
         <v-list-tile avatar :key="item.id" @click="verPerfil(item.identificador || item.user.identificador)">
           <v-list-tile-avatar>
-            <img :src="item.avatar || item.user.avatar">
+            <img :src="`${API_URL_STORAGE}/${item.avatar || item.user.avatar}`">
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title>
@@ -30,6 +30,11 @@
 <script>
 export default {
   props: ['classificacoes', 'user', 'loading'],
+  computed: {
+    API_URL_STORAGE () {
+      return process.env.API_URL_STORAGE
+    }
+  },
   methods: {
     verPerfil (value) {
       this.$emit('perfilSelecionado', value)

@@ -5,7 +5,7 @@
         <v-divider></v-divider>
         <v-list-tile :inactive="true" avatar :key="partida.id" @click="verPartida(partida)">
           <v-list-tile-avatar>
-            <img v-bind:src="adversario(partida).avatar">
+            <img v-bind:src="`${API_URL_STORAGE}/${adversario(partida).avatar}`">
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title>
@@ -35,6 +35,11 @@
 <script>
 export default {
   props: ['partidas', 'user', 'loading'],
+  computed: {
+    API_URL_STORAGE () {
+      return process.env.API_URL_STORAGE
+    }
+  },
   methods: {
     adversario (partida) {
       return (this.user.id === partida.user1_id) ? partida.user2 : partida.user1
