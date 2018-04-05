@@ -57,6 +57,8 @@ import Profile from '~/components/Profile'
 import Classificacoes from '~/components/Classificacoes'
 import PontuacaoJogador from '~/components/PontuacaoJogador'
 import HistoricoPartidas from '~/components/HistoricoPartidas'
+import User from '@/models/User'
+import Temporada from '@/models/Temporada'
 
 export default {
   middleware: 'auth',
@@ -89,83 +91,74 @@ export default {
 
     let identificador = this.$route.params.slug.replace('@', '')
 
-    let params = {
-      identificador: identificador,
-      includes: 'plataforma,jogo',
-      appends: 'posicao'
-    }
+    this.user = await User
+      .include('plataforma', 'jogo')
+      .append('posicao')
+      .where('identificador', identificador)
+      .first()
 
-    let response
-
-    response = await this.$axios.get(`/users`, { params })
-
-    if (response.data.total === 0) {
+    if (this.user.id === undefined) {
       this.$router.replace({ path: '/' })
       return
     }
 
-    this.user = response.data.data[0]
-
     if (this.user.id === this.eu.id) {
-      params = {
-        plataforma_id: this.user.plataforma_id,
-        jogo_id: this.user.jogo_id,
-        order_by: 'pontos,desc|vitorias,desc|empates,desc|derrotas,asc',
-        limit: 50
-      }
+      this.classificacoes_geral = await Temporada
+        .custom('temporadas/ladder')
+        .where('plataforma_id', this.user.plataforma_id)
+        .where('jogo_id', this.user.jogo_id)
+        .limit(50)
+        .orderBy('-pontos', '-vitorias', '-empates', 'derrotas')
+        .$get()
 
-      this.$axios.get(`/temporadas/ladder`, { params }).then(response => {
-        this.classificacoes_geral = response.data
-        this.loading.classificacoes_geral = false
-      })
+      this.loading.classificacoes_geral = false
     }
 
-    this.$axios.get(`/temporadas/ultima`).then(response => {
-      this.temporada_ultima = response.data
-      this.carregarTemporada(this.temporada_ultima.id)
-    })
+    this.temporada_ultima = await Temporada
+      .custom('temporadas/ultima')
+      .first()
 
-    this.$axios.get(`/temporadas`).then(response => {
-      this.temporadas = response.data
-      this.loading.temporadas = false
-    })
+    this.carregarTemporada(this.temporada_ultima.id)
 
-    params = {
-      includes: 'user1,user2',
-      order_by: 'created_at,desc'
-    }
-    this.$axios.get(`/users/${this.user.id}/partidas`, { params }).then(response => {
-      this.historico = response.data.data
-      this.loading.historico = false
-    })
+    this.temporadas = await Temporada.get()
+
+    this.loading.temporadas = false
+
+    this.historico = await this.user
+      .partidas()
+      .include('user1', 'user2')
+      .orderBy('-created_at')
+      .$get()
+
+    this.loading.historico = false
   },
   methods: {
     async carregarTemporada (value) {
-      let params = {
-        user_id: this.user.id,
-        appends: 'posicao'
-      }
-
       this.loading.eu_temporada = true
-      this.$axios.get(`/temporadas/${value}/ladder`, { params }).then(response => {
-        this.eu_temporada = response.data[0]
-        this.loading.eu_temporada = false
-      })
+
+      let temporada = await new Temporada({ id: value })
+
+      this.eu_temporada = await temporada
+        .classificacoes()
+        .append('posicao')
+        .where('user_id', this.user.id)
+        .$get()
+
+      this.loading.eu_temporada = false
 
       if (this.user.id === this.eu.id) {
-        params = {
-          includes: 'user',
-          plataforma_id: this.user.plataforma_id,
-          jogo_id: this.user.jogo_id,
-          order_by: 'pontos,desc|vitorias,desc|empates,desc|derrotas,asc',
-          limit: 50
-        }
-
         this.loading.classificacoes_temporada = true
-        this.$axios.get(`/temporadas/${value}/ladder`, { params }).then(response => {
-          this.classificacoes_temporada = response.data
-          this.loading.classificacoes_temporada = false
-        })
+
+        this.classificacoes_temporada = await temporada
+          .classificacoes()
+          .include('user')
+          .where('plataforma_id', this.user.plataforma_id)
+          .where('jogo_id', this.user.jogo_id)
+          .limit(50)
+          .orderBy('-pontos', '-vitorias', '-empates', 'derrotas')
+          .$get()
+
+        this.loading.classificacoes_temporada = false
       }
     },
     verPerfil (value) {

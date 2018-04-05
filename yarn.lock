@@ -6393,6 +6393,10 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-api-query@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/vue-api-query/-/vue-api-query-0.4.0.tgz#f32932eb2f1221e259941c5a0999590a358ad431"
+
 vue-echo@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/vue-echo/-/vue-echo-1.0.1.tgz#f845650a0e71408603f70b22a28918c99696a1f0"

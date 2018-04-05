@@ -1,4 +1,4 @@
-let API_URL = (process.env.NODE_ENV !== 'production') ? 'http://localhost:8000/api/' : 'https://fairplay-api.arena17.com/api/'
+let API_URL = (process.env.NODE_ENV !== 'production') ? 'http://localhost:8000/api' : 'https://fairplay-api.arena17.com/api/'
 let API_URL_SOCKET = (process.env.NODE_ENV !== 'production') ? 'http://localhost:6001' : 'https://fairplay-api.arena17.com:6001'
 let API_URL_STORAGE = (process.env.NODE_ENV !== 'production') ? 'http://localhost:8000/storage/' : 'https://fairplay-api.arena17.com/storage'
 
@@ -37,7 +37,8 @@ module.exports = {
   plugins: [
     '~plugins/vuetify',
     '~plugins/vee-validate',
-    '~plugins/socket.io'
+    '~plugins/socket.io',
+    '~plugins/vue-api-query'
   ],
   modules: [
     '@nuxtjs/auth',
