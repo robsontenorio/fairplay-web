@@ -170,17 +170,3 @@ export default {
   }
 }
 </script>
-
-<style  scoped>
-/* .tabs {
-  margin-top: 30px;
-}
-
-.temporadas {
-  margin-bottom: 20px;
-}
-
-h3 {
-  margin-top: 20px !important;
-} */
-</style>

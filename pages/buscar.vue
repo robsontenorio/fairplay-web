@@ -52,8 +52,10 @@
 
 <script>
 
-import User from '~/components/User'
+// import {User as UserProfile} from '~/components/User'
 import RespostaPareamento from '~/components/RespostaPareamento'
+import User from '@/models/User'
+import Pareamento from '@/models/Pareamento'
 
 export default {
   middleware: 'auth',
@@ -61,6 +63,7 @@ export default {
   data () {
     return {
       user: {},
+      ultima_partida: {},
       procurando: false,
       encontrado: false,
       pareamento: {},
@@ -75,24 +78,29 @@ export default {
   },
   async mounted () {
     this.user = this.$store.state.auth.user
-    let { data } = await this.$axios.get(`/users/${this.user.id}/partidas?ultima`)
+    this.ultima_partida = await (new User({ id: this.user.id })).partidas().where('ultima', 1).first()
 
-    if ((data !== '' && data.status === 'JOGANDO') || (data.status === 'RESULTADO' && data.detalhes[this.eu.id].vencedor === null)) {
-      this.$router.replace({ path: `/partidas/${data.id}` })
+    if ((this.ultima_partida !== '' && this.ultima_partida.status === 'JOGANDO') || (this.ultima_partida.status === 'RESULTADO' && this.ultima_partida.detalhes[this.eu.id].vencedor === null)) {
+      this.$router.replace({ path: `/partidas/${this.ultima_partida.id}` })
     } else {
       this.procurando = true
-      let response
+
       try {
-        response = await this.$axios.post(`/pareamentos`)
+        this.pareamento = new Pareamento({})
+        await this.pareamento.save()
       } catch (error) {
+        console.log(error)
         alert(error.response.data.message)
 
         if (error.response.data.code === 702) {
           this.$router.replace({ path: '/julgamentos' })
         }
-      }
 
-      this.pareamento = response.data
+        if (error.response.data.code === 701) {
+          this.$router.replace({ path: `/partidas/${this.ultima_partida.id}` })
+        }
+      }
+      console.log(this.pareamento)
       this.tratar()
 
       this.$echo.channel('pareamento-' + this.pareamento.id)
@@ -139,11 +147,15 @@ export default {
     },
     async cancelar () {
       this.parar()
-      await this.$axios.patch(`/pareamentos/${this.pareamento.id}`, { status: 'CANCELADO' })
+      this.pareamento.status = 'CANCELADO'
+      this.pareamento.save()
       this.$router.replace({ path: '/home' })
     },
     async responder (params) {
-      this.$axios.patch(`/pareamentos/${this.pareamento.id}`, params)
+      console.log(this.pareamento)
+      Object.assign(this.pareamento, { ...params })
+      console.log(this.pareamento)
+      await this.pareamento.save()
     },
     async tratar () {
       if (this.pareamento.status === 'MATCH') {
@@ -152,8 +164,8 @@ export default {
       }
 
       if (this.pareamento.status === 'SUCESSO') {
-        let { data } = await this.$axios.get(`/users/${this.user.id}/partidas?ultima`)
-        this.$router.replace({ path: `/partidas/${data.id}` })
+        let ultima = await (new User({ id: this.user.id })).partidas().where('ultima', 1).first()
+        this.$router.replace({ path: `/partidas/${ultima.id}` })
       }
 
       if (this.pareamento.status === 'CANCELADO') {
@@ -164,19 +176,3 @@ export default {
   }
 }
 </script>
-
-<style  scoped>
-/* .user-avatar {
-  margin-bottom: 20px;
-}
-
-.user-avatar img {
-  width: 96px !important;
-}
-
-h2 {
-  font-size: 14pt;
-  font-weight: bold;
-  margin-top: 0px !important;
-} */
-</style>

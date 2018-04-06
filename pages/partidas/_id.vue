@@ -164,15 +164,15 @@
 </template>
 
 <script>
-import User from '~/components/User'
 import Chat from '~/components/Chat'
 import RespostaPartida from '~/components/RespostaPartida'
 import Countdown from '@xkeshi/vue-countdown'
 import moment from 'moment'
+import Partida from '@/models/Partida'
 
 export default {
   middleware: 'auth',
-  components: { User, Chat, Countdown, RespostaPartida },
+  components: { Chat, Countdown, RespostaPartida },
 
   data () {
     return {
@@ -205,20 +205,19 @@ export default {
   async mounted () {
     let user = this.$store.state.auth.user
     let id = this.$route.params.id
-    let { data } = await this.$axios.get(`/partidas/${id}`)
+    this.partida = await Partida.find(id)
 
-    if (data.status === 'JULGAMENTO') {
-      this.$router.replace({ path: `/julgamentos/${data.id}` })
+    if (this.partida.status === 'JULGAMENTO') {
+      this.$router.replace({ path: `/julgamentos/${this.partida.id}` })
     }
 
-    if (data === '' || data.status === 'CANCELADA' || data.status === 'FINALIZADA' || data.status === 'ANULADA') {
+    if (this.partida.status === 'CANCELADA' || this.partida.status === 'FINALIZADA' || this.partida.status === 'ANULADA') {
       alert('Partida finalizada.')
       this.$router.replace({ path: '/home' })
-    } else if (data.user1.id !== user.id && data.user2.id !== user.id) {
+    } else if (this.partida.user1.id !== user.id && this.partida.user2.id !== user.id) {
       alert('Você não participa desta partida')
       this.$router.replace({ path: '/home' })
     } else {
-      this.partida = data
       this.carregado = true
 
       let mensagens = await this.$axios.get(`/partidas/${this.partida.id}/mensagens`)
@@ -321,18 +320,18 @@ export default {
         userId = -1
       }
 
-      let params = {
-        vencedor: userId
-      }
-
       try {
-        let { data } = await this.$axios.patch(`/partidas/${this.partida.id}`, params)
+        this.partida.vencedor = userId
+        console.log(this.partida)
+        await this.partida.save()
+        console.log(this.partida)
 
-        if (data.status === 'RESULTADO') {
+        if (this.partida.status === 'RESULTADO') {
           this.sheet.text = `O adversário tem 30 minutos para confirmar ou recusar o resultado. Você ainda pode alterar o resultado informado, continuar conversando com o aversário ou procurar por uma nova partida.`
           this.sheet.show = true
         }
       } catch (error) {
+        console.log(error)
         alert(error.response.data.message)
       }
     },
