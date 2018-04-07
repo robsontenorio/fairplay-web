@@ -1,7 +1,7 @@
 <template>
   <div v-if="partida.id">
-    <div v-if="carregado && finalizaEm > 0" class="pa-2 text-xs-center yellow accent-4">
-      <countdown :time="finalizaEm">
+    <div v-if="carregado && this.partida.finalizaEm > 0" class="pa-2 text-xs-center yellow accent-4">
+      <countdown :time="this.partida.finalizaEm">
         <template slot-scope="props">Finaliza em
           <strong>{{ props.minutes }}</strong> minutos e {{ props.seconds }}s</template>
       </countdown>
@@ -68,7 +68,7 @@
       <v-tab-item id="tab-2">
         <v-card flat>
           <v-card-text>
-            <chat :eu="eu" :adversario="adversario" :partidaId="partida.id" :mensagens="mensagens" @enviarMensagem="enviarMensagem"></chat>
+            <chat :partida="partida" :mensagens="mensagens" @enviarMensagem="enviarMensagem"></chat>
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -167,8 +167,9 @@
 import Chat from '~/components/Chat'
 import RespostaPartida from '~/components/RespostaPartida'
 import Countdown from '@xkeshi/vue-countdown'
-import moment from 'moment'
 import Partida from '@/models/Partida'
+import Mensagem from '@/models/Mensagem'
+import Resultado from '@/models/Resultado'
 
 export default {
   middleware: 'auth',
@@ -203,43 +204,43 @@ export default {
     // TODO usar metodo FETCH() ??
   },
   async mounted () {
-    let user = this.$store.state.auth.user
     let id = this.$route.params.id
-    this.partida = await Partida.find(id)
 
-    if (this.partida.status === 'JULGAMENTO') {
+    this.partida = await Partida.find(id)
+    this.partida.eu = this.$store.state.auth.user
+    this.mensagens = await this.partida.mensagens().$get()
+    this.carregado = true
+
+    if (this.partida.isJulgamento()) {
+      alert('Partida em julgamento.')
       this.$router.replace({ path: `/julgamentos/${this.partida.id}` })
     }
 
-    if (this.partida.status === 'CANCELADA' || this.partida.status === 'FINALIZADA' || this.partida.status === 'ANULADA') {
-      alert('Partida finalizada.')
+    if (this.partida.isFinalizada() || this.partida.isAnulada()) {
+      alert('Partida concluída.')
       this.$router.replace({ path: '/home' })
-    } else if (this.partida.user1.id !== user.id && this.partida.user2.id !== user.id) {
+    }
+
+    if (this.partida.user1.id !== this.partida.eu.id && this.partida.user2.id !== this.partida.eu.id) {
       alert('Você não participa desta partida')
       this.$router.replace({ path: '/home' })
-    } else {
-      this.carregado = true
-
-      let mensagens = await this.$axios.get(`/partidas/${this.partida.id}/mensagens`)
-      this.mensagens = mensagens.data
-
-      this.$echo.channel('partida-' + this.partida.id)
-        .listen('.PartidaAtualizadaEvent', (payload) => {
-          this.partida = payload.partida
-          this.tratar()
-        })
-
-      this.$echo.channel('chat-' + this.partida.id)
-        .listen('.MensagemRecebidaEvent', (payload) => {
-          this.mensagens.push(payload.mensagem)
-        })
-
-      let socket = this.$echo.connector.socket
-      let self = this
-      socket.on('disconnect', function () {
-        self.conexao.show = true
-      })
     }
+
+    this.$echo.channel('partida-' + this.partida.id)
+      .listen('.PartidaAtualizadaEvent', (payload) => {
+        Object.assign(this.partida, payload.partida)
+        this.tratar()
+      })
+
+    this.$echo.channel('chat-' + this.partida.id)
+      .listen('.MensagemRecebidaEvent', (payload) => {
+        this.mensagens.push(new Mensagem(payload.mensagem))
+      })
+
+    let self = this
+    this.$echo.connector.socket.on('disconnect', function () {
+      self.conexao.show = true
+    })
   },
   beforeDestroy () {
     this.$echo.leave('partida-' + this.partida.id)
@@ -248,26 +249,6 @@ export default {
   computed: {
     API_URL_STORAGE () {
       return process.env.API_URL_STORAGE
-    },
-    eu () {
-      return this.$store.state.auth.user
-    },
-    adversario () {
-      let adversario = null
-
-      if (this.eu) {
-        adversario = (this.eu.id === this.partida.user1_id) ? this.partida.user2 : this.partida.user1
-      }
-
-      return adversario
-    },
-    finalizaEm () {
-      let trinta = 1000 * 60 * 30
-      let agora = moment()
-      let resultadoEm = moment(this.partida.resultado_em)
-      let diff = trinta - agora.diff(resultadoEm)
-
-      return diff
     }
   },
   methods: {
@@ -275,17 +256,17 @@ export default {
       location.reload()
     },
     async tratar () {
-      if (this.partida.status === 'FINALIZADA') {
+      if (this.partida.isFinalizada()) {
         this.final.show = true
         this.final.text = 'Partida finalizada'
       }
 
-      if (this.partida.status === 'JULGAMENTO') {
+      if (this.partida.isJulgamento()) {
         this.final.show = true
         this.final.text = 'Os resultados informados foram divergentes. Partida vai a JULGAMENTO'
       }
 
-      if (this.partida.status === 'ANULADA') {
+      if (this.partida.isAnulada()) {
         this.final.show = true
         this.final.text = 'A partida foi anulada, pois ambos jogadores concordaram'
       }
@@ -303,35 +284,16 @@ export default {
     },
     async postResultado () {
       this.dialog.show = false
-      let userId
-      let tipo = this.dialog.tipo
-
-      if (tipo === 'vitoria') {
-        userId = this.eu.id
-      } else if (tipo === 'derrota') {
-        if (this.eu.id === this.partida.user1.id) {
-          userId = this.partida.user2.id
-        } else {
-          userId = this.partida.user1.id
-        }
-      } else if (tipo === 'empate') {
-        userId = 0
-      } else if (tipo === 'cancelamento') {
-        userId = -1
-      }
 
       try {
-        this.partida.vencedor = userId
-        console.log(this.partida)
+        this.partida.vencedor = Resultado.vencedor(this.partida, this.dialog.tipo)
         await this.partida.save()
-        console.log(this.partida)
 
-        if (this.partida.status === 'RESULTADO') {
+        if (this.partida.isResultado()) {
           this.sheet.text = `O adversário tem 30 minutos para confirmar ou recusar o resultado. Você ainda pode alterar o resultado informado, continuar conversando com o aversário ou procurar por uma nova partida.`
           this.sheet.show = true
         }
       } catch (error) {
-        console.log(error)
         alert(error.response.data.message)
       }
     },

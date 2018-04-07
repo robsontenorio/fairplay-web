@@ -1,3 +1,5 @@
+var path = require('path')
+
 let API_URL = (process.env.NODE_ENV !== 'production') ? 'http://localhost:8000/api' : 'https://fairplay-api.arena17.com/api/'
 let API_URL_SOCKET = (process.env.NODE_ENV !== 'production') ? 'http://localhost:6001' : 'https://fairplay-api.arena17.com:6001'
 let API_URL_STORAGE = (process.env.NODE_ENV !== 'production') ? 'http://localhost:8000/storage/' : 'https://fairplay-api.arena17.com/storage'
@@ -72,15 +74,18 @@ module.exports = {
     ** Run ESLint on save
     */
     extend (config, { isDev, isClient }) {
+
       if (isDev && isClient) {
 
-        config.resolve.alias['vue-api-query'] = '/Volumes/BackupHD/Dropbox/dev/vue-api-query/src'
-        // config.module.rules.push({
-        //   enforce: 'pre',
-        //   test: /\.(js|vue)$/,
-        //   loader: 'eslint-loader',
-        //   exclude: /(node_modules)/
-        // })
+        // config.resolve.alias['root'] = path.resolve(__dirname, 'node_modules')
+        // config.resolve.alias['vue-api-query'] = '/Volumes/BackupHD/Dropbox/dev/vue-api-query/src'
+
+        config.module.rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          loader: 'eslint-loader',
+          exclude: /(node_modules)/
+        })
       }
     }
   }

@@ -10,7 +10,7 @@
         <i class="fa fa-comments"></i> Conversas são publicas
       </div>
       <div class="messages-wrapper">
-        <div v-for="mensagem in mensagens" :key="mensagem.id" class="message" :class="[mensagem.from_id === eu.id ? 'to' : 'from']">
+        <div v-for="mensagem in mensagens" :key="mensagem.id" class="message" :class="[mensagem.from_id === partida.eu.id ? 'to' : 'from']">
           <v-avatar size="32">
             <img :src="`${API_URL_STORAGE}/${mensagem.from.avatar}`">
           </v-avatar>
@@ -40,7 +40,7 @@ import vue2Dropzone from 'vue2-dropzone'
 
 export default {
 
-  props: ['eu', 'adversario', 'partidaId', 'mensagens', 'desativado'],
+  props: ['partida', 'mensagens', 'desativado'],
   components: {
     vueDropzone: vue2Dropzone
   },
@@ -86,9 +86,9 @@ export default {
         return
       }
 
-      this.params.partida_id = this.partidaId
-      this.params.from_id = this.eu.id
-      this.params.to_id = this.adversario.id
+      this.params.partida_id = this.partida.id
+      this.params.from_id = this.partida.eu.id
+      this.params.to_id = this.partida.adversario.id
 
       let params = { ...this.params }
 

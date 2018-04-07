@@ -18,17 +18,17 @@
         <v-layout>
           <v-flex xs6>
             <v-avatar size="96" class="mb-3">
-              <img :src="`${API_URL_STORAGE}/${eu.avatar}`" />
+              <img :src="`${API_URL_STORAGE}/${pareamento.eu.avatar}`" />
             </v-avatar>
-            <div class="mb-3">{{ eu.identificador }}</div>
-            <resposta-pareamento :pareamento="pareamento" :eu="eu" @respondeu="responder" />
+            <div class="mb-3">{{ pareamento.eu.identificador }}</div>
+            <resposta-pareamento :pareamento="pareamento" :eu="pareamento.eu" @respondeu="responder" />
           </v-flex>
           <v-flex xs6>
             <v-avatar size="96" class="mb-3">
-              <img :src="`${API_URL_STORAGE}/${adversario.avatar}`" />
+              <img :src="`${API_URL_STORAGE}/${pareamento.adversario.avatar}`" />
             </v-avatar>
-            <div class="mb-3">{{ adversario.identificador }}</div>
-            <resposta-pareamento :pareamento="pareamento" :adversario="adversario" />
+            <div class="mb-3">{{ pareamento.adversario.identificador }}</div>
+            <resposta-pareamento :pareamento="pareamento" :adversario="pareamento.adversario" />
           </v-flex>
         </v-layout>
         <br><br>
@@ -51,15 +51,13 @@
 </template>
 
 <script>
-
-// import {User as UserProfile} from '~/components/User'
 import RespostaPareamento from '~/components/RespostaPareamento'
 import User from '@/models/User'
 import Pareamento from '@/models/Pareamento'
 
 export default {
   middleware: 'auth',
-  components: { User, RespostaPareamento },
+  components: { RespostaPareamento },
   data () {
     return {
       user: {},
@@ -77,44 +75,44 @@ export default {
     // TODO nao funciona em SPA?
   },
   async mounted () {
-    this.user = this.$store.state.auth.user
-    this.ultima_partida = await (new User({ id: this.user.id })).partidas().where('ultima', 1).first()
+    this.user = new User(this.$store.state.auth.user)
+    this.ultima_partida = await this.user.ultimaPartida()
+    this.ultima_partida.eu = this.user
 
-    if ((this.ultima_partida !== '' && this.ultima_partida.status === 'JOGANDO') || (this.ultima_partida.status === 'RESULTADO' && this.ultima_partida.detalhes[this.eu.id].vencedor === null)) {
+    if ((this.ultima_partida.isJogando() || this.ultima_partida.isResultado()) && this.ultima_partida.meuResultado === null) {
       this.$router.replace({ path: `/partidas/${this.ultima_partida.id}` })
-    } else {
-      this.procurando = true
-
-      try {
-        this.pareamento = new Pareamento({})
-        await this.pareamento.save()
-      } catch (error) {
-        console.log(error)
-        alert(error.response.data.message)
-
-        if (error.response.data.code === 702) {
-          this.$router.replace({ path: '/julgamentos' })
-        }
-
-        if (error.response.data.code === 701) {
-          this.$router.replace({ path: `/partidas/${this.ultima_partida.id}` })
-        }
-      }
-      console.log(this.pareamento)
-      this.tratar()
-
-      this.$echo.channel('pareamento-' + this.pareamento.id)
-        .listen('.PareamentoAtualizadoEvent', (payload) => {
-          this.pareamento = payload.pareamento
-          this.tratar()
-        })
-
-      let socket = this.$echo.connector.socket
-      let self = this
-      socket.on('disconnect', function () {
-        self.conexao.show = true
-      })
     }
+    this.procurando = true
+
+    try {
+      this.pareamento = new Pareamento({})
+      this.pareamento.eu = this.user
+      await this.pareamento.save()
+    } catch (error) {
+      alert(error.response.data.message)
+
+      if (error.response.data.code === 702) {
+        this.$router.replace({ path: '/julgamentos' })
+      }
+
+      if (error.response.data.code === 701) {
+        this.$router.replace({ path: `/partidas/${this.ultima_partida.id}` })
+      }
+    }
+
+    this.tratar()
+
+    this.$echo.channel('pareamento-' + this.pareamento.id)
+      .listen('.PareamentoAtualizadoEvent', (payload) => {
+        this.pareamento = Object.assign(this.pareamento, payload.pareamento)
+        this.tratar()
+      })
+
+    let socket = this.$echo.connector.socket
+    let self = this
+    socket.on('disconnect', function () {
+      self.conexao.show = true
+    })
   },
   beforeDestroy () {
     this.parar()
@@ -122,18 +120,6 @@ export default {
   computed: {
     API_URL_STORAGE () {
       return process.env.API_URL_STORAGE
-    },
-    eu () {
-      return this.$store.state.auth.user
-    },
-    adversario () {
-      let adversario = null
-
-      if (this.eu) {
-        adversario = (this.eu.id === this.pareamento.user1_id) ? this.pareamento.user2 : this.pareamento.user1
-      }
-
-      return adversario
     }
   },
   methods: {
@@ -152,23 +138,21 @@ export default {
       this.$router.replace({ path: '/home' })
     },
     async responder (params) {
-      console.log(this.pareamento)
-      Object.assign(this.pareamento, { ...params })
-      console.log(this.pareamento)
+      this.pareamento = Object.assign(this.pareamento, params)
       await this.pareamento.save()
     },
     async tratar () {
-      if (this.pareamento.status === 'MATCH') {
+      if (this.pareamento.isMatch()) {
         this.encontrado = true
         this.procurando = false
       }
 
-      if (this.pareamento.status === 'SUCESSO') {
-        let ultima = await (new User({ id: this.user.id })).partidas().where('ultima', 1).first()
+      if (this.pareamento.isSucesso()) {
+        let ultima = await this.user.ultimaPartida()
         this.$router.replace({ path: `/partidas/${ultima.id}` })
       }
 
-      if (this.pareamento.status === 'CANCELADO') {
+      if (this.pareamento.isCancelado()) {
         alert('O desafio foi cancelado, pois um dos jogadores recusou o confronto.')
         this.$router.replace({ path: '/home' })
       }
