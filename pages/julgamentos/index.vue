@@ -45,6 +45,7 @@
 
 <script>
 import Profile from '~/components/Profile'
+import Julgamento from '@/models/Julgamento'
 
 export default {
   middleware: 'auth',
@@ -57,9 +58,7 @@ export default {
     }
   },
   async mounted () {
-    let response
-    response = await this.$axios.get('/julgamentos')
-    this.julgamentos = response.data
+    this.julgamentos = await Julgamento.$get()
     this.loading = false
   },
   methods: {

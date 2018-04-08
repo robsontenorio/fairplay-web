@@ -23,16 +23,3 @@ export default {
     }
 }
 </script>
-<style  scoped>
-/* .decisao-1 {
-  color: green;
-}
-
-.decisao-2 {
-  color: red;
-}
-
-.tag {
-  font-size: 21pt;
-} */
-</style>

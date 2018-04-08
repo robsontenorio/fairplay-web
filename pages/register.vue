@@ -17,10 +17,10 @@
 </template>
 
 <script>
-// import Avatar from '~/components/Avatar'
+import Plataforma from '@/models/Plataforma'
+import Jogo from '@/models/Jogo'
 
 export default {
-  // components: { Avatar },
   $_veeValidate: {
     validator: 'new'
   },
@@ -45,13 +45,9 @@ export default {
   },
   async mounted () {
     // this.$modal.open(`Preencha atentamente as informações. Caso você modifique posteriormente, seu histórico será perdido em todas as temporadas e você voltará para a última posição.`)
-    let response
 
-    response = await this.$axios.get(`/plataformas`)
-    this.plataformas = response.data
-
-    response = await this.$axios.get(`/jogos`)
-    this.jogos = response.data
+    this.plataformas = await Plataforma.get()
+    this.jogos = await Jogo.get()
 
     this.form.provider.avatar = this.$route.query.avatar
     this.form.provider.email = this.$route.query.email

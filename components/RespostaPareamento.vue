@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div v-if="eu">
+    --> {{ resposta }}
+    <div v-if="jogador === 'eu'">
       <div v-show="!resposta">
         <v-btn block class="success mb-3" @click="responder(true)" :disabled="respondi">
           <v-icon>check</v-icon> aceitar
@@ -16,7 +17,7 @@
         </v-btn>
       </div>
     </div>
-    <div v-if="adversario">
+    <div v-else>
       <resposta-desafio :resposta="resposta" />
     </div>
   </div>
@@ -25,7 +26,7 @@
 import RespostaDesafio from '~/components/RespostaDesafio'
 
 export default {
-  props: ['pareamento', 'eu', 'adversario'],
+  props: ['pareamento', 'jogador'],
   components: { RespostaDesafio },
   data () {
     return {
@@ -36,10 +37,10 @@ export default {
     {
       resposta () {
         let resposta
-        if (this.eu) {
-          resposta = (this.eu.id === this.pareamento.user1_id) ? this.pareamento.user1_aceitou : this.pareamento.user2_aceitou
+        if (this.jogador === 'eu') {
+          resposta = (this.pareamento.eu.id === this.pareamento.user1_id) ? this.pareamento.user1_aceitou : this.pareamento.user2_aceitou
         } else {
-          resposta = (this.adversario.id === this.pareamento.user1_id) ? this.pareamento.user1_aceitou : this.pareamento.user2_aceitou
+          resposta = (this.pareamento.adversario.id === this.pareamento.user1_id) ? this.pareamento.user1_aceitou : this.pareamento.user2_aceitou
         }
 
         return resposta
@@ -56,7 +57,7 @@ export default {
       }
 
       this.respondi = true
-      let user = (this.eu.id === this.pareamento.user1_id) ? 1 : 2
+      let user = (this.pareamento.eu.id === this.pareamento.user1_id) ? 1 : 2
 
       user = 'user' + user + '_aceitou'
 

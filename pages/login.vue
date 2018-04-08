@@ -37,7 +37,7 @@ export default {
   methods: {
     async login (provider) {
       this.loading = true
-      window.location = process.env.API_URL + 'auth/social/login?provider=' + provider
+      window.location = process.env.API_URL + '/auth/social/login?provider=' + provider
     }
   }
 }

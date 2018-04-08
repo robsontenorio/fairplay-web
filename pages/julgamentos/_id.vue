@@ -57,7 +57,7 @@
       <v-tab-item id="tab-2">
         <v-card flat>
           <v-card-text>
-            <chat :eu="partida.user1" :adversario="partida.user2" :partidaId="partida.id" :mensagens="mensagens" :desativado="true"></chat>
+            <chat :partida="partida" :mensagens="mensagens" :desativado="true"></chat>
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -88,13 +88,14 @@
 </template>
 
 <script>
-import User from '~/components/User'
 import Chat from '~/components/Chat'
 import RespostaPartida from '~/components/RespostaPartida'
+import Julgamento from '@/models/Julgamento'
+import Partida from '@/models/Partida'
 
 export default {
   middleware: 'auth',
-  components: { User, Chat, RespostaPartida },
+  components: { Chat, RespostaPartida },
 
   data () {
     return {
@@ -104,19 +105,12 @@ export default {
     }
   },
   async mounted () {
-    // let user = this.$store.state.auth.user
     let id = this.$route.params.id
 
-    let response
-
-    response = await this.$axios.get(`/julgamentos/${id}`)
-    this.julgamento = response.data
-
-    response = await this.$axios.get(`/partidas/${this.julgamento.partida.id}`)
-    this.partida = response.data
-
-    response = await this.$axios.get(`/partidas/${this.julgamento.partida.id}/mensagens`)
-    this.mensagens = response.data
+    this.julgamento = await Julgamento.find(id)
+    this.partida = await Partida.find(this.julgamento.partida.id)
+    this.partida.eu = this.partida.user1
+    this.mensagens = await this.partida.mensagens().get()
   },
   computed: {
     API_URL_STORAGE () {
@@ -128,20 +122,19 @@ export default {
       location.reload()
     },
     async votar (valor) {
+      if (!confirm('Seu voto não poderá ser modificado')) {
+        return
+      }
+
       try {
-        if (!confirm('Seu voto não poderá ser modificado')) {
-          return
-        }
-
-        let params = {
-          voto: valor
-        }
-
-        await this.$axios.patch(`/julgamentos/${this.julgamento.id}`, params)
-        this.$router.replace({ path: `/julgamentos` })
+        this.julgamento.voto = valor
+        await this.julgamento.save()
       } catch (error) {
         alert(error.response.data.message)
+        return
       }
+
+      this.$router.replace({ path: `/julgamentos` })
     }
   }
 }

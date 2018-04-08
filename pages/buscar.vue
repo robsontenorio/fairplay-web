@@ -21,14 +21,14 @@
               <img :src="`${API_URL_STORAGE}/${pareamento.eu.avatar}`" />
             </v-avatar>
             <div class="mb-3">{{ pareamento.eu.identificador }}</div>
-            <resposta-pareamento :pareamento="pareamento" :eu="pareamento.eu" @respondeu="responder" />
+            <resposta-pareamento :pareamento="pareamento" jogador="eu" @respondeu="responder" />
           </v-flex>
           <v-flex xs6>
             <v-avatar size="96" class="mb-3">
               <img :src="`${API_URL_STORAGE}/${pareamento.adversario.avatar}`" />
             </v-avatar>
             <div class="mb-3">{{ pareamento.adversario.identificador }}</div>
-            <resposta-pareamento :pareamento="pareamento" :adversario="pareamento.adversario" />
+            <resposta-pareamento :pareamento="pareamento" />
           </v-flex>
         </v-layout>
         <br><br>
@@ -104,7 +104,8 @@ export default {
 
     this.$echo.channel('pareamento-' + this.pareamento.id)
       .listen('.PareamentoAtualizadoEvent', (payload) => {
-        this.pareamento = Object.assign(this.pareamento, payload.pareamento)
+        // vue caveats
+        this.pareamento = Object.assign(new Pareamento({}), this.pareamento, payload.pareamento)
         this.tratar()
       })
 
@@ -138,7 +139,8 @@ export default {
       this.$router.replace({ path: '/home' })
     },
     async responder (params) {
-      this.pareamento = Object.assign(this.pareamento, params)
+      // vue caveats
+      this.pareamento = Object.assign(new Pareamento({}), this.pareamento, params)
       await this.pareamento.save()
     },
     async tratar () {
