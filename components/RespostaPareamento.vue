@@ -1,6 +1,5 @@
 <template>
   <div>
-    --> {{ resposta }}
     <div v-if="jogador === 'eu'">
       <div v-show="!resposta">
         <v-btn block class="success mb-3" @click="responder(true)" :disabled="respondi">

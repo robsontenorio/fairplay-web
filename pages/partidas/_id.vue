@@ -298,7 +298,13 @@ export default {
       }
     },
     async enviarMensagem (params) {
-      await this.$axios.post(`/partidas/${this.partida.id}/mensagens`, params)
+      await this.partida.mensagens().attach(params)
+      // await this.mensagens[0].save() // PUT /partidas/{id}/mensagens/{id2}
+      // await this.mensagens[0].delete() // DELETE /partidas/{id}/mensagens/{id2}
+
+      // await this.partida.mensagens().attach(payload) // POST /partidas/{id}/mensagens
+      // await this.partida.mensagens().sync(payload) // PUT /partidas/{id}/mensagens      
+
     }
   }
 }

@@ -91,6 +91,10 @@ export default {
 
     let identificador = this.$route.params.slug.replace('@', '')
 
+    // let u = new User({ identificador: 'aaaaaa' })
+    // await u.save()
+    // console.log(u)
+
     this.user = await User
       .include('plataforma', 'jogo')
       .append('posicao')

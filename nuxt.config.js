@@ -77,15 +77,15 @@ module.exports = {
 
       if (isDev && isClient) {
 
-        // config.resolve.alias['root'] = path.resolve(__dirname, 'node_modules')
-        // config.resolve.alias['vue-api-query'] = '/Volumes/BackupHD/Dropbox/dev/vue-api-query/src'
+        config.resolve.alias['root'] = path.resolve(__dirname, 'node_modules')
+        config.resolve.alias['vue-api-query'] = '/Volumes/BackupHD/Dropbox/dev/vue-api-query/src'
 
-        config.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          exclude: /(node_modules)/
-        })
+        // config.module.rules.push({
+        //   enforce: 'pre',
+        //   test: /\.(js|vue)$/,
+        //   loader: 'eslint-loader',
+        //   exclude: /(node_modules)/
+        // })
       }
     }
   }
