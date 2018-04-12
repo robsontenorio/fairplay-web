@@ -89,14 +89,13 @@ export default {
       return process.env.API_URL_STORAGE
     },
     loggedIn () {
-      return this.$store.getters['auth/loggedIn']
-      // return true
+      return this.$auth.loggedIn
     }
   },
   methods: {
     async logout () {
-      await this.$store.dispatch('auth/logout')
-      this.$router.push({ path: '/' })
+      await this.$auth.logout()
+      // this.$router.push({ path: '/' })
     }
   }
 }

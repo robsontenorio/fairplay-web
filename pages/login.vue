@@ -26,7 +26,7 @@ export default {
     }
   },
   mounted () {
-    if (this.$store.getters['auth/loggedIn']) {
+    if (this.$auth.loggedIn) {
       this.$router.replace({ path: '/home' })
     }
     // if (this.$route.query.ipx === undefined) {

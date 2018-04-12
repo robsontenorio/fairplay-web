@@ -24,13 +24,15 @@ export default {
   methods: {
     async login () {
       try {
-        await this.$store.dispatch('auth/login', {
-          fields: this.form
+        await this.$auth.loginWith('local', {
+          data: this.form
         })
+
+        // this.$router.replace({ path: '/home' })
+
       } catch (error) {
         alert(error.response.data.error)
       }
-      this.$router.replace({ path: '/home' })
     }
   }
 }

@@ -1,5 +1,3 @@
-var path = require('path')
-
 let API_URL = (process.env.NODE_ENV !== 'production') ? 'http://localhost:8000/api' : 'https://fairplay-api.arena17.com/api/'
 let API_URL_SOCKET = (process.env.NODE_ENV !== 'production') ? 'http://localhost:6001' : 'https://fairplay-api.arena17.com:6001'
 let API_URL_STORAGE = (process.env.NODE_ENV !== 'production') ? 'http://localhost:8000/storage/' : 'https://fairplay-api.arena17.com/storage'
@@ -52,14 +50,18 @@ module.exports = {
     API_URL_STORAGE: API_URL_STORAGE
   },
   axios: {
-    proxyHeaders: false,
-    credentials: false,
     baseURL: API_URL,
-    requestInterceptor: (config, { store }) => {
-      if (store.state['auth']['token']) {
-        config.headers.common['Authorization'] = 'Bearer ' + store.state['auth']['token']
+  },
+
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: '/auth/login' },
+          logout: { url: '/auth/logout', method: 'GET' },
+          user: { url: '/auth/user' }
+        }
       }
-      return config
     }
   },
 
@@ -77,7 +79,7 @@ module.exports = {
 
       if (isDev && isClient) {
 
-        config.resolve.alias['root'] = path.resolve(__dirname, 'node_modules')
+        // config.resolve.alias['root'] = path.resolve(__dirname, 'node_modules')
         config.resolve.alias['vue-api-query'] = '/Volumes/BackupHD/Dropbox/dev/vue-api-query/src'
 
         // config.module.rules.push({
