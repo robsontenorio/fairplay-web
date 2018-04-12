@@ -5,8 +5,8 @@
   "author": "Robson Tenório <robsontenorio@me.com>",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development HOST=0.0.0.0 nuxt",
-    "build": "cross-env NODE_ENV=production nuxt build --spa",
+    "dev": "nuxt",
+    "build": "nuxt build --spa",
     "clean": "rm -rf node_modules && rm yarn.lock && yarn cache clean && rm -rf .nuxt",
     "start": "nuxt start",
     "generate": "nuxt generate",
@@ -16,6 +16,7 @@
   "dependencies": {
     "@nuxtjs/auth": "^4.1.0",
     "@nuxtjs/axios": "^5.3.1",
+    "@nuxtjs/dotenv": "^1.1.1",
     "@xkeshi/vue-countdown": "^0.5.0",
     "cross-env": "^5.1.4",
     "moment": "^2.19.3",

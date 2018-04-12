@@ -10,5 +10,7 @@ npm-debug.log
 # Nuxt generate
 dist
 
+# env file
+.env
 
 .DS_STORE

@@ -1,6 +1,4 @@
-let API_URL = (process.env.NODE_ENV !== 'production') ? 'http://localhost:8000/api' : 'https://fairplay-api.arena17.com/api/'
-let API_URL_SOCKET = (process.env.NODE_ENV !== 'production') ? 'http://localhost:6001' : 'https://fairplay-api.arena17.com:6001'
-let API_URL_STORAGE = (process.env.NODE_ENV !== 'production') ? 'http://localhost:8000/storage/' : 'https://fairplay-api.arena17.com/storage'
+require('dotenv').config()
 
 module.exports = {
   ssr: false,
@@ -42,15 +40,16 @@ module.exports = {
   ],
   modules: [
     '@nuxtjs/auth',
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/dotenv'
   ],
   env: {
-    API_URL: API_URL,
-    API_URL_SOCKET: API_URL_SOCKET,
-    API_URL_STORAGE: API_URL_STORAGE
+    API_URL: process.env.API_URL,
+    API_URL_SOCKET: process.env.API_URL_SOCKET,
+    API_URL_STORAGE: process.env.API_URL_STORAGE
   },
   axios: {
-    baseURL: API_URL,
+    baseURL: process.env.API_URL,
   },
 
   auth: {
