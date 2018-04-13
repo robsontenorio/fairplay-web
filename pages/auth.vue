@@ -27,9 +27,7 @@ export default {
         await this.$auth.loginWith('local', {
           data: this.form
         })
-
-        // this.$router.replace({ path: '/home' })
-
+        this.$router.replace({ path: '/home' })
       } catch (error) {
         alert(error.response.data.error)
       }
