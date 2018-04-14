@@ -246,11 +246,6 @@ export default {
     this.$echo.leave('partida-' + this.partida.id)
     this.$echo.leave('chat-' + this.partida.id)
   },
-  computed: {
-    API_URL_STORAGE () {
-      return process.env.API_URL_STORAGE
-    }
-  },
   methods: {
     recarregar () {
       location.reload()

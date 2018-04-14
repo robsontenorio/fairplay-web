@@ -36,7 +36,8 @@ module.exports = {
     '~plugins/vuetify',
     '~plugins/vee-validate',
     '~plugins/socket.io',
-    '~plugins/vue-api-query'
+    '~plugins/vue-api-query',
+    '~mixins/api-urls'
   ],
   modules: [
     '@nuxtjs/auth',

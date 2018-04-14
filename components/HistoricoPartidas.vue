@@ -35,11 +35,6 @@
 <script>
 export default {
   props: ['partidas', 'user', 'loading'],
-  computed: {
-    API_URL_STORAGE () {
-      return process.env.API_URL_STORAGE
-    }
-  },
   methods: {
     adversario (partida) {
       return (this.user.id === partida.user1_id) ? partida.user2 : partida.user1

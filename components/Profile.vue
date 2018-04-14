@@ -23,13 +23,7 @@
 // import Avatar from '~/components/Avatar'
 
 export default {
-  props: ['user'],
-  // components: { Avatar }
-  computed: {
-    API_URL_STORAGE () {
-      return process.env.API_URL_STORAGE
-    }
-  }
+  props: ['user']
 }
 </script>
 <style  scoped>

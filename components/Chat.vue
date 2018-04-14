@@ -55,7 +55,7 @@ export default {
         media: null
       },
       dropzoneOptions: {
-        url: process.env.API_URL + 'upload',
+        url: process.env.API_URL + '/upload',
         dictDefaultMessage: "<i class='fa fa-camera'></i>",
         previewsContainer: false,
         thumbnailWidth: 150,
@@ -63,11 +63,6 @@ export default {
         resizeWidth: 800,
         acceptedFiles: 'image/*'
       }
-    }
-  },
-  computed: {
-    API_URL_STORAGE () {
-      return process.env.API_URL_STORAGE
     }
   },
   methods: {

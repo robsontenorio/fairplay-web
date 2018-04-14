@@ -68,11 +68,6 @@ export default {
     jogar () {
       this.$router.replace(`/buscar`)
     }
-  },
-  computed: {
-    API_URL_STORAGE () {
-      return process.env.API_URL_STORAGE
-    }
   }
 }
 </script>

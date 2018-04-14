@@ -112,11 +112,6 @@ export default {
     this.partida.eu = this.partida.user1
     this.mensagens = await this.partida.mensagens().get()
   },
-  computed: {
-    API_URL_STORAGE () {
-      return process.env.API_URL_STORAGE
-    }
-  },
   methods: {
     recarregar () {
       location.reload()

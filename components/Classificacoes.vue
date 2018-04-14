@@ -30,11 +30,6 @@
 <script>
 export default {
   props: ['classificacoes', 'user', 'loading'],
-  computed: {
-    API_URL_STORAGE () {
-      return process.env.API_URL_STORAGE
-    }
-  },
   methods: {
     verPerfil (value) {
       this.$emit('perfilSelecionado', value)

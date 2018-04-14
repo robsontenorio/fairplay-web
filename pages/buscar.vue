@@ -118,11 +118,6 @@ export default {
   beforeDestroy () {
     this.parar()
   },
-  computed: {
-    API_URL_STORAGE () {
-      return process.env.API_URL_STORAGE
-    }
-  },
   methods: {
     recarregar () {
       location.reload()

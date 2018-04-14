@@ -85,9 +85,6 @@ export default {
     user () {
       return this.$store.state.auth.user
     },
-    API_URL_STORAGE () {
-      return process.env.API_URL_STORAGE
-    },
     loggedIn () {
       return this.$auth.loggedIn
     }
