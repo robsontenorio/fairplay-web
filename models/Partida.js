@@ -4,6 +4,9 @@ import Mensagem from './Mensagem'
 import User from './User'
 
 export default class Partida extends Model {
+  resource () {
+    return 'partidas'
+  }
   /**
    * Relacionamentos
    */

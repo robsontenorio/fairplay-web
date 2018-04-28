@@ -2,6 +2,9 @@ import Model from './Model'
 import Partida from './Partida'
 
 export default class User extends Model {
+  resource () {
+    return 'users'
+  }
   /**
    * Relacionamentos
    */

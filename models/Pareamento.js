@@ -2,6 +2,9 @@ import Model from './Model'
 import User from './User'
 
 export default class Pareamento extends Model {
+  resource () {
+    return 'pareamentos'
+  }
   /**
    * Metodos
    */
