@@ -1,22 +1,12 @@
-# fairplay-web
+# ARENA FAIR PLAY (FRONTEND)
 
-> Arena Fair Play
+Desenvolvimento da API do projeto ARENA FAIR PLAY.
 
-## Build Setup
+# Local
 
-``` bash
-# install dependencies
-$ npm install # Or yarn install
+Variáveis de ambiente do Docker Compose
 
-# serve with hot reload at localhost:3000
-$ npm run dev
-
-# build for production and launch server
-$ npm run build
-$ npm start
-
-# generate static project
-$ npm run generate
 ```
-
-For detailed explanation on how things work, checkout the [Nuxt.js docs](https://github.com/nuxt/nuxt.js).
+cd .docker
+cp .env.example .env
+```
