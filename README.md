@@ -10,4 +10,3 @@ Variáveis de ambiente do Docker Compose
 cd .docker
 cp .env.example .env
 ```
-...
