@@ -1,12 +1,7 @@
-# ARENA FAIR PLAY (FRONTEND)
+# FAIRPLAY-WEB (FRONTEND)
 
-..Desenvolvimento da API do projeto ARENA FAIR PLAY.
+Sub-repositório do projeto FAIRPLAY.
 
-# Local
+# INSTALAÇÃO
 
-Variáveis de ambiente do Docker Compose
-
-```
-cd .docker
-cp .env.example .env
-```
+Confira as instruções no repositório principal 🔗 https://github.com/robsontenorio/fairplay
