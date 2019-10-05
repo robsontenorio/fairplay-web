@@ -1,10 +1,10 @@
 <template>
   <div class="text-xs-center pa-3">
     <div v-if="!loading">
-      <v-btn block color="blue" class="white--text mb-3" :disabled="loading" @click="login('facebook')">
+      <!-- <v-btn block color="blue" class="white--text mb-3" :disabled="loading" @click="login('facebook')">
         <v-icon dark left>fa-facebook</v-icon>
         Facebook
-      </v-btn>
+      </v-btn> -->
       <v-btn block color="red" class="white--text" :disabled="loading" @click="login('google')">
         <v-icon dark left>fa-google</v-icon>
         Google
